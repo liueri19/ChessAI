@@ -2,8 +2,8 @@ package org._7hills.liueri19.game;
 
 public class Pawn extends Piece {
 
-	public Pawn(Color color, int x, int y) {
-		super(color, x, y);
+	public Pawn(Board board, Color color, int x, int y) {
+		super(board, color, x, y);
 		
 	}
 

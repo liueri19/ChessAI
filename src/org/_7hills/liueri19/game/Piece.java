@@ -2,12 +2,18 @@ package org._7hills.liueri19.game;
 
 public abstract class Piece implements Comparable<Piece>{
 	private Color color;	//color the color of the piece. 0 for black, 1 for white.
+	private final Board board;
 	private int[] coordinate;
 	private int[][] legalMoves;
 	
-	public Piece(Color color, int x, int y) {
+	public Piece(Board board, Color color, int x, int y) {
+		this.board = board;
 		this.color = color;
 		coordinate = new int[] {x, y};
+	}
+	
+	public Board getBoard() {
+		return board;
 	}
 	
 	public Color getColor() {
@@ -36,8 +42,6 @@ public abstract class Piece implements Comparable<Piece>{
 		return legalMoves;
 	}
 	
-	public abstract int[][] generateLegalMoves(int[] square);
-	
 	public void setLegalMoves(int[][] moves) {
 		legalMoves = moves;
 	}
@@ -58,7 +62,16 @@ public abstract class Piece implements Comparable<Piece>{
 		return false;
 	}
 	
-	public abstract boolean move(int x, int y);
+	public boolean move(int x, int y) {
+		int[] move = new int[] {x, y};
+		if (isLegalMove(move)) {
+			setSquare(move);
+			return true;
+		}
+		return false;
+	}
+	
+	public abstract int[][] generateLegalMoves(int[] square);
 	
 	public abstract String toString();
 	

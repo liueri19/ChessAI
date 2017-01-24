@@ -2,14 +2,8 @@ package org._7hills.liueri19.game;
 
 public class Knight extends Piece {
 
-	public Knight(Color color, int x, int y) {
-		super(color, x, y);
-	}
-
-	@Override
-	public void move(int x, int y) {
-		// TODO Auto-generated method stub
-		
+	public Knight(Board board, Color color, int x, int y) {
+		super(board, color, x, y);
 	}
 
 	@Override

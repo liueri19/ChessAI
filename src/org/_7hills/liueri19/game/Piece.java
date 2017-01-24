@@ -38,7 +38,7 @@ public abstract class Piece implements Comparable<Piece>{
 	
 	public int[][] getLegalMoves(int[] square) {
 		if (legalMoves.length == 0)
-			setLegalMoves(generateLegalMoves(square));
+			generateLegalMoves(square);
 		return legalMoves;
 	}
 	
@@ -71,7 +71,7 @@ public abstract class Piece implements Comparable<Piece>{
 		return false;
 	}
 	
-	public abstract int[][] generateLegalMoves(int[] square);
+	public abstract void generateLegalMoves(int[] square);
 	
 	public abstract String toString();
 	

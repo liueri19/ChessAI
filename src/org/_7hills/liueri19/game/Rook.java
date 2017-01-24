@@ -14,10 +14,22 @@ public class Rook extends Piece {
 	}
 
 	@Override
-	public int[][] generateLegalMoves(int[] square) {
-		for (int fileP = square[0]+1; fileP < 9; fileP++) {
+	public void generateLegalMoves(int[] square) {
+		for (int fileP = square[0] + 1; fileP < 9; fileP++) {
 			if (getBoard().getPieceAt(fileP, square[1]) == null)
 				addLegalMove(new int[] {fileP, square[1]});
+		}
+		for (int fileN = square[0] - 1; fileN > 0; fileN--) {
+			if (getBoard().getPieceAt(fileN, square[1]) == null)
+				addLegalMove(new int[] {fileN, square[1]});
+		}
+		for (int rankP = square[1] + 1; rankP < 9; rankP++) {
+			if (getBoard().getPieceAt(square[0], rankP) == null)
+				addLegalMove(new int[] {square[0], rankP});
+		}
+		for (int rankN = square[1] - 1; rankN > 0; rankN--) {
+			if (getBoard().getPieceAt(square[0], rankN) == null)
+				addLegalMove(new int[] {square[0], rankN});
 		}
 	}
 }

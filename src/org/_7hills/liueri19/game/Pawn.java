@@ -25,9 +25,8 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public int[][] generateLegalMoves(int[] square) {
+	public void generateLegalMoves(int[] square) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

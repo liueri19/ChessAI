@@ -1,10 +1,7 @@
 package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class Board {
 	//protected Map<int[], Piece> pieces = new HashMap<int[], Piece>();

@@ -4,12 +4,17 @@ public class Bishop extends Piece {
 
 	public Bishop(Color color, int x, int y) {
 		super(color, x, y);
+		setLegalMoves(generateLegalMoves(getSquare()));
 	}
 
 	@Override
-	public void move(int x, int y) {
-		// TODO Auto-generated method stub
-
+	public boolean move(int x, int y) {
+		int[] move = new int[] {x, y};
+		if (isLegalMove(move)) {
+			setSquare(move);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -17,5 +22,10 @@ public class Bishop extends Piece {
 		if (this.getColor() == Color.WHITE)
 			return "WB";
 		return "BB";
+	}
+
+	@Override
+	public int[][] generateLegalMoves(int[] square) {
+		
 	}
 }

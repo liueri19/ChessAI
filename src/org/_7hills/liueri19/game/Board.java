@@ -2,18 +2,39 @@ package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Board {
 	//protected Map<int[], Piece> pieces = new HashMap<int[], Piece>();
 	protected List<Piece> pieces = new ArrayList<Piece>();
+	private boolean gameEnded = false;
+	private boolean autoPrint = false;
 	
 	public Board() {
 		setUpPieces();
 	}
 	
+	public Board(boolean doSetUp) {
+		if (doSetUp)
+			setUpPieces();
+	}
+	
 	public static void main(String[] args) {
 		Board board = new Board();
-		board.printBoard();
+		Scanner sc = new Scanner(System.in);
+		String input;
+		
+		System.out.println("Use command 'prtboard' to see a visual representation of the board.\nUse command 'autoprt' to switch automatic board print on/off.");
+		//board.printBoard();
+		while(!board.gameEnded) {
+			input = sc.nextLine();
+			//parse input
+			if (input.equals("prtboard"))
+				board.printBoard();
+			else if (input.equals("autoprt"))
+				board.autoPrint = !board.autoPrint;
+			
+		}
 	}
 	
 	public Piece getPieceAt(int file, int rank) {

@@ -23,6 +23,7 @@ public class Board {
 		Board board = new Board();
 		Scanner sc = new Scanner(System.in);
 		String input;
+		Piece piece;
 		
 		System.out.println("Use command 'prtboard' to see a visual representation of the board.\nUse command 'autoprt' to switch automatic board print on/off.");
 		//board.printBoard();
@@ -33,14 +34,44 @@ public class Board {
 				board.printBoard();
 			else if (input.equals("autoprt"))
 				board.autoPrint = !board.autoPrint;
+			else if (input.equals("resign"))
+				board.gameEnded = true;
+//			else if (input.equals("draw"))
+//				//suggest draw to the opponent
 			
+			else if (input.length() == 4) {	//a move
+				char fileO = input.charAt(0);
+				int rankO = Integer.valueOf(input.charAt(1));
+				
+				if (Character.toString(fileO).matches("[abcdefgh]"))	//if the first character is a, b, c, d, e, f, g, or h
+					piece = board.getPieceAt(fileO, rankO);
+			}
+			
+			if (board.autoPrint)
+				board.printBoard();
 		}
+		sc.close();
 	}
 	
-	public Piece getPieceAt(int file, int rank) {
+	public Piece getPieceAt(char file, int rank) {
+		int fileNum = 0;
+		switch (file) {
+			case 'a': fileNum = 1; break;
+			case 'b': fileNum = 2; break;
+			case 'c': fileNum = 3; break;
+			case 'd': fileNum = 4; break;
+			case 'e': fileNum = 5; break;
+			case 'f': fileNum = 6; break;
+			case 'g': fileNum = 7; break;
+			case 'h': fileNum = 8; break;
+		}
+		
+		if (fileNum == 0)
+			return null;
+		
 		pieces.sort(null);
 		for (Piece p : pieces) {
-			if (p.getFile() == file && p.getRank() == rank)
+			if (p.getFile() == fileNum && p.getRank() == rank)
 				return p;
 			if (p.getRank() > rank)
 				break;

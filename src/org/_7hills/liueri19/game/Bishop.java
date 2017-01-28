@@ -4,7 +4,6 @@ public class Bishop extends Piece {
 
 	public Bishop(Board board, Color color, int x, int y) {
 		super(board, color, x, y);
-		setLegalMoves(generateLegalMoves(getSquare()));
 	}
 
 	@Override
@@ -15,7 +14,7 @@ public class Bishop extends Piece {
 	}
 
 	@Override
-	public int[][] generateLegalMoves(int[] square) {
+	public void generateLegalMoves(int[] square) {
 		
 	}
 }

@@ -12,4 +12,10 @@ public class Queen extends Piece {
 			return "WQ";
 		return "BQ";
 	}
+
+	@Override
+	public void generateLegalMoves(int[] square) {
+		// TODO Auto-generated method stub
+		
+	}
 }

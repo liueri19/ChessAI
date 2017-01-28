@@ -1,10 +1,14 @@
 package org._7hills.liueri19.game;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class Piece implements Comparable<Piece>{
 	private Color color;	//color the color of the piece. 0 for black, 1 for white.
 	private final Board board;
 	private int[] coordinate;
-	private int[][] legalMoves;
+	private List<int[]> legalMoves = new ArrayList<int[]>();
 	
 	public Piece(Board board, Color color, int x, int y) {
 		this.board = board;
@@ -36,35 +40,37 @@ public abstract class Piece implements Comparable<Piece>{
 		return coordinate[1];
 	}
 	
-	public int[][] getLegalMoves(int[] square) {
-		if (legalMoves.length == 0)
-			generateLegalMoves(square);
+	public List<int[]> getLegalMoves() {
 		return legalMoves;
 	}
 	
-	public void setLegalMoves(int[][] moves) {
+	public void setLegalMoves(List<int[]> moves) {
 		legalMoves = moves;
 	}
 	
 	public void clearLegalMoves() {
-		legalMoves = new int[][] {};
+		legalMoves.clear();
 	}
 	
 	public void addLegalMove(int[] move) {
-		legalMoves[legalMoves.length] = move;
+		legalMoves.add(move);
 	}
 	
 	public boolean isLegalMove(int[] move) {
-		for (int[] m : legalMoves) {
-			if (move.equals(m))
+		for (int[] m : getLegalMoves()) {
+			if (Arrays.equals(move, m))
 				return true;
 		}
 		return false;
 	}
 	
-	public boolean move(int x, int y) {
-		int[] move = new int[] {x, y};
+	public boolean move(int file, int rank) {
+		int[] move = new int[] {file, rank};
+		generateLegalMoves(getSquare());
 		if (isLegalMove(move)) {
+			Piece p = getBoard().getPieceAt(move[0], move[1]);
+			if (p != null)
+				getBoard().pieces.remove(p);
 			setSquare(move);
 			return true;
 		}

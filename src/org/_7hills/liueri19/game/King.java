@@ -13,4 +13,10 @@ public class King extends Piece {
 		return "BK";
 	}
 
+	@Override
+	public void generateLegalMoves(int[] square) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

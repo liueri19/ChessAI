@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Board {
-	//protected Map<int[], Piece> pieces = new HashMap<int[], Piece>();
 	protected List<Piece> pieces = new ArrayList<Piece>();
 	private boolean gameEnded = false;
 	private boolean autoPrint = false;
+	private boolean whiteMove = true;
 	
 	public Board() {
 		setUpPieces();
@@ -30,10 +30,14 @@ public class Board {
 		while(!board.gameEnded) {
 			input = sc.nextLine();
 			//parse input
-			if (input.equals("prtboard"))
+			if (input.equals("prtboard")) {
 				board.printBoard();
-			else if (input.equals("autoprt"))
+				continue;
+			}
+			else if (input.equals("autoprt")) {
 				board.autoPrint = !board.autoPrint;
+				System.out.println("autoprt changed to " + board.autoPrint);
+			}
 			else if (input.equals("resign"))
 				board.gameEnded = true;
 //			else if (input.equals("draw"))
@@ -41,10 +45,36 @@ public class Board {
 			
 			else if (input.length() == 4) {	//a move
 				char fileO = input.charAt(0);
-				int rankO = Integer.valueOf(input.charAt(1));
+				int rankO = Character.getNumericValue(input.charAt(1));
 				
-				if (Character.toString(fileO).matches("[abcdefgh]"))	//if the first character is a, b, c, d, e, f, g, or h
+				if (Character.toString(fileO).matches("[abcdefgh]")) {	//if the first character is a, b, c, d, e, f, g, or h
 					piece = board.getPieceAt(fileO, rankO);
+					if (piece == null) {
+						System.out.println("Invalid input: no piece on the selected square");
+						continue;
+					}
+					//a valid piece selected, validate turn
+					if (piece.getColor() == Color.WHITE && !board.whiteMove) {
+						System.out.println("Invalid input: cannot move white piece on black's turn");
+						continue;
+					}
+					else if (piece.getColor() == Color.BLACK && board.whiteMove) {
+						System.out.println("Invalid input: cannot move black piece on white's turn");
+						continue;
+					}
+					//get the target square
+					char fileD = input.charAt(2);
+					int rankD = Character.getNumericValue(input.charAt(3));
+					if (!piece.move(parseFile(fileD), rankD)) {
+						System.out.println("Invalid input: illegal move");
+						continue;
+					}
+					board.whiteMove = !board.whiteMove;
+				}
+				else {	//if the input did not start with abcdefgh
+					System.out.println("Invalid input: invalid square coordinate");
+					continue;
+				}
 			}
 			
 			if (board.autoPrint)
@@ -53,7 +83,7 @@ public class Board {
 		sc.close();
 	}
 	
-	public Piece getPieceAt(char file, int rank) {
+	public static int parseFile(char file) {
 		int fileNum = 0;
 		switch (file) {
 			case 'a': fileNum = 1; break;
@@ -65,15 +95,19 @@ public class Board {
 			case 'g': fileNum = 7; break;
 			case 'h': fileNum = 8; break;
 		}
-		
-		if (fileNum == 0)
-			return null;
-		
+		return fileNum;
+	}
+	
+	public Piece getPieceAt(char file, int rank) {
+		return getPieceAt(parseFile(file), rank);
+	}
+	
+	public Piece getPieceAt(int file, int rank) {
 		pieces.sort(null);
 		for (Piece p : pieces) {
-			if (p.getFile() == fileNum && p.getRank() == rank)
+			if (p.getFile() == file && p.getRank() == rank)
 				return p;
-			if (p.getRank() > rank)
+			if (rank > p.getRank())
 				break;
 		}
 		return null;
@@ -84,7 +118,7 @@ public class Board {
 		String blackSpace = "|////";
 		boolean even, white;
 		int index = 0;
-		
+		pieces.sort(null);
 		//first line, upper border
 		System.out.println("_________________________________________");
 		
@@ -146,8 +180,8 @@ public class Board {
 		//bishops
 		pieces.add(new Bishop(this, Color.WHITE, 3, 1));
 		pieces.add(new Bishop(this, Color.WHITE, 6, 1));
-		pieces.add(new Bishop(this, Color.WHITE, 3, 8));
-		pieces.add(new Bishop(this, Color.WHITE, 6, 8));
+		pieces.add(new Bishop(this, Color.BLACK, 3, 8));
+		pieces.add(new Bishop(this, Color.BLACK, 6, 8));
 		//queens
 		pieces.add(new Queen(this, Color.WHITE, 4, 1));
 		pieces.add(new Queen(this, Color.BLACK, 4, 8));

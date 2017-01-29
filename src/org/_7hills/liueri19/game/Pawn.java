@@ -8,16 +8,6 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public boolean move(int x, int y) {
-		int[] move = new int[] {x, y};
-		if (isLegalMove(move)) {
-			setSquare(move);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public String toString() {
 		if (this.getColor() == Color.WHITE)
 			return "WP";

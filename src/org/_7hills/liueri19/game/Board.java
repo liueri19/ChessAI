@@ -135,7 +135,12 @@ public class Board {
 			System.out.println("|");
 			//rank second line
 			for (int file = 1; file < 9; file++) {
-				Piece p = pieces.get(index);
+				Piece p = new King(this, Color.WHITE, 0, 0);	//placeholder
+				try {
+				p = pieces.get(index);
+				}
+				catch (IndexOutOfBoundsException e) {
+				}
 				if (p.getRank() == rank && p.getFile() == file) {
 					index++;
 					if (white)

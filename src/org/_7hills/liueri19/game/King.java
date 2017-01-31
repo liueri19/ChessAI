@@ -15,6 +15,7 @@ public class King extends Piece {
 
 	@Override
 	public void generateLegalMoves(int[] square) {
+		//TODO check for attacked square
 		//8 candidate moves
 		int[][] candidates = new int[][] {
 			new int[] {square[0] -1, square[1] +1},

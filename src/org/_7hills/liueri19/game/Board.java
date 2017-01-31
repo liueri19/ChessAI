@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Board {
 	protected List<Piece> pieces = new ArrayList<Piece>();
 	private boolean gameEnded = false;
+	private int gameResult;
 	private boolean autoPrint = false;
 	private boolean whiteMove = true;
 	

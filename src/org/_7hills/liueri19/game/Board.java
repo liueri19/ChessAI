@@ -8,8 +8,9 @@ public class Board {
 	protected List<Piece> pieces = new ArrayList<Piece>();
 	private boolean gameEnded = false;
 	private int gameResult;
-	private boolean autoPrint = false;
+	private boolean autoPrint = true;
 	private boolean whiteMove = true;
+	private List<Object[]> history = new ArrayList<Object[]>();
 	
 	public Board() {
 		setUpPieces();
@@ -26,7 +27,7 @@ public class Board {
 		String input;
 		Piece piece;
 		
-		System.out.println("Use command 'prtboard' to see a visual representation of the board.\nUse command 'autoprt' to switch automatic board print on/off.");
+		System.out.println("Use command 'prtboard' to see a visual representation of the board.\nUse command 'autoprt' to switch automatic board print on/off.\nUse command 'prthistory' to see previous moves.");
 		//board.printBoard();
 		while(!board.gameEnded) {
 			input = sc.nextLine();
@@ -38,6 +39,10 @@ public class Board {
 			else if (input.equals("autoprt")) {
 				board.autoPrint = !board.autoPrint;
 				System.out.println("autoprt changed to " + board.autoPrint);
+			}
+			else if (input.equals("prthistory")) {
+				board.printHistory();
+				continue;
 			}
 			else if (input.equals("resign"))
 				board.gameEnded = true;
@@ -70,6 +75,8 @@ public class Board {
 						System.out.println("Invalid input: illegal move");
 						continue;
 					}
+					//move verified legal
+					board.history.add(new Object[] {new Character(fileO), new Integer(rankO), new Character(fileD), new Integer(rankD)});
 					board.whiteMove = !board.whiteMove;
 				}
 				else {	//if the input did not start with abcdefgh
@@ -112,6 +119,12 @@ public class Board {
 				break;
 		}
 		return null;
+	}
+	
+	public void printHistory() {
+		for (Object[] move : history) {
+			System.out.printf("%s%s->%s%s\n", (Character) move[0], (Integer) move[1], (Character) move[2], (Integer) move[3]);
+		}
 	}
 	
 	public void printBoard() {

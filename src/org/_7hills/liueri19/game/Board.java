@@ -77,7 +77,7 @@ public class Board {
 					}
 					//move verified legal
 					board.history.add(new Object[] {new Character(fileO), new Integer(rankO), new Character(fileD), new Integer(rankD)});
-					board.whiteMove = !board.whiteMove;
+					board.changeTurn();
 				}
 				else {	//if the input did not start with abcdefgh
 					System.out.println("Invalid input: invalid square coordinate");
@@ -104,6 +104,11 @@ public class Board {
 			case 'h': fileNum = 8; break;
 		}
 		return fileNum;
+	}
+	
+	public void changeTurn() {
+		//update legalMoves
+		whiteMove = !whiteMove;
 	}
 	
 	public Piece getPieceAt(char file, int rank) {

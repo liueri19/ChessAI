@@ -215,4 +215,16 @@ public class Board {
 		
 		pieces.sort(null);
 	}
+	
+	public List<Object[]> getHistory() {
+		return history;
+	}
+	
+	public Object[] getMove(int moveNum) {
+		return history.get(moveNum);
+	}
+	
+	public int getCurrentMoveNum() {
+		return history.size();	//starts with 0
+	}
 }

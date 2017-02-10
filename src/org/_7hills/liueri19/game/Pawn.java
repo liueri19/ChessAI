@@ -33,7 +33,10 @@ public class Pawn extends Piece {
 					getBoard().getPieceAt(square[0] + 1, square[1] + 1).getColor() != this.getColor())
 				addLegalMove(new int[] {square[0] + 1, square[1] + 1});
 			//en passant
-			
+			/*
+			 * if (last move == file left || file right && is pawn move)
+			 *   add en passant;
+			 */
 		}
 		else {
 			if (getBoard().getPieceAt(square[0], square[1] - 1) == null) {	//black pawn, moving down

@@ -37,6 +37,11 @@ public class Pawn extends Piece {
 			 * if (last move == file left || file right && is pawn move)
 			 *   add en passant;
 			 */
+			Object[] lastMove = getBoard().getMove(getBoard().getCurrentMoveNum() - 1);
+			int lastMoveFile = Board.parseFile((char) lastMove[0]);
+			if (getBoard().getPieceAt((char) lastMove[2], (int) lastMove[3]) instanceof Pawn && (lastMoveFile == this.getFile() -1 || lastMoveFile == this.getFile() +1)) {
+				
+			}
 		}
 		else {
 			if (getBoard().getPieceAt(square[0], square[1] - 1) == null) {	//black pawn, moving down

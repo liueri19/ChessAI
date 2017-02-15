@@ -227,4 +227,12 @@ public class Board {
 	public int getCurrentMoveNum() {
 		return history.size();	//starts with 0
 	}
+	
+	public boolean isSquareUnderAttack(Color color, int file, int rank) {
+		for (Piece p : pieces) {
+			if (p.getColor() != color && p.isLegalMove(new int[] {file, rank}))
+				return true;
+		}
+		return false;
+	}
 }

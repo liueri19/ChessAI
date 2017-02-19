@@ -39,3 +39,8 @@ _________________________________________
 |////|    |////|    |////|    |////|    |
 |/WR/| WN |/WB/| WQ |/WK/| WB |/WN/| WR |
 |____|____|____|____|____|____|____|____|
+
+
+Legal move and attacked squares are not the same: an attacked square of a king may not be a legal move.
+King class need to implement attacked squares to handle King vs King end games.
+Update legal moves after each move, kings should handle legal moves update after other pieces.

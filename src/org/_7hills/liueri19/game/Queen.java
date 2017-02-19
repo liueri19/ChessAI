@@ -14,7 +14,9 @@ public class Queen extends Piece {
 	}
 
 	@Override
-	public void generateLegalMoves(int[] square) {
+	public void updateLegalMoves(int[] square) {
+		this.clearLegalMoves();
+		
 		// rook's
 		for (int fileP = square[0] + 1; fileP < 9; fileP++) {
 			if (getBoard().getPieceAt(fileP, square[1]) == null)	//if the square is empty

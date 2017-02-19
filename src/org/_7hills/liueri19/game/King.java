@@ -14,7 +14,9 @@ public class King extends Piece {
 	}
 
 	@Override
-	public void generateLegalMoves(int[] square) {
+	public void updateLegalMoves(int[] square) {
+		this.clearLegalMoves();
+		
 		//8 candidate moves
 		int[][] candidates = new int[][] {
 			new int[] {square[0] -1, square[1] +1},
@@ -30,7 +32,7 @@ public class King extends Piece {
 		for (int[] move : candidates) {
 			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
 				continue;
-			else if (!getBoard().isSquareUnderAttack(this.getColor(), this.getFile(), this.getRank()) &&	//king check attack not functional
+			else if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1]) &&
 					(getBoard().getPieceAt(move[0], move[1]) == null ||
 					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor()))
 				addLegalMove(move);

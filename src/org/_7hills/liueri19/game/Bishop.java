@@ -14,7 +14,9 @@ public class Bishop extends Piece {
 	}
 
 	@Override
-	public void generateLegalMoves(int[] square) {
+	public void updateLegalMoves(int[] square) {
+		this.clearLegalMoves();
+		
 		boolean blockedPP, blockedPN, blockedNP, blockedNN;
 		blockedPP = blockedPN = blockedNP = blockedNN = false;
 		int rankPP, rankPN, rankNP, rankNN;

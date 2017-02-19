@@ -19,7 +19,9 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public void generateLegalMoves(int[] square) {
+	public void updateLegalMoves(int[] square) {
+		this.clearLegalMoves();
+		
 		if (isWhite) {
 			if (getBoard().getPieceAt(square[0], square[1] + 1) == null) {	//white pawn, moving up
 				addLegalMove(new int[] {square[0], square[1] + 1});

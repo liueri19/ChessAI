@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Board {
-	protected List<Piece> pieces = new ArrayList<Piece>();
+	private List<Piece> pieces = new ArrayList<Piece>();
+	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
 	private int gameResult;
 	private boolean autoPrint = true;
@@ -107,7 +108,7 @@ public class Board {
 	}
 	
 	public void changeTurn() {
-		//update legalMoves
+		this.updatePieces();
 		whiteMove = !whiteMove;
 	}
 	
@@ -116,14 +117,19 @@ public class Board {
 	}
 	
 	public Piece getPieceAt(int file, int rank) {
-		pieces.sort(null);
 		for (Piece p : pieces) {
 			if (p.getFile() == file && p.getRank() == rank)
 				return p;
-			if (rank > p.getRank())
-				break;
 		}
 		return null;
+	}
+	
+	public boolean removePiece(Piece p) {
+		return this.pieces.remove(p);
+	}
+	
+	public Piece removePiece(int index) {
+		return this.pieces.remove(index);
 	}
 	
 	public void printHistory() {
@@ -210,10 +216,10 @@ public class Board {
 		pieces.add(new Queen(this, Color.WHITE, 4, 1));
 		pieces.add(new Queen(this, Color.BLACK, 4, 8));
 		//kings
-		pieces.add(new King(this, Color.WHITE, 5, 1));
-		pieces.add(new King(this, Color.BLACK, 5, 8));
+		pieces.add(whiteKing = new King(this, Color.WHITE, 5, 1));
+		pieces.add(blackKing = new King(this, Color.BLACK, 5, 8));
 		
-		pieces.sort(null);
+		updatePieces();
 	}
 	
 	public List<Object[]> getHistory() {
@@ -228,11 +234,21 @@ public class Board {
 		return history.size();	//starts with 0
 	}
 	
-	public boolean isSquareUnderAttack(Color color, int file, int rank) {
+	public boolean isSquareAttacked(Color color, int file, int rank) {
 		for (Piece p : pieces) {
 			if (p.getColor() != color && p.isLegalMove(new int[] {file, rank}))
 				return true;
 		}
 		return false;
+	}
+	
+	public void updatePieces() {
+		for (Piece p : pieces) {
+			if (!(p instanceof King))
+				p.updateLegalMoves();
+		}
+		
+		whiteKing.updateLegalMoves();
+		blackKing.updateLegalMoves();
 	}
 }

@@ -236,7 +236,7 @@ public class Board {
 	
 	public boolean isSquareAttacked(Color color, int file, int rank) {
 		for (Piece p : pieces) {
-			if (p.getColor() != color && p.isLegalMove(new int[] {file, rank}))
+			if (p.getColor() != color && p.isAttacking(new int[] {file, rank}))
 				return true;
 		}
 		return false;
@@ -245,10 +245,10 @@ public class Board {
 	public void updatePieces() {
 		for (Piece p : pieces) {
 			if (!(p instanceof King))
-				p.updateLegalMoves();
+				p.updatePiece();
 		}
-		
-		whiteKing.updateLegalMoves();
-		blackKing.updateLegalMoves();
+		//kings need to be updated last
+		whiteKing.updatePiece();
+		blackKing.updatePiece();
 	}
 }

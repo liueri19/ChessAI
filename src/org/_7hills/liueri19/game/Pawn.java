@@ -19,7 +19,7 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public void updateLegalMoves(int[] square) {
+	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
 		if (isWhite) {

@@ -1,6 +1,12 @@
 package org._7hills.liueri19.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class King extends Piece {
+	
+	private boolean castlable = true;
+	private List<int[]> attackedSquares = new ArrayList<int[]>();
 
 	public King(Board board, Color color, int x, int y) {
 		super(board, color, x, y);
@@ -14,7 +20,7 @@ public class King extends Piece {
 	}
 
 	@Override
-	public void updateLegalMoves(int[] square) {
+	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
 		//8 candidate moves
@@ -32,11 +38,41 @@ public class King extends Piece {
 		for (int[] move : candidates) {
 			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
 				continue;
-			else if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1]) &&
+			addAttackedSquare(move);
+			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1]) &&
 					(getBoard().getPieceAt(move[0], move[1]) == null ||
 					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor()))
 				addLegalMove(move);
 		}
 	}
-
+	
+	public boolean getCastlable() {
+		return castlable;
+	}
+	
+	@Override
+	public List<int[]> getAttackedSquares() {
+		return attackedSquares;
+	}
+	
+	@Override
+	public void setAttackedSquares(List<int[]> moves) {
+		attackedSquares = moves;
+	}
+	
+	@Override
+	public void clearAttackedSquares() {
+		attackedSquares.clear();
+	}
+	
+	@Override
+	public void addAttackedSquare(int[] move) {
+		attackedSquares.add(move);
+	}
+	
+	@Override
+	public boolean move(int file, int rank) {
+		castlable = false;
+		return super.move(file, rank);
+	}
 }

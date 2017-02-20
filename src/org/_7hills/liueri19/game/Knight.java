@@ -14,7 +14,7 @@ public class Knight extends Piece {
 	}
 
 	@Override
-	public void updateLegalMoves(int[] square) {
+	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
 		//8 candidate moves

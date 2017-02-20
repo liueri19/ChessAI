@@ -14,7 +14,7 @@ public class Rook extends Piece {
 	}
 
 	@Override
-	public void updateLegalMoves(int[] square) {
+	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
 		for (int fileP = square[0] + 1; fileP < 9; fileP++) {

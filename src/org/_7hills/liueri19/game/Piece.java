@@ -64,6 +64,34 @@ public abstract class Piece implements Comparable<Piece>{
 		return false;
 	}
 	
+	/*
+	 * For pieces other than King, attacked squares are the same as legal moves
+	 */
+	public List<int[]> getAttackedSquares() {
+		return getLegalMoves();
+	}
+	
+	public void setAttackedSquares(List<int[]> moves) {
+		setLegalMoves(moves);
+	}
+	
+	public void clearAttackedSquares() {
+		clearLegalMoves();
+	}
+	
+	public void addAttackedSquare(int[] move) {
+		addLegalMove(move);
+	}
+	
+	public boolean isAttacking(int[] move) {
+		for (int[] m : getAttackedSquares()) {
+			if (Arrays.equals(move, m))
+				return true;
+		}
+		return false;
+	}
+	////
+	
 	public boolean move(int file, int rank) {
 		int[] move = new int[] {file, rank};
 		if (isLegalMove(move)) {
@@ -76,10 +104,10 @@ public abstract class Piece implements Comparable<Piece>{
 		return false;
 	}
 	
-	public abstract void updateLegalMoves(int[] square);
+	public abstract void updatePiece(int[] square);
 	
-	public void updateLegalMoves() {
-		updateLegalMoves(this.getSquare());
+	public void updatePiece() {
+		updatePiece(this.getSquare());
 	}
 	
 	public abstract String toString();

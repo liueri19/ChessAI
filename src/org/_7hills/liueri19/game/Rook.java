@@ -1,14 +1,16 @@
 package org._7hills.liueri19.game;
 
 public class Rook extends Piece {
+	
+	private boolean castlable = true;
 
-	public Rook(Board board, Color color, int x, int y) {
+	public Rook(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
 	}
 
 	@Override
 	public String toString() {
-		if (this.getColor() == Color.WHITE)
+		if (this.getColor())
 			return "WR";
 		return "BR";
 	}
@@ -57,5 +59,19 @@ public class Rook extends Piece {
 			else
 				break;
 		}
+	}
+	
+	@Override
+	public boolean move(int file, int rank) {
+		setCastlable(false);
+		return super.move(file, rank);
+	}
+	
+	public boolean isCastlable() {
+		return castlable;
+	}
+	
+	public void setCastlable(boolean castlable) {
+		this.castlable = castlable;
 	}
 }

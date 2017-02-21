@@ -3,9 +3,9 @@ package org._7hills.liueri19.game;
 public class Pawn extends Piece {
 	private boolean isWhite;
 
-	public Pawn(Board board, Color color, int x, int y) {
+	public Pawn(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
-		if (this.getColor() == Color.WHITE)
+		if (this.getColor())
 			isWhite = true;
 		else
 			isWhite = false;

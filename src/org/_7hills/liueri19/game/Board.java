@@ -50,6 +50,58 @@ public class Board {
 //			else if (input.equals("draw"))
 //				//suggest draw to the opponent
 			
+			else if (input.equals("0-0")) {	//castling, king side
+				//validate requirements
+				/*
+				 * The king and the chosen rook are on the player's first rank.
+				 * Neither the king nor the chosen rook has previously moved.
+				 * There are no pieces between the king and the chosen rook.
+				 * The king is not currently in check.
+				 * The king does not pass through a square that is attacked by an enemy piece.
+				 * The king does not end up in check. (True of any legal move.)
+				 */
+				King king;
+				Piece rook;
+				if (board.whiteMove) {	//acquire the pieces
+					king = board.whiteKing;
+					rook = board.getPieceAt(8, 1);
+				}
+				else {
+					king = board.blackKing;
+					rook = board.getPieceAt(8, 8);
+				}
+				if (rook == null || !(rook instanceof Rook)) {
+					System.out.println("Rook is not on the required square");
+					continue;
+				}
+				if (!king.isCastlable()) {
+					System.out.println("The king had been moved");
+					continue;
+				}
+				if (board.getPieceAt(6, king.getRank()) != null || board.getPieceAt(7, king.getRank()) != null) {
+					System.out.println("There are piece(s) blocking the castling");
+					continue;
+				}
+				//in check
+				
+				//move pieces
+				king.setSquare(7, king.getRank());
+				rook.setSquare(6, rook.getRank());
+				//add history entry
+				
+				
+				if (board.whiteMove)
+					board.whiteKing.setCastlable(false);
+				else
+					board.blackKing.setCastlable(false);
+				((Rook) rook).setCastlable(false);
+				board.changeTurn();
+			}
+			
+			else if (input.equals("0-0-0")) {	//castling, queen side
+				
+			}
+			
 			else if (input.length() == 4) {	//a move
 				char fileO = input.charAt(0);
 				int rankO = Character.getNumericValue(input.charAt(1));
@@ -57,23 +109,23 @@ public class Board {
 				if (Character.toString(fileO).matches("[abcdefgh]")) {	//if the first character is a, b, c, d, e, f, g, or h
 					piece = board.getPieceAt(fileO, rankO);
 					if (piece == null) {
-						System.out.println("Invalid input: no piece on the selected square");
+						System.out.println("No piece on the selected square");
 						continue;
 					}
 					//a valid piece selected, validate turn
-					if (piece.getColor() == Color.WHITE && !board.whiteMove) {
-						System.out.println("Invalid input: cannot move white piece on black's turn");
+					if (piece.getColor() && !board.whiteMove) {
+						System.out.println("Cannot move white piece on black's turn");
 						continue;
 					}
-					else if (piece.getColor() == Color.BLACK && board.whiteMove) {
-						System.out.println("Invalid input: cannot move black piece on white's turn");
+					else if (!piece.getColor() && board.whiteMove) {
+						System.out.println("Cannot move black piece on white's turn");
 						continue;
 					}
 					//get the target square
 					char fileD = input.charAt(2);
 					int rankD = Character.getNumericValue(input.charAt(3));
 					if (!piece.move(parseFile(fileD), rankD)) {
-						System.out.println("Invalid input: illegal move");
+						System.out.println("Illegal move");
 						continue;
 					}
 					//move verified legal
@@ -81,7 +133,7 @@ public class Board {
 					board.changeTurn();
 				}
 				else {	//if the input did not start with abcdefgh
-					System.out.println("Invalid input: invalid square coordinate");
+					System.out.println("Invalid square coordinate");
 					continue;
 				}
 			}
@@ -160,7 +212,7 @@ public class Board {
 			System.out.println("|");
 			//rank second line
 			for (int file = 1; file < 9; file++) {
-				Piece p = new King(this, Color.WHITE, 0, 0);	//placeholder
+				Piece p = new King(this, true, 0, 0);	//placeholder
 				try {
 				p = pieces.get(index);
 				}
@@ -192,32 +244,32 @@ public class Board {
 		for (int y = 2; y < 8; y += 5) {
 			for (int x = 1; x < 9; x++) {
 				if (y == 2)
-					pieces.add(new Pawn(this, Color.WHITE, x, y));
+					pieces.add(new Pawn(this, true, x, y));
 				else
-					pieces.add(new Pawn(this, Color.BLACK, x, y));
+					pieces.add(new Pawn(this, false, x, y));
 			}
 		}
 		//rooks
-		pieces.add(new Rook(this, Color.WHITE, 1, 1));
-		pieces.add(new Rook(this, Color.WHITE, 8, 1));
-		pieces.add(new Rook(this, Color.BLACK, 1, 8));
-		pieces.add(new Rook(this, Color.BLACK, 8, 8));
+		pieces.add(new Rook(this, true, 1, 1));
+		pieces.add(new Rook(this, true, 8, 1));
+		pieces.add(new Rook(this, false, 1, 8));
+		pieces.add(new Rook(this, false, 8, 8));
 		//knights
-		pieces.add(new Knight(this, Color.WHITE, 2, 1));
-		pieces.add(new Knight(this, Color.WHITE, 7, 1));
-		pieces.add(new Knight(this, Color.BLACK, 2, 8));
-		pieces.add(new Knight(this, Color.BLACK, 7, 8));
+		pieces.add(new Knight(this, true, 2, 1));
+		pieces.add(new Knight(this, true, 7, 1));
+		pieces.add(new Knight(this, false, 2, 8));
+		pieces.add(new Knight(this, false, 7, 8));
 		//bishops
-		pieces.add(new Bishop(this, Color.WHITE, 3, 1));
-		pieces.add(new Bishop(this, Color.WHITE, 6, 1));
-		pieces.add(new Bishop(this, Color.BLACK, 3, 8));
-		pieces.add(new Bishop(this, Color.BLACK, 6, 8));
+		pieces.add(new Bishop(this, true, 3, 1));
+		pieces.add(new Bishop(this, true, 6, 1));
+		pieces.add(new Bishop(this, false, 3, 8));
+		pieces.add(new Bishop(this, false, 6, 8));
 		//queens
-		pieces.add(new Queen(this, Color.WHITE, 4, 1));
-		pieces.add(new Queen(this, Color.BLACK, 4, 8));
+		pieces.add(new Queen(this, true, 4, 1));
+		pieces.add(new Queen(this, false, 4, 8));
 		//kings
-		pieces.add(whiteKing = new King(this, Color.WHITE, 5, 1));
-		pieces.add(blackKing = new King(this, Color.BLACK, 5, 8));
+		pieces.add(whiteKing = new King(this, true, 5, 1));
+		pieces.add(blackKing = new King(this, false, 5, 8));
 		
 		updatePieces();
 	}
@@ -234,7 +286,7 @@ public class Board {
 		return history.size();	//starts with 0
 	}
 	
-	public boolean isSquareAttacked(Color color, int file, int rank) {
+	public boolean isSquareAttacked(boolean color, int file, int rank) {
 		for (Piece p : pieces) {
 			if (p.getColor() != color && p.isAttacking(new int[] {file, rank}))
 				return true;

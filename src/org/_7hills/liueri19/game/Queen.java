@@ -2,13 +2,13 @@ package org._7hills.liueri19.game;
 
 public class Queen extends Piece {
 
-	public Queen(Board board, Color color, int x, int y) {
+	public Queen(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
 	}
 
 	@Override
 	public String toString() {
-		if (this.getColor() == Color.WHITE)
+		if (this.getColor())
 			return "WQ";
 		return "BQ";
 	}
@@ -69,9 +69,10 @@ public class Queen extends Piece {
 			if (!blockedPP && rankPP < 9) {
 				if (getBoard().getPieceAt(fileP, rankPP) == null)
 					addLegalMove(new int[] {fileP, rankPP});
-				else if (getBoard().getPieceAt(fileP, rankPP).getColor() != this.getColor()) {
-					addLegalMove(new int[] {fileP, rankPP});
+				else {
 					blockedPP = true;
+					if (getBoard().getPieceAt(fileP, rankPP).getColor() != this.getColor())
+						addLegalMove(new int[] {fileP, rankPP});
 				}
 			}
 			else
@@ -80,9 +81,10 @@ public class Queen extends Piece {
 			if (!blockedPN && rankPN > 0) {
 				if (getBoard().getPieceAt(fileP, rankPN) == null)
 					addLegalMove(new int[] {fileP, rankPN});
-				else if (getBoard().getPieceAt(fileP, rankPN).getColor() != this.getColor()) {
-					addLegalMove(new int[] {fileP, rankPN});
+				else {
 					blockedPN = true;
+					if (getBoard().getPieceAt(fileP, rankPN).getColor() != this.getColor())
+						addLegalMove(new int[] {fileP, rankPN});
 				}
 			}
 			else
@@ -93,11 +95,12 @@ public class Queen extends Piece {
 		
 		for (int fileN = square[0] - 1; fileN > 0; fileN--) {
 			if (!blockedNP && rankNP < 9) {
-				 if (getBoard().getPieceAt(fileN, rankNP) == null)
+				if (getBoard().getPieceAt(fileN, rankNP) == null)
 					addLegalMove(new int[] {fileN, rankNP});
-				else if (getBoard().getPieceAt(fileN, rankNP).getColor() != this.getColor()) {
-					addLegalMove(new int[] {fileN, rankNP});
+				else {
 					blockedNP = true;
+					if (getBoard().getPieceAt(fileN, rankNP).getColor() != this.getColor())
+						addLegalMove(new int[] {fileN, rankNP});
 				}
 			}
 			else
@@ -106,9 +109,10 @@ public class Queen extends Piece {
 			if (!blockedNN && rankNN > 0) {
 				if (getBoard().getPieceAt(fileN, rankNN) == null)
 					addLegalMove(new int[] {fileN, rankNN});
-				else if (getBoard().getPieceAt(fileN, rankNN).getColor() != this.getColor()) {
-					addLegalMove(new int[] {fileN, rankNN});
+				else {
 					blockedNN = true;
+					if (getBoard().getPieceAt(fileN, rankNN).getColor() != this.getColor())
+						addLegalMove(new int[] {fileN, rankNN});
 				}
 			}
 			else

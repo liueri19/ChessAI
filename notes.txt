@@ -40,6 +40,9 @@ _________________________________________
 |/WR/| WN |/WB/| WQ |/WK/| WB |/WN/| WR |
 |____|____|____|____|____|____|____|____|
 
+white == true
+black == false
+
 Completed
 Legal move and attacked squares are not the same: an attacked square of a king may not be a legal move.
 King class need to implement attacked squares to handle King vs King end games.
@@ -49,3 +52,4 @@ Bishops should not ignore blocking pieces.
 TODO
 en passant
 castling
+implement check

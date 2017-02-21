@@ -2,13 +2,13 @@ package org._7hills.liueri19.game;
 
 public class Bishop extends Piece {
 
-	public Bishop(Board board, Color color, int x, int y) {
+	public Bishop(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
 	}
 
 	@Override
 	public String toString() {
-		if (this.getColor() == Color.WHITE)
+		if (this.getColor())
 			return "WB";
 		return "BB";
 	}

@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class Piece implements Comparable<Piece>{
-	private Color color;	//color the color of the piece. 0 for black, 1 for white.
+	private boolean color;	//color the color of the piece. true for white, false for black
 	private final Board board;
 	private int[] coordinate;
 	private List<int[]> legalMoves = new ArrayList<int[]>();
 	
-	public Piece(Board board, Color color, int x, int y) {
+	public Piece(Board board, boolean color, int x, int y) {
 		this.board = board;
 		this.color = color;
 		coordinate = new int[] {x, y};
@@ -20,7 +20,7 @@ public abstract class Piece implements Comparable<Piece>{
 		return board;
 	}
 	
-	public Color getColor() {
+	public boolean getColor() {
 		return color;
 	}
 	
@@ -30,6 +30,10 @@ public abstract class Piece implements Comparable<Piece>{
 	
 	public void setSquare(int[] square) {
 		coordinate = square;
+	}
+	
+	public void setSquare(int file, int rank) {
+		setSquare(new int[] {file, rank});
 	}
 	
 	public int getFile() {
@@ -64,7 +68,7 @@ public abstract class Piece implements Comparable<Piece>{
 		return false;
 	}
 	
-	/*
+	/**
 	 * For pieces other than King, attacked squares are the same as legal moves
 	 */
 	public List<int[]> getAttackedSquares() {

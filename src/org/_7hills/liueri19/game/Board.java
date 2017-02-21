@@ -70,8 +70,8 @@ public class Board {
 					king = board.blackKing;
 					rook = board.getPieceAt(8, 8);
 				}
-				if (rook == null || !(rook instanceof Rook)) {
-					System.out.println("Rook is not on the required square");
+				if (rook == null || !(rook instanceof Rook) || !((Rook) rook).isCastlable()) {
+					System.out.println("The rook had been moved");
 					continue;
 				}
 				if (!king.isCastlable()) {
@@ -82,24 +82,74 @@ public class Board {
 					System.out.println("There are piece(s) blocking the castling");
 					continue;
 				}
-				//in check
-				
+				if (board.isInCheck(king.getColor())) {
+					System.out.println("The king cannot castle while in check");
+					continue;
+				}
+				if (board.isSquareAttacked(king.getColor(), 6, king.getRank())) {
+					System.out.println("The king cannot move through an attacked square");
+					continue;
+				}
+				if (board.isSquareAttacked(king.getColor(), 7, king.getRank())) {
+					System.out.println("The king cannot catle into a check");
+					continue;
+				}
 				//move pieces
 				king.setSquare(7, king.getRank());
 				rook.setSquare(6, rook.getRank());
 				//add history entry
+				board.history.add(new String[] {"0-0"});
 				
-				
-				if (board.whiteMove)
-					board.whiteKing.setCastlable(false);
-				else
-					board.blackKing.setCastlable(false);
+				king.setCastlable(false);
 				((Rook) rook).setCastlable(false);
 				board.changeTurn();
 			}
 			
 			else if (input.equals("0-0-0")) {	//castling, queen side
+				King king;
+				Piece rook;
+				if (board.whiteMove) {	//acquire the pieces
+					king = board.whiteKing;
+					rook = board.getPieceAt(1, 1);
+				}
+				else {
+					king = board.blackKing;
+					rook = board.getPieceAt(1, 8);
+				}
+				if (rook == null || !(rook instanceof Rook) || !((Rook) rook).isCastlable()) {
+					System.out.println("The rook had been moved");
+					continue;
+				}
+				if (!king.isCastlable()) {
+					System.out.println("The king had been moved");
+					continue;
+				}
+				if (board.getPieceAt(2, king.getRank()) != null || board.getPieceAt(3, king.getRank()) != null ||
+						board.getPieceAt(4, king.getRank()) != null) {
+					System.out.println("There are piece(s) blocking the castling");
+					continue;
+				}
+				if (board.isInCheck(king.getColor())) {
+					System.out.println("The king cannot castle while in check");
+					continue;
+				}
+				if (board.isSquareAttacked(king.getColor(), 4, king.getRank())) {
+					System.out.println("The king cannot move through an attacked square");
+					continue;
+				}
+				if (board.isSquareAttacked(king.getColor(), 3, king.getRank())) {
+					System.out.println("The king cannot catle into a check");
+					continue;
+				}
+				//move pieces
+				king.setSquare(3, king.getRank());
+				rook.setSquare(4, rook.getRank());
+				//add history entry
+				board.history.add(new String[] {"0-0-0"});
 				
+				king.setCastlable(false);
+				((Rook) rook).setCastlable(false);
+				board.changeTurn();
 			}
 			
 			else if (input.length() == 4) {	//a move
@@ -186,7 +236,10 @@ public class Board {
 	
 	public void printHistory() {
 		for (Object[] move : history) {
-			System.out.printf("%s%s->%s%s\n", (Character) move[0], (Integer) move[1], (Character) move[2], (Integer) move[3]);
+			if (move.length == 1)
+				System.out.println(move[0]);
+			else
+				System.out.printf("%s%s->%s%s\n", (Character) move[0], (Integer) move[1], (Character) move[2], (Integer) move[3]);
 		}
 	}
 	
@@ -292,6 +345,10 @@ public class Board {
 				return true;
 		}
 		return false;
+	}
+	
+	public boolean isInCheck(boolean color) {
+		return color ? isSquareAttacked(color, whiteKing.getFile(), whiteKing.getRank()) : isSquareAttacked(color, blackKing.getFile(), blackKing.getRank());
 	}
 	
 	public void updatePieces() {

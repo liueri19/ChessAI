@@ -48,7 +48,7 @@ public abstract class Piece implements Comparable<Piece>{
 		return legalMoves;
 	}
 	
-	public void setLegalMoves(List<int[]> moves) {
+	public void setLegalMoves(ArrayList<int[]> moves) {
 		legalMoves = moves;
 	}
 	
@@ -69,16 +69,19 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	/**
-	 * For pieces other than King, attacked squares are the same as legal moves
+	 * For pieces other than King and Pawn, attacked squares are the same as legal moves
 	 */
 	public List<int[]> getAttackedSquares() {
 		return getLegalMoves();
 	}
 	
-	public void setAttackedSquares(List<int[]> moves) {
+	public void setAttackedSquares(ArrayList<int[]> moves) {
 		setLegalMoves(moves);
 	}
 	
+	/**
+	 * All classes implementing attacked squares separately must call this method in updatePiece();
+	 */
 	public void clearAttackedSquares() {
 		clearLegalMoves();
 	}

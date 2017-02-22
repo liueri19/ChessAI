@@ -44,13 +44,15 @@ white == true
 black == false
 
 Completed
-Legal move and attacked squares are not the same: an attacked square of a king may not be a legal move.
+Legal move and attacked squares are not the same for Kings.
 King class need to implement attacked squares to handle King vs King end games.
 Update legal moves after each move, kings should handle legal moves update after other pieces.
 Bishops should not ignore blocking pieces.
 
 TODO
-en passant
-castling
-implement check
-when checked, the check must be resolved (all other moves must be illegal)
+En passant
+Castling
+Implement check
+When checked, the check must be resolved (all other moves must be illegal)
+Legal move and attacked squares are not the same for Pawns.
+Promotion.

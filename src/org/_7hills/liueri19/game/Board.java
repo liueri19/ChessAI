@@ -215,6 +215,21 @@ public class Board {
 		return fileNum;
 	}
 	
+	public static char parseFile(int file) {
+		char fileNum = '0';
+		switch (file) {
+			case 1: fileNum = 'a'; break;
+			case 2: fileNum = 'b'; break;
+			case 3: fileNum = 'c'; break;
+			case 4: fileNum = 'd'; break;
+			case 5: fileNum = 'e'; break;
+			case 6: fileNum = 'f'; break;
+			case 7: fileNum = 'g'; break;
+			case 8: fileNum = 'h'; break;
+		}
+		return fileNum;
+	}
+	
 	public void changeTurn() {
 		this.updatePieces();
 		whiteMove = !whiteMove;

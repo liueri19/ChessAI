@@ -41,7 +41,7 @@ public class Pawn extends Piece {
 			 */
 			if (this.getRank() == 5) {
 				Move lastMove = getBoard().getMove(getBoard().getCurrentMoveNum() - 1);
-				int lastMoveFile = Board.parseFile((char) lastMove[0]);	//not working
+				int lastMoveFile = lastMove.getOrigin()[0];
 				if (lastMove.getPiece() instanceof Pawn && (lastMoveFile == this.getFile() -1 || lastMoveFile == this.getFile() +1)) {
 					
 				}

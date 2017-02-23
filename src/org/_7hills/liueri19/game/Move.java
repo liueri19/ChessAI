@@ -34,6 +34,6 @@ public class Move {
 	
 	@Override
 	public String toString() {
-		return "" + origin[0] + origin[1] + destination[0] + destination[1];
+		return "" + Board.parseFile(origin[0]) + origin[1] + Board.parseFile(destination[0]) + destination[1];
 	}
 }

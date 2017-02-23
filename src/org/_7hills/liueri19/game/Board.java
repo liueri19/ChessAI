@@ -11,7 +11,8 @@ public class Board {
 	private int gameResult;
 	private boolean autoPrint = true;
 	private boolean whiteMove = true;
-	private List<Object[]> history = new ArrayList<Object[]>();
+	//private List<Object[]> history = new ArrayList<Object[]>();
+	private List<Move> history = new ArrayList<Move>();
 	
 	public Board() {
 		setUpPieces();
@@ -94,13 +95,14 @@ public class Board {
 					System.out.println("The king cannot catle into a check");
 					continue;
 				}
+				
+				int[] from = king.getSquare();
 				//move pieces
 				king.setSquare(7, king.getRank());
 				rook.setSquare(6, rook.getRank());
 				//add history entry
-				board.history.add(new String[] {"0-0"});
+				board.history.add(new Castling(king, from, king.getSquare()));
 				
-				king.setCastlable(false);
 				((Rook) rook).setCastlable(false);
 				board.changeTurn();
 			}
@@ -141,13 +143,14 @@ public class Board {
 					System.out.println("The king cannot catle into a check");
 					continue;
 				}
+				
+				int[] from = king.getSquare();
 				//move pieces
 				king.setSquare(3, king.getRank());
 				rook.setSquare(4, rook.getRank());
 				//add history entry
-				board.history.add(new String[] {"0-0-0"});
+				board.history.add(new Castling(king, from, king.getSquare()));
 				
-				king.setCastlable(false);
 				((Rook) rook).setCastlable(false);
 				board.changeTurn();
 			}
@@ -171,15 +174,18 @@ public class Board {
 						System.out.println("Cannot move black piece on white's turn");
 						continue;
 					}
+					
 					//get the target square
 					char fileD = input.charAt(2);
 					int rankD = Character.getNumericValue(input.charAt(3));
-					if (!piece.move(parseFile(fileD), rankD)) {
+					int[] from = piece.getSquare();
+					int[] to = new int[] {parseFile(fileD), rankD};
+					if (!piece.move(to)) {
 						System.out.println("Illegal move");
 						continue;
 					}
 					//move verified legal
-					board.history.add(new Object[] {new Character(fileO), new Integer(rankO), new Character(fileD), new Integer(rankD)});
+					board.history.add(new Move(piece, from, to));
 					board.changeTurn();
 				}
 				else {	//if the input did not start with abcdefgh
@@ -226,6 +232,10 @@ public class Board {
 		return null;
 	}
 	
+	public Piece getPieceAt(int[] square) {
+		return getPieceAt(square[0], square[1]);
+	}
+	
 	public boolean removePiece(Piece p) {
 		return this.pieces.remove(p);
 	}
@@ -235,12 +245,8 @@ public class Board {
 	}
 	
 	public void printHistory() {
-		for (Object[] move : history) {
-			if (move.length == 1)
-				System.out.println(move[0]);
-			else
-				System.out.printf("%s%s->%s%s\n", (Character) move[0], (Integer) move[1], (Character) move[2], (Integer) move[3]);
-		}
+		for (Move move : history)
+			System.out.println(move.toString());
 	}
 	
 	public void printBoard() {
@@ -327,11 +333,11 @@ public class Board {
 		updatePieces();
 	}
 	
-	public List<Object[]> getHistory() {
+	public List<Move> getHistory() {
 		return history;
 	}
 	
-	public Object[] getMove(int moveNum) {
+	public Move getMove(int moveNum) {
 		return history.get(moveNum);
 	}
 	

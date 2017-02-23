@@ -101,6 +101,10 @@ public abstract class Piece implements Comparable<Piece>{
 	
 	public boolean move(int file, int rank) {
 		int[] move = new int[] {file, rank};
+		return move(move);
+	}
+	
+	public boolean move(int[] move) {
 		if (isLegalMove(move)) {
 			Piece p = getBoard().getPieceAt(move[0], move[1]);
 			if (p != null)

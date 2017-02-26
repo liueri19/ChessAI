@@ -22,7 +22,6 @@ public class King extends Piece {
 	@Override
 	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
-		this.clearAttackedSquares();
 		
 		//8 candidate moves
 		int[][] candidates = new int[][] {
@@ -61,7 +60,7 @@ public class King extends Piece {
 	}
 	
 	@Override
-	public void setAttackedSquares(ArrayList<int[]> moves) {
+	public void setAttackedSquares(List<int[]> moves) {
 		attackedSquares = moves;
 	}
 	
@@ -77,9 +76,7 @@ public class King extends Piece {
 	
 	@Override
 	public boolean move(int file, int rank) {
-		boolean isLegal = super.move(file, rank);
-		if (isLegal)
-			setCastlable(false);
-		return isLegal;
+		setCastlable(false);
+		return super.move(file, rank);
 	}
 }

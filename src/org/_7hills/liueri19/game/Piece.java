@@ -8,7 +8,7 @@ public abstract class Piece implements Comparable<Piece>{
 	private boolean color;	//color the color of the piece. true for white, false for black
 	private final Board board;
 	private int[] coordinate;
-	private List<int[]> legalMoves = new ArrayList<int[]>();
+	private List<Move> legalMoves = new ArrayList<Move>();
 	
 	public Piece(Board board, boolean color, int x, int y) {
 		this.board = board;

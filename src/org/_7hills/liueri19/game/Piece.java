@@ -44,11 +44,11 @@ public abstract class Piece implements Comparable<Piece>{
 		return coordinate[1];
 	}
 	
-	public List<int[]> getLegalMoves() {
+	public List<Move> getLegalMoves() {
 		return legalMoves;
 	}
 	
-	public void setLegalMoves(List<int[]> moves) {
+	public void setLegalMoves(ArrayList<Move> moves) {
 		legalMoves = moves;
 	}
 	
@@ -56,12 +56,12 @@ public abstract class Piece implements Comparable<Piece>{
 		legalMoves.clear();
 	}
 	
-	public void addLegalMove(int[] move) {
+	public void addLegalMove(Move move) {
 		legalMoves.add(move);
 	}
 	
-	public boolean isLegalMove(int[] move) {
-		for (int[] m : getLegalMoves()) {
+	public boolean isLegalMove(Move move) {
+		for (Move m : getLegalMoves()) {
 			if (Arrays.equals(move, m))
 				return true;
 		}
@@ -130,5 +130,12 @@ public abstract class Piece implements Comparable<Piece>{
 		if (this.getRank() > piece.getRank())
 			return -1;
 		return 1;
+	}
+	
+	@Override
+	public boolean equals(Piece piece) {
+		if (this.getClass().equals(piece.getClass()))
+			return true;
+		return false;
 	}
 }

@@ -1,18 +1,19 @@
 package org._7hills.liueri19.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Pawn extends Piece {
-	private List<int[]> attackedSquares = new ArrayList<int[]>();
+	private boolean isWhite;
 
 	public Pawn(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
+		if (this.getColor())
+			isWhite = true;
+		else
+			isWhite = false;
 	}
 
 	@Override
 	public String toString() {
-		if (getColor())
+		if (isWhite)
 			return "WP";
 		return "BP";
 	}
@@ -20,9 +21,8 @@ public class Pawn extends Piece {
 	@Override
 	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
-		this.clearAttackedSquares();
 		
-		if (getColor()) {
+		if (isWhite) {
 			if (getBoard().getPieceAt(square[0], square[1] + 1) == null) {	//white pawn, moving up
 				addLegalMove(new int[] {square[0], square[1] + 1});
 				if (square[1] == 2)	//on the second rank
@@ -60,53 +60,6 @@ public class Pawn extends Piece {
 					getBoard().getPieceAt(square[0] + 1, square[1] - 1).getColor() != this.getColor())
 				addLegalMove(new int[] {square[0] + 1, square[1] - 1});
 		}
-		
-		updateAttackedSquares();
 	}
-	
-	private void updateAttackedSquares() {
-		int file = getFile();
-		int rank = getRank();
-		if (getColor()) {
-			if (file == 1)
-				addAttackedSquare(new int[] {2, rank + 1});
-			else if (file == 8)
-				addAttackedSquare(new int[] {7, rank + 1});
-			else {
-				addAttackedSquare(new int[] {file - 1, rank + 1});
-				addAttackedSquare(new int[] {file + 1, rank + 1});
-			}
-		}
-		else {
-			if (file == 1)
-				addAttackedSquare(new int[] {2, rank - 1});
-			else if (file == 8)
-				addAttackedSquare(new int[] {7, rank - 1});
-			else {
-				addAttackedSquare(new int[] {file - 1, rank - 1});
-				addAttackedSquare(new int[] {file + 1, rank - 1});
-			}
-		}
-	}
-	
-	//this can be done differently, but I chose this way for consistency with the King class
-	@Override
-	public List<int[]> getAttackedSquares() {
-		return attackedSquares;
-	}
-	
-	@Override
-	public void setAttackedSquares(ArrayList<int[]> moves) {
-		attackedSquares = moves;
-	}
-	
-	@Override
-	public void clearAttackedSquares() {
-		attackedSquares.clear();
-	}
-	
-	@Override
-	public void addAttackedSquare(int[] move) {
-		attackedSquares.add(move);
-	}
+
 }

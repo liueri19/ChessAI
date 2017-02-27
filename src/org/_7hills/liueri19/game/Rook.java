@@ -63,10 +63,8 @@ public class Rook extends Piece {
 	
 	@Override
 	public boolean move(int file, int rank) {
-		boolean isLegal = super.move(file, rank);
-		if (isLegal)
-			setCastlable(false);
-		return isLegal;
+		setCastlable(false);
+		return super.move(file, rank);
 	}
 	
 	public boolean isCastlable() {

@@ -62,7 +62,7 @@ public abstract class Piece implements Comparable<Piece>{
 	
 	public boolean isLegalMove(Move move) {
 		for (Move m : getLegalMoves()) {
-			if (Arrays.equals(move, m))
+			if (move.equals(m))
 				return true;
 		}
 		return false;
@@ -71,11 +71,11 @@ public abstract class Piece implements Comparable<Piece>{
 	/**
 	 * For pieces other than King, attacked squares are the same as legal moves
 	 */
-	public List<int[]> getAttackedSquares() {
+	public List<Move> getAttackedSquares() {
 		return getLegalMoves();
 	}
 	
-	public void setAttackedSquares(List<int[]> moves) {
+	public void setAttackedSquares(ArrayList<Move> moves) {
 		setLegalMoves(moves);
 	}
 	
@@ -83,11 +83,11 @@ public abstract class Piece implements Comparable<Piece>{
 		clearLegalMoves();
 	}
 	
-	public void addAttackedSquare(int[] move) {
+	public void addAttackedSquare(Move move) {
 		addLegalMove(move);
 	}
 	
-	public boolean isAttacking(int[] move) {
+	public boolean isAttacking(Move move) {
 		for (int[] m : getAttackedSquares()) {
 			if (Arrays.equals(move, m))
 				return true;
@@ -133,7 +133,7 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	@Override
-	public boolean equals(Piece piece) {
+	public boolean equals(Object piece) {
 		if (this.getClass().equals(piece.getClass()))
 			return true;
 		return false;

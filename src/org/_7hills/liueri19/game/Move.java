@@ -46,6 +46,8 @@ public class Move {
 		else if (Arrays.equals(getOrigin(), ((Move) move).getOrigin()) 
 				&& Arrays.equals(getDestination(), ((Move) move).getDestination()) 
 				&& getPiece().equals(((Move) move).getPiece())
+				&& getSubject() != null
+				&& ((Move) move).getSubject() != null
 				&& getSubject().equals(((Move) move).getSubject()))
 			return true;
 		return false;

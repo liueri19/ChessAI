@@ -23,26 +23,29 @@ public class Bishop extends Piece {
 		rankPP = rankNP = square[1] + 1;
 		rankPN = rankNN = square[1] - 1;
 		
+		Piece target;
 		for (int fileP = square[0] + 1; fileP < 9; fileP++) {
 			if (!blockedPP && rankPP < 9) {
-				if (getBoard().getPieceAt(fileP, rankPP) == null)
-					addLegalMove(new int[] {fileP, rankPP});
+				target = getBoard().getPieceAt(fileP, rankPP);	//may be null
+				if (target == null)
+					addLegalMove(new Move(this, square, new int[] {fileP, rankPP}));
 				else {
 					blockedPP = true;
-					if (getBoard().getPieceAt(fileP, rankPP).getColor() != this.getColor())
-						addLegalMove(new int[] {fileP, rankPP});
+					if (target.getColor() != this.getColor())
+						addLegalMove(new Move(this, target, square, new int[] {fileP, rankPP}));
 				}
 			}
 			else
 				blockedPP = true;
 			
 			if (!blockedPN && rankPN > 0) {
-				if (getBoard().getPieceAt(fileP, rankPN) == null)
-					addLegalMove(new int[] {fileP, rankPN});
+				target = getBoard().getPieceAt(fileP, rankPN);
+				if (target == null)
+					addLegalMove(new Move(this, square, new int[] {fileP, rankPN}));
 				else {
 					blockedPN = true;
-					if (getBoard().getPieceAt(fileP, rankPN).getColor() != this.getColor())
-						addLegalMove(new int[] {fileP, rankPN});
+					if (target.getColor() != this.getColor())
+						addLegalMove(new Move(this, target, square, new int[] {fileP, rankPN}));
 				}
 			}
 			else
@@ -53,24 +56,26 @@ public class Bishop extends Piece {
 		
 		for (int fileN = square[0] - 1; fileN > 0; fileN--) {
 			if (!blockedNP && rankNP < 9) {
-				if (getBoard().getPieceAt(fileN, rankNP) == null)
-					addLegalMove(new int[] {fileN, rankNP});
+				target = getBoard().getPieceAt(fileN, rankNP);
+				if (target == null)
+					addLegalMove(new Move(this, square, new int[] {fileN, rankNP}));
 				else {
 					blockedNP = true;
-					if (getBoard().getPieceAt(fileN, rankNP).getColor() != this.getColor())
-						addLegalMove(new int[] {fileN, rankNP});
+					if (target.getColor() != this.getColor())
+						addLegalMove(new Move(this, target, square, new int[] {fileN, rankNP}));
 				}
 			}
 			else
 				blockedNP = true;
 			
 			if (!blockedNN && rankNN > 0) {
-				if (getBoard().getPieceAt(fileN, rankNN) == null)
-					addLegalMove(new int[] {fileN, rankNN});
+				target = getBoard().getPieceAt(fileN, rankNN);
+				if (target == null)
+					addLegalMove(new Move(this, square, new int[] {fileN, rankNN}));
 				else {
 					blockedNN = true;
 					if (getBoard().getPieceAt(fileN, rankNN).getColor() != this.getColor())
-						addLegalMove(new int[] {fileN, rankNN});
+						addLegalMove(new Move(this, target, square, new int[] {fileN, rankNN}));
 				}
 			}
 			else

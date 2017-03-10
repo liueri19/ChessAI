@@ -88,8 +88,8 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	public boolean isAttacking(Move move) {
-		for (int[] m : getAttackedSquares()) {
-			if (Arrays.equals(move, m))
+		for (Move m : getAttackedSquares()) {
+			if (move.equals(m))
 				return true;
 		}
 		return false;
@@ -103,9 +103,9 @@ public abstract class Piece implements Comparable<Piece>{
 	public boolean move(Move move) {
 		if (isLegalMove(move)) {
 			Piece p = move.getPiece();
-			if (p != null)
-				getBoard().removePiece(p);
-			setSquare(move);
+			if (move.getSubject() != null)
+				getBoard().removePiece(move.getSubject());
+			setSquare(move.getDestination());
 			return true;
 		}
 		return false;

@@ -29,12 +29,18 @@ public class Knight extends Piece {
 			new int[] {square[0] +2, square[1] -1}
 		};
 		//eliminate illegal moves
+		Piece target;
 		for (int[] move : candidates) {
 			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
 				continue;
-			else if (getBoard().getPieceAt(move[0], move[1]) == null ||
-					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor())
-				addLegalMove(move);
+//			else if (getBoard().getPieceAt(move[0], move[1]) == null ||
+//					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor())
+//				addLegalMove(move);
+			target = getBoard().getPieceAt(move[0], move[1]);
+			if (target == null)
+				addLegalMove(new Move(this, square, move));
+			else if (target.getColor() != this.getColor())
+				addLegalMove(new Move(this, target, square, move));
 		}
 	}
 }

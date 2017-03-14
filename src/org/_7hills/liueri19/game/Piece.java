@@ -16,6 +16,8 @@ public abstract class Piece implements Comparable<Piece>{
 		coordinate = new int[] {x, y};
 	}
 	
+	public static abstract Piece copy(Piece piece);
+	
 	public Board getBoard() {
 		return board;
 	}
@@ -71,24 +73,24 @@ public abstract class Piece implements Comparable<Piece>{
 	/**
 	 * For pieces other than King, attacked squares are the same as legal moves
 	 */
-	public List<Move> getAttackedSquares() {
+	public List<Move> getThreats() {
 		return getLegalMoves();
 	}
 	
-	public void setAttackedSquares(ArrayList<Move> moves) {
+	public void setThreats(ArrayList<Move> moves) {
 		setLegalMoves(moves);
 	}
 	
-	public void clearAttackedSquares() {
+	public void clearThreats() {
 		clearLegalMoves();
 	}
 	
-	public void addAttackedSquare(Move move) {
+	public void addThreat(Move move) {
 		addLegalMove(move);
 	}
 	
-	public boolean isAttacking(Move move) {
-		for (Move m : getAttackedSquares()) {
+	public boolean isThreating(Move move) {
+		for (Move m : getThreats()) {
 			if (move.equals(m))
 				return true;
 		}

@@ -1,19 +1,14 @@
 package org._7hills.liueri19.game;
 
 public class Pawn extends Piece {
-	private boolean isWhite;
 
 	public Pawn(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
-		if (this.getColor())
-			isWhite = true;
-		else
-			isWhite = false;
 	}
 
 	@Override
 	public String toString() {
-		if (isWhite)
+		if (this.getColor())
 			return "WP";
 		return "BP";
 	}
@@ -22,7 +17,7 @@ public class Pawn extends Piece {
 	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
-		if (isWhite) {
+		if (this.getColor()) {
 			if (getBoard().getPieceAt(square[0], square[1] + 1) == null) {	//white pawn, moving up
 				addLegalMove(new int[] {square[0], square[1] + 1});
 				if (square[1] == 2)	//on the second rank

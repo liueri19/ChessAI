@@ -19,41 +19,48 @@ public class Rook extends Piece {
 	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
+		Piece target;
 		for (int fileP = square[0] + 1; fileP < 9; fileP++) {
-			if (getBoard().getPieceAt(fileP, square[1]) == null)	//if the square is empty
-				addLegalMove(new int[] {fileP, square[1]});
-			else if (getBoard().getPieceAt(fileP, square[1]).getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new int[] {fileP, square[1]});
+			target = getBoard().getPieceAt(fileP, square[1]);
+			if (target == null)	//if the square is empty
+				addLegalMove(new Move(this, square, new int[] {fileP, square[1]}));
+			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
+				addLegalMove(new Move(this, target, square, new int[] {fileP, square[1]}));
 				break;
 			}
 			else	
 				break;
 		}
+		target = null;
 		for (int fileN = square[0] - 1; fileN > 0; fileN--) {
-			if (getBoard().getPieceAt(fileN, square[1]) == null)
-				addLegalMove(new int[] {fileN, square[1]});
-			else if (getBoard().getPieceAt(fileN, square[1]).getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new int[] {fileN, square[1]});
+			target = getBoard().getPieceAt(fileN, square[1]);
+			if (target == null)
+				addLegalMove(new Move(this, square, new int[] {fileN, square[1]}));
+			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
+				addLegalMove(new Move(this, target, square, new int[] {fileN, square[1]}));
 				break;
 			}
 			else
 				break;
 		}
+		target = null;
 		for (int rankP = square[1] + 1; rankP < 9; rankP++) {
-			if (getBoard().getPieceAt(square[0], rankP) == null)
-				addLegalMove(new int[] {square[0], rankP});
-			else if (getBoard().getPieceAt(square[0], rankP).getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new int[] {square[0], rankP});
+			target = getBoard().getPieceAt(square[0], rankP);
+			if (target == null)
+				addLegalMove(new Move(this, square, new int[] {square[0], rankP}));
+			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
+				addLegalMove(new Move(this, target, square, new int[] {square[0], rankP}));
 				break;
 			}
 			else
 				break;
 		}
 		for (int rankN = square[1] - 1; rankN > 0; rankN--) {
-			if (getBoard().getPieceAt(square[0], rankN) == null)
-				addLegalMove(new int[] {square[0], rankN});
-			else if (getBoard().getPieceAt(square[0], rankN).getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new int[] {square[0], rankN});
+			target = getBoard().getPieceAt(square[0], rankN);
+			if (target == null)
+				addLegalMove(new Move(this, square, new int[] {square[0], rankN}));
+			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
+				addLegalMove(new Move(this, target, square, new int[] {square[0], rankN}));
 				break;
 			}
 			else

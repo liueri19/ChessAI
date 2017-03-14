@@ -362,7 +362,7 @@ public class Board {
 	
 	public boolean isSquareAttacked(boolean color, int file, int rank) {
 		for (Piece p : pieces) {
-			if (p.getColor() != color && p.isAttacking(new int[] {file, rank}))
+			if (p.getColor() != color && p.isThreating(new int[] {file, rank}))
 				return true;
 		}
 		return false;

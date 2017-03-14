@@ -6,7 +6,7 @@ import java.util.List;
 public class King extends Piece {
 	
 	private boolean castlable = true;
-	private List<int[]> attackedSquares = new ArrayList<int[]>();
+	private List<Move> attackedSquares = new ArrayList<Move>();
 
 	public King(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
@@ -38,11 +38,18 @@ public class King extends Piece {
 		for (int[] move : candidates) {
 			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
 				continue;
-			addAttackedSquare(move);
-			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1]) &&
-					(getBoard().getPieceAt(move[0], move[1]) == null ||
-					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor()))
-				addLegalMove(move);
+			addThreat(new Move(this, square, move));
+//			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1]) &&
+//					(getBoard().getPieceAt(move[0], move[1]) == null ||
+//					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor()))
+//				addLegalMove(new Move(this, square, move));
+			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1])) {
+				Piece target = getBoard().getPieceAt(move[0], move[1]);
+				if (target == null)
+					addLegalMove(new Move(this, square, move));
+				else if (target.getColor() != this.getColor())
+					addLegalMove(new Move(this, target, square, move));
+			}
 		}
 	}
 	
@@ -55,22 +62,22 @@ public class King extends Piece {
 	}
 	
 	@Override
-	public List<int[]> getAttackedSquares() {
+	public List<Move> getThreats() {
 		return attackedSquares;
 	}
 	
 	@Override
-	public void setAttackedSquares(List<int[]> moves) {
+	public void setThreats(ArrayList<Move> moves) {
 		attackedSquares = moves;
 	}
 	
 	@Override
-	public void clearAttackedSquares() {
+	public void clearThreats() {
 		attackedSquares.clear();
 	}
 	
 	@Override
-	public void addAttackedSquare(int[] move) {
+	public void addThreat(Move move) {
 		attackedSquares.add(move);
 	}
 	

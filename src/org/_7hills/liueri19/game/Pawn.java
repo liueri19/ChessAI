@@ -16,19 +16,19 @@ public class Pawn extends Piece {
 	@Override
 	public void updatePiece(int[] square) {
 		this.clearLegalMoves();
-		
+		Piece target;
 		if (this.getColor()) {
 			if (getBoard().getPieceAt(square[0], square[1] + 1) == null) {	//white pawn, moving up
-				addLegalMove(new int[] {square[0], square[1] + 1});
+				addLegalMove(new Move(this, square, new int[] {square[0], square[1] + 1}));
 				if (square[1] == 2)	//on the second rank
-					addLegalMove(new int[] {square[0], square[1] + 2});
+					addLegalMove(new Move(this, square, new int[] {square[0], square[1] + 2}));
 			}
-			if (getBoard().getPieceAt(square[0] - 1, square[1] + 1) != null &&
-					getBoard().getPieceAt(square[0] - 1, square[1] + 1).getColor() != this.getColor())
-				addLegalMove(new int[] {square[0] - 1, square[1] + 1});
-			if (getBoard().getPieceAt(square[0] + 1, square[1] + 1) != null &&
-					getBoard().getPieceAt(square[0] + 1, square[1] + 1).getColor() != this.getColor())
-				addLegalMove(new int[] {square[0] + 1, square[1] + 1});
+			if ((target = getBoard().getPieceAt(square[0] - 1, square[1] + 1)) != null &&
+					target.getColor() != this.getColor())
+				addLegalMove(new Move(this, target, square, new int[] {square[0] - 1, square[1] + 1}));
+			if ((target = getBoard().getPieceAt(square[0] + 1, square[1] + 1)) != null &&
+					target.getColor() != this.getColor())
+				addLegalMove(new Move(this, target, square, new int[] {square[0] + 1, square[1] + 1}));
 			//en passant
 			/*
 			 * if (last move == file left || file right && is pawn move)
@@ -44,17 +44,24 @@ public class Pawn extends Piece {
 		}
 		else {
 			if (getBoard().getPieceAt(square[0], square[1] - 1) == null) {	//black pawn, moving down
-				addLegalMove(new int[] {square[0], square[1] - 1});
+				addLegalMove(new Move(this, square, new int[] {square[0], square[1] - 1}));
 				if (square[1] == 7)	//on the second rank
-					addLegalMove(new int[] {square[0], square[1] - 2});
+					addLegalMove(new Move(this, square, new int[] {square[0], square[1] - 2}));
 			}
-			if (getBoard().getPieceAt(square[0] - 1, square[1] - 1) != null &&
-					getBoard().getPieceAt(square[0] - 1, square[1] - 1).getColor() != this.getColor())
-				addLegalMove(new int[] {square[0] - 1, square[1] - 1});
-			if (getBoard().getPieceAt(square[0] + 1, square[1] - 1) != null &&
-					getBoard().getPieceAt(square[0] + 1, square[1] - 1).getColor() != this.getColor())
-				addLegalMove(new int[] {square[0] + 1, square[1] - 1});
+			if ((target = getBoard().getPieceAt(square[0] - 1, square[1] - 1)) != null &&
+					target.getColor() != this.getColor())
+				addLegalMove(new Move(this, target, square, new int[] {square[0] - 1, square[1] - 1}));
+			if ((target = getBoard().getPieceAt(square[0] + 1, square[1] - 1)) != null &&
+					target.getColor() != this.getColor())
+				addLegalMove(new Move(this, target, square, new int[] {square[0] + 1, square[1] - 1}));
 		}
+	}
+
+	@Override
+	public Piece copy() {
+		Piece p = new Pawn(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
+		p.updatePiece();
+		return p;
 	}
 
 }

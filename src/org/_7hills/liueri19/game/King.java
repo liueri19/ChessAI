@@ -39,10 +39,6 @@ public class King extends Piece {
 			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
 				continue;
 			addThreat(new Move(this, square, move));
-//			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1]) &&
-//					(getBoard().getPieceAt(move[0], move[1]) == null ||
-//					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor()))
-//				addLegalMove(new Move(this, square, move));
 			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1])) {
 				Piece target = getBoard().getPieceAt(move[0], move[1]);
 				if (target == null)
@@ -85,5 +81,13 @@ public class King extends Piece {
 	public boolean move(int file, int rank) {
 		setCastlable(false);
 		return super.move(file, rank);
+	}
+
+	@Override
+	public Piece copy() {
+		King p = new King(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
+		p.setCastlable(this.isCastlable());
+		p.updatePiece();
+		return p;
 	}
 }

@@ -134,4 +134,11 @@ public class Queen extends Piece {
 			rankNN--;
 		}
 	}
+
+	@Override
+	public Piece copy() {
+		Piece p = new Queen(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
+		p.updatePiece();
+		return p;
+	}
 }

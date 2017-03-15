@@ -1,7 +1,6 @@
 package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class Piece implements Comparable<Piece>{
@@ -16,7 +15,8 @@ public abstract class Piece implements Comparable<Piece>{
 		coordinate = new int[] {x, y};
 	}
 	
-	public static abstract Piece copy(Piece piece);
+	public abstract Piece copy();
+	
 	
 	public Board getBoard() {
 		return board;
@@ -104,7 +104,6 @@ public abstract class Piece implements Comparable<Piece>{
 	
 	public boolean move(Move move) {
 		if (isLegalMove(move)) {
-			Piece p = move.getPiece();
 			if (move.getSubject() != null)
 				getBoard().removePiece(move.getSubject());
 			setSquare(move.getDestination());

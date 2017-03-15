@@ -43,4 +43,11 @@ public class Knight extends Piece {
 				addLegalMove(new Move(this, target, square, move));
 		}
 	}
+
+	@Override
+	public Piece copy() {
+		Piece p = new Knight(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
+		p.updatePiece();
+		return p;
+	}
 }

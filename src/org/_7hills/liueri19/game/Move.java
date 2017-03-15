@@ -3,19 +3,22 @@ package org._7hills.liueri19.game;
 import java.util.Arrays;
 
 public class Move {
-	private Piece piece;	//the mover
-	private Piece subject;	//may be null
-	private int[] origin, destination;
+	private final Piece piece;	//the mover
+	private final Piece subject;	//may be null
+	private final int[] origin, destination;
 	
 	public Move(Piece piece, int[] from, int[] to) {
 		this.piece = piece;
+		this.subject = null;
 		origin = from;
 		destination = to;
 	}
 	
 	public Move(Piece piece, Piece subject, int[] from, int[] to) {
-		this(piece, from, to);
+		this.piece = piece;
 		this.subject = subject;
+		origin = from;
+		destination = to;
 	}
 	
 	public Piece getPiece() {

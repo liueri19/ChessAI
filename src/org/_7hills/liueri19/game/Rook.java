@@ -81,4 +81,11 @@ public class Rook extends Piece {
 	public void setCastlable(boolean castlable) {
 		this.castlable = castlable;
 	}
+
+	@Override
+	public Piece copy() {
+		Piece p = new Pawn(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
+		p.updatePiece();
+		return p;
+	}
 }

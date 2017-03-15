@@ -96,12 +96,11 @@ public class Board {
 					continue;
 				}
 				
-				int[] from = king.getSquare();
 				//move pieces
 				king.setSquare(7, king.getRank());
 				rook.setSquare(6, rook.getRank());
 				//add history entry
-				board.history.add(new Castling(king, from, king.getSquare()));
+				board.history.add(new Castling(king, king.getSquare()));
 				
 				((Rook) rook).setCastlable(false);
 				board.changeTurn();
@@ -143,13 +142,12 @@ public class Board {
 					System.out.println("The king cannot catle into a check");
 					continue;
 				}
-				
-				int[] from = king.getSquare();
+
 				//move pieces
 				king.setSquare(3, king.getRank());
 				rook.setSquare(4, rook.getRank());
 				//add history entry
-				board.history.add(new Castling(king, from, king.getSquare()));
+				board.history.add(new Castling(king, king.getSquare()));
 				
 				((Rook) rook).setCastlable(false);
 				board.changeTurn();
@@ -178,14 +176,14 @@ public class Board {
 					//get the target square
 					char fileD = input.charAt(2);
 					int rankD = Character.getNumericValue(input.charAt(3));
-					int[] from = piece.getSquare();
 					int[] to = new int[] {parseFile(fileD), rankD};
-					if (!piece.move(to)) {
+					Move m = new Move(piece, to);
+					if (!piece.move(m)) {
 						System.out.println("Illegal move");
 						continue;
 					}
 					//move verified legal
-					board.history.add(new Move(piece, from, to));
+					board.history.add(m);
 					board.changeTurn();
 				}
 				else {	//if the input did not start with abcdefgh
@@ -362,7 +360,7 @@ public class Board {
 	
 	public boolean isSquareAttacked(boolean color, int file, int rank) {
 		for (Piece p : pieces) {
-			if (p.getColor() != color && p.isThreating(new int[] {file, rank}))
+			if (p.getColor() != color && p.isThreating(new Move(p, new int[] {file, rank})))
 				return true;
 		}
 		return false;

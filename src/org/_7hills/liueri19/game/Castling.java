@@ -14,6 +14,11 @@ public class Castling extends Move {
 		king.setCastlable(false);
 	}
 	
+	public Castling(King king, int[] to) {
+		super(king, to);
+		king.setCastlable(false);
+	}
+	
 	@Override
 	public String toString() {
 		if (getDestination()[0] == 3)

@@ -99,7 +99,7 @@ public abstract class Piece implements Comparable<Piece>{
 	////
 	
 	public boolean move(int file, int rank) {
-		return move(new Move(this, this.getSquare(), new int[] {file, rank}));
+		return move(new Move(this, new int[] {file, rank}));
 	}
 	
 	public boolean move(Move move) {

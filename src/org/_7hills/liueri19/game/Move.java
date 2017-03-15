@@ -7,6 +7,21 @@ public class Move {
 	private final Piece subject;	//may be null
 	private final int[] origin, destination;
 	
+	public Move(Piece piece, Piece subject, int[] from, int[] to) {
+		this.piece = piece.copy();
+		this.subject = subject.copy();
+		origin = Arrays.copyOf(from, from.length);
+		destination = Arrays.copyOf(to, to.length);
+	}
+	
+	public Move(Piece piece, Piece subject, int[] to) {
+		this.piece = piece.copy();
+		this.subject = subject.copy();
+		int[] square = piece.getSquare();
+		origin = Arrays.copyOf(square, square.length);
+		destination = Arrays.copyOf(to, to.length);
+	}
+	
 	public Move(Piece piece, int[] from, int[] to) {
 		this.piece = piece.copy();
 		this.subject = null;
@@ -14,10 +29,11 @@ public class Move {
 		destination = Arrays.copyOf(to, to.length);
 	}
 	
-	public Move(Piece piece, Piece subject, int[] from, int[] to) {
-		this.piece = piece;
-		this.subject = subject;
-		origin = Arrays.copyOf(from, from.length);
+	public Move(Piece piece, int[] to) {
+		this.piece = piece.copy();
+		this.subject = null;
+		int[] square = piece.getSquare();
+		origin = Arrays.copyOf(square, square.length);
 		destination = Arrays.copyOf(to, to.length);
 	}
 	

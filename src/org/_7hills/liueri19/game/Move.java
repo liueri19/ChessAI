@@ -8,17 +8,17 @@ public class Move {
 	private final int[] origin, destination;
 	
 	public Move(Piece piece, int[] from, int[] to) {
-		this.piece = piece;
+		this.piece = piece.copy();
 		this.subject = null;
-		origin = from;
-		destination = to;
+		origin = Arrays.copyOf(from, from.length);
+		destination = Arrays.copyOf(to, to.length);
 	}
 	
 	public Move(Piece piece, Piece subject, int[] from, int[] to) {
 		this.piece = piece;
 		this.subject = subject;
-		origin = from;
-		destination = to;
+		origin = Arrays.copyOf(from, from.length);
+		destination = Arrays.copyOf(to, to.length);
 	}
 	
 	public Piece getPiece() {

@@ -50,7 +50,7 @@ public abstract class Piece implements Comparable<Piece>{
 		return legalMoves;
 	}
 	
-	public void setLegalMoves(ArrayList<Move> moves) {
+	public void setLegalMoves(List<Move> moves) {
 		legalMoves = moves;
 	}
 	
@@ -77,7 +77,7 @@ public abstract class Piece implements Comparable<Piece>{
 		return getLegalMoves();
 	}
 	
-	public void setThreats(ArrayList<Move> moves) {
+	public void setThreats(List<Move> moves) {
 		setLegalMoves(moves);
 	}
 	

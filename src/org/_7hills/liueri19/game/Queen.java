@@ -138,7 +138,8 @@ public class Queen extends Piece {
 	@Override
 	public Piece copy() {
 		Piece p = new Queen(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
-		p.updatePiece();
+		for (Move move : this.getLegalMoves())
+			p.addLegalMove(move.copy());
 		return p;
 	}
 }

@@ -60,7 +60,8 @@ public class Pawn extends Piece {
 	@Override
 	public Piece copy() {
 		Piece p = new Pawn(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
-		p.updatePiece();
+		for (Move move : this.getLegalMoves())
+			p.addLegalMove(move.copy());
 		return p;
 	}
 

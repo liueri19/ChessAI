@@ -63,7 +63,7 @@ public class King extends Piece {
 	}
 	
 	@Override
-	public void setThreats(ArrayList<Move> moves) {
+	public void setThreats(List<Move> moves) {
 		attackedSquares = moves;
 	}
 	
@@ -87,7 +87,8 @@ public class King extends Piece {
 	public Piece copy() {
 		King p = new King(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
 		p.setCastlable(this.isCastlable());
-		p.updatePiece();
+		for (Move move : this.getLegalMoves())
+			p.addLegalMove(move.copy());
 		return p;
 	}
 }

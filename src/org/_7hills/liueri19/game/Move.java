@@ -71,4 +71,8 @@ public class Move {
 			return true;
 		return false;
 	}
+	
+	public Move copy() {
+		return new Move(getPiece(), getSubject(), getOrigin(), getDestination());
+	}
 }

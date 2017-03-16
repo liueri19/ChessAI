@@ -9,32 +9,21 @@ public class Move {
 	
 	public Move(Piece piece, Piece subject, int[] from, int[] to) {
 		this.piece = piece.copy();
-		this.subject = subject.copy();
+		this.subject = subject == null ? null : subject.copy();
 		origin = Arrays.copyOf(from, from.length);
 		destination = Arrays.copyOf(to, to.length);
 	}
 	
 	public Move(Piece piece, Piece subject, int[] to) {
-		this.piece = piece.copy();
-		this.subject = subject.copy();
-		int[] square = piece.getSquare();
-		origin = Arrays.copyOf(square, square.length);
-		destination = Arrays.copyOf(to, to.length);
+		this(piece, subject, Arrays.copyOf(piece.getSquare(), piece.getSquare().length), to);
 	}
 	
 	public Move(Piece piece, int[] from, int[] to) {
-		this.piece = piece.copy();
-		this.subject = null;
-		origin = Arrays.copyOf(from, from.length);
-		destination = Arrays.copyOf(to, to.length);
+		this(piece, null, from, to);
 	}
 	
 	public Move(Piece piece, int[] to) {
-		this.piece = piece.copy();
-		this.subject = null;
-		int[] square = piece.getSquare();
-		origin = Arrays.copyOf(square, square.length);
-		destination = Arrays.copyOf(to, to.length);
+		this(piece, null, Arrays.copyOf(piece.getSquare(), piece.getSquare().length), to);
 	}
 	
 	public Piece getPiece() {
@@ -60,7 +49,7 @@ public class Move {
 	
 	@Override
 	public boolean equals(Object move) {
-		if (move instanceof Move)
+		if (!(move instanceof Move))
 			return false;
 		else if (Arrays.equals(getOrigin(), ((Move) move).getOrigin()) 
 				&& Arrays.equals(getDestination(), ((Move) move).getDestination()) 

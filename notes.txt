@@ -49,6 +49,8 @@ King class need to implement attacked squares to handle King vs King end games.
 Update legal moves after each move, kings should handle legal moves update after other pieces.
 Bishops should not ignore blocking pieces.
 Castling
+Move should be a class.
+Move class should be immutable.
 
 TODO
 En passant
@@ -56,5 +58,3 @@ Implement check
 When checked, the check must be resolved (all other moves must be illegal)
 Legal move and attacked squares are not the same for Pawns.
 Promotion.
-Move should be a class.
-Move class should be immutable.

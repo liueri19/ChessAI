@@ -71,7 +71,7 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	/**
-	 * For pieces other than King, attacked squares are the same as legal moves
+	 * For pieces other than King and Pawn, attacked squares are the same as legal moves
 	 */
 	public List<Move> getThreats() {
 		return getLegalMoves();

@@ -1,9 +1,14 @@
 package org._7hills.liueri19.game;
 
+/**
+ * This is the special move for castling.
+ * @author liueri19
+ *
+ */
 public class Castling extends Move {
 	
 	/**
-	 * This is the special move for castling.
+	 * Constructs a new Castling object identifying the move.
 	 * 
 	 * @param king	the king
 	 * @param from	origin of the king
@@ -14,6 +19,13 @@ public class Castling extends Move {
 		king.setCastlable(false);
 	}
 	
+	/**
+	 * Constructs a new Castling object identifying the move.
+	 * This constructor assumes the origin of the move is the current square of the specified King.
+	 * 
+	 * @param king	the king
+	 * @param to	destination of the king
+	 */
 	public Castling(King king, int[] to) {
 		super(king, to);
 		king.setCastlable(false);

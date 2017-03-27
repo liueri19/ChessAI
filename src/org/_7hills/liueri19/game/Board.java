@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The Board where Pieces rest on and the game would be played.
+ * 
+ * @author liueri19
+ */
 public class Board {
 	private List<Piece> pieces = new ArrayList<Piece>();
 	private King whiteKing, blackKing;
@@ -14,10 +19,18 @@ public class Board {
 	//private List<Object[]> history = new ArrayList<Object[]>();
 	private List<Move> history = new ArrayList<Move>();
 	
+	/**
+	 * Constructs a chess board with standard setup.
+	 */
 	public Board() {
 		setUpPieces();
 	}
 	
+	/**
+	 * Constructs a chess board with setup optional.
+	 * 
+	 * @param doSetUp	option for setup pieces.
+	 */
 	public Board(boolean doSetUp) {
 		if (doSetUp)
 			setUpPieces();
@@ -198,6 +211,12 @@ public class Board {
 		sc.close();
 	}
 	
+	/**
+	 * Parse the file represented as a char into an int.
+	 * 
+	 * @param file	the char representation of a file, always lower-case
+	 * @return the int representation of the input file
+	 */
 	public static int parseFile(char file) {
 		int fileNum = 0;
 		switch (file) {
@@ -213,6 +232,12 @@ public class Board {
 		return fileNum;
 	}
 	
+	/**
+	 * Parse the file represented as an int into a char.
+	 * 
+	 * @param file	the int representation of a file
+	 * @return the char representation of the input file
+	 */
 	public static char parseFile(int file) {
 		char fileNum = '0';
 		switch (file) {
@@ -228,15 +253,32 @@ public class Board {
 		return fileNum;
 	}
 	
+	/**
+	 * Change white's turn to black's turn or vice versa. This method also updates all pieces.
+	 */
 	public void changeTurn() {
 		this.updatePieces();
 		whiteMove = !whiteMove;
 	}
 	
+	/**
+	 * Iterates through the list of pieces currently on the board and returns the piece at the specified location.
+	 * 
+	 * @param file	the file of the piece represented as char
+	 * @param rank	the rank of the piece represented as int
+	 * @return the Piece object with the specified file and rank, or null if none has the specified value
+	 */
 	public Piece getPieceAt(char file, int rank) {
 		return getPieceAt(parseFile(file), rank);
 	}
 	
+	/**
+	 * Iterates through the list of pieces currently on the board and returns the piece at the specified location.
+	 * 
+	 * @param file	the file of the piece represented as int
+	 * @param rank	the rank of the piece represented as int
+	 * @return the Piece object with the specified file and rank, or null if none has the specified value
+	 */
 	public Piece getPieceAt(int file, int rank) {
 		for (Piece p : pieces) {
 			if (p.getFile() == file && p.getRank() == rank)
@@ -245,23 +287,47 @@ public class Board {
 		return null;
 	}
 	
+	/**
+	 * Iterates through the list of pieces currently on the board and returns the piece at the specified location.
+	 * 
+	 * @param square	the file and rank in an int array
+	 * @return the Piece object with the specified file and rank, or null if none has the specified value
+	 */
 	public Piece getPieceAt(int[] square) {
 		return getPieceAt(square[0], square[1]);
 	}
 	
+	/**
+	 * Removes the specified Piece object from the list of Pieces currently on the board.
+	 * 
+	 * @param p	the Piece to remove
+	 * @return true if this list contained the specified element
+	 */
 	public boolean removePiece(Piece p) {
 		return this.pieces.remove(p);
 	}
 	
+	/**
+	 * Removes the Piece object at the specified location in the list of Pieces currently on the board.
+	 * 
+	 * @param index	the index of the Piece to be removed
+	 * @return the Piece that was removed
+	 */
 	public Piece removePiece(int index) {
 		return this.pieces.remove(index);
 	}
 	
+	/**
+	 * Prints a list of moves played to the console.
+	 */
 	public void printHistory() {
 		for (Move move : history)
 			System.out.println(move.toString());
 	}
 	
+	/**
+	 * Print a visual representation of the current state of the board to the console.
+	 */
 	public void printBoard() {
 		String whiteSpace = "|    ";
 		String blackSpace = "|////";
@@ -311,6 +377,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Construct new Piece objects each with their standard starting position.
+	 */
 	public void setUpPieces() {
 		//pawns
 		for (int y = 2; y < 8; y += 5) {
@@ -346,18 +415,44 @@ public class Board {
 		updatePieces();
 	}
 	
+	/**
+	 * Returns a List of Move objects representing the previous moves played.
+	 * 
+	 * @return a List of Move objects representing the previous moves played
+	 */
 	public List<Move> getHistory() {
 		return history;
 	}
 	
+	/**
+	 * Returns the Move object at the specified index in history. Note that the index starts at 0, and each Move will occupy an index in history, therefore the index is not the same as the move number in standard transcript.
+	 * 
+	 * @param moveNum	the index of the desired Move object
+	 * @return the Move object at the specified index in history
+	 */
 	public Move getMove(int moveNum) {
 		return history.get(moveNum);
 	}
 	
+	/**
+	 * Returns the number of Move objects recorded.
+	 * 
+	 * @return the number of Move objects recorded (the size of the history)
+	 */
 	public int getCurrentMoveNum() {
 		return history.size();	//starts with 0
 	}
 	
+	/**
+	 * Returns true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise.<br>
+	 * <code>isSquareAttacked(true, 1, 1)</code> returns true if square A1 is being attacked by black;
+	 * likewise, <code>isSquareAttacked(false, 1, 1)</code> returns true if square A1 is being attacked by white.
+	 * 
+	 * @param color	the color of the friendly side
+	 * @param file	the file of the square
+	 * @param rank	the rank of the square
+	 * @return true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise
+	 */
 	public boolean isSquareAttacked(boolean color, int file, int rank) {
 		for (Piece p : pieces) {
 			if (p.getColor() != color && p.isThreating(new Move(p, new int[] {file, rank})))
@@ -366,10 +461,19 @@ public class Board {
 		return false;
 	}
 	
+	/**
+	 * Returns true if the King of the specified color is in check, false otherwise.
+	 * 
+	 * @param color	the color of the specified king
+	 * @return true if the King of the specified color is in check, false otherwise
+	 */
 	public boolean isInCheck(boolean color) {
 		return color ? isSquareAttacked(color, whiteKing.getFile(), whiteKing.getRank()) : isSquareAttacked(color, blackKing.getFile(), blackKing.getRank());
 	}
 	
+	/**
+	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
+	 */
 	public void updatePieces() {
 		for (Piece p : pieces) {
 			if (!(p instanceof King))

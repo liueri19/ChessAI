@@ -1,5 +1,10 @@
 package org._7hills.liueri19.game;
 
+/**
+ * Represents a Pawn. This class overrides certain methods in Piece.
+ * @author liueri19
+ *
+ */
 public class Pawn extends Piece {
 
 	public Pawn(Board board, boolean color, int x, int y) {

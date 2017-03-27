@@ -1,5 +1,10 @@
 package org._7hills.liueri19.game;
 
+/**
+ * Represents a Queen. This class overrides certain methods in Piece.
+ * @author liueri19
+ *
+ */
 public class Queen extends Piece {
 
 	public Queen(Board board, boolean color, int x, int y) {

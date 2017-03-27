@@ -3,6 +3,11 @@ package org._7hills.liueri19.game;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a King. This class overrides certain methods in Piece.
+ * @author liueri19
+ *
+ */
 public class King extends Piece {
 	
 	private boolean castlable = true;
@@ -87,8 +92,9 @@ public class King extends Piece {
 	public Piece copy() {
 		King p = new King(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
 		p.setCastlable(this.isCastlable());
-		for (Move move : this.getLegalMoves())
-			p.addLegalMove(move.copy());
+//		for (Move move : this.getLegalMoves())
+//			p.addLegalMove(move.copy());
+		this.getLegalMoves().forEach((Move m)->p.addLegalMove(m.copy()));
 		return p;
 	}
 }

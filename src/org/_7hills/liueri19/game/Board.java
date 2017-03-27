@@ -445,6 +445,7 @@ public class Board {
 	
 	/**
 	 * Returns true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise.<br>
+	 * <p>
 	 * <code>isSquareAttacked(true, 1, 1)</code> returns true if square A1 is being attacked by black;
 	 * likewise, <code>isSquareAttacked(false, 1, 1)</code> returns true if square A1 is being attacked by white.
 	 * 
@@ -455,7 +456,7 @@ public class Board {
 	 */
 	public boolean isSquareAttacked(boolean color, int file, int rank) {
 		for (Piece p : pieces) {
-			if (p.getColor() != color && p.isThreating(new Move(p, new int[] {file, rank})))
+			if (p.getColor() != color && p.isThreatening(new Move(p, new int[] {file, rank})))
 				return true;
 		}
 		return false;

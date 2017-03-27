@@ -1,5 +1,10 @@
 package org._7hills.liueri19.game;
 
+/**
+ * Represents a Rook. This class overrides certain methods in Piece.
+ * @author liueri19
+ *
+ */
 public class Rook extends Piece {
 	
 	private boolean castlable = true;

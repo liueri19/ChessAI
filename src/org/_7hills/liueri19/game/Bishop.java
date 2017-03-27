@@ -1,5 +1,10 @@
 package org._7hills.liueri19.game;
 
+/**
+ * Represents a Bishop. This class overrides certain methods in Piece.
+ * @author liueri19
+ *
+ */
 public class Bishop extends Piece {
 
 	public Bishop(Board board, boolean color, int x, int y) {

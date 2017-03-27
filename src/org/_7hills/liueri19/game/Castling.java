@@ -31,6 +31,11 @@ public class Castling extends Move {
 		king.setCastlable(false);
 	}
 	
+	/**
+	 * Returns a string representation of this Castling object.
+	 * Only two values could be returned by this method, <code>"0-0"</code> for king side castling;
+	 * <code>"0-0-0"</code> for queen side castling. 
+	 */
 	@Override
 	public String toString() {
 		if (getDestination()[0] == 3)

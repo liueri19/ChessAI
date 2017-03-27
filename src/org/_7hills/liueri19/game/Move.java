@@ -101,11 +101,29 @@ public class Move {
 		return destination;
 	}
 	
+	/**
+	 * Returns a String representation of this Move object.<br>
+	 * <p>
+	 * A move will be formated as:<br>
+	 * <code>[initiating_piece][origin_file][origin_rank][destination_file][destination_rank]</code><br>
+	 * A white Pawn move from E2 to E4 would be represented as:<br>
+	 * <code>WPe2e4</code>
+	 */
 	@Override
 	public String toString() {
-		return "" + Board.parseFile(origin[0]) + origin[1] + Board.parseFile(destination[0]) + destination[1];
+		return "" + getPiece().toString() + Board.parseFile(origin[0]) + origin[1] + Board.parseFile(destination[0]) + destination[1];
 	}
 	
+	/**
+	 * Indicates whether some other object is "equal to" this Move.<br>
+	 * <p>
+	 * Returns true if and only if:<br>
+	 * the specified object is an instance of Move, and<br>
+	 * this Move has the same origin as the specified Move, and<br>
+	 * this Move has the same destination as the specified Move, and<br>
+	 * this Move has the same initiating Piece as the specified Move.
+	 * @param move the Object to be compared with
+	 */
 	@Override
 	public boolean equals(Object move) {
 		if (!(move instanceof Move))

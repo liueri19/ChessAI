@@ -19,7 +19,7 @@ public class Bishop extends Piece {
 	}
 
 	@Override
-	public void updatePiece(int[] square) {
+	protected void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
 		boolean blockedPP, blockedPN, blockedNP, blockedNN;
@@ -93,8 +93,8 @@ public class Bishop extends Piece {
 	@Override
 	public Piece copy() {
 		Piece p = new Bishop(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
-		for (Move move : this.getLegalMoves())	// ArrayList.clone() creates shallow copy
-			p.addLegalMove(move.copy());
+//		for (Move move : this.getLegalMoves())	// ArrayList.clone() creates shallow copy
+//			p.addLegalMove(move.copy());
 		return p;
 	}
 }

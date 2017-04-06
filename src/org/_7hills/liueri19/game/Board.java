@@ -23,7 +23,7 @@ public class Board {
 	 * Constructs a chess board with standard setup.
 	 */
 	public Board() {
-		setUpPieces();
+		setupPieces();
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class Board {
 	 */
 	public Board(boolean doSetUp) {
 		if (doSetUp)
-			setUpPieces();
+			setupPieces();
 	}
 	
 	public static void main(String[] args) {
@@ -105,18 +105,21 @@ public class Board {
 					continue;
 				}
 				if (board.isSquareAttacked(king.getColor(), 7, king.getRank())) {
-					System.out.println("The king cannot catle into a check");
+					System.out.println("The king cannot castle into a check");
 					continue;
 				}
 				
-				//move pieces
-				king.setSquare(7, king.getRank());
-				rook.setSquare(6, rook.getRank());
-				//add history entry
-				board.history.add(new Castling(king, king.getSquare()));
+				//move
+				board.move(new Castling(king, (Rook) rook));
 				
-				((Rook) rook).setCastlable(false);
-				board.changeTurn();
+//				//move pieces
+//				king.setSquare(7, king.getRank());
+//				rook.setSquare(6, rook.getRank());
+//				//add history entry
+//				board.history.add(new Castling(king, king.getSquare()));
+//				
+//				((Rook) rook).setCastlable(false);
+//				board.changeTurn();
 			}
 			
 			else if (input.equals("0-0-0")) {	//castling, queen side
@@ -155,15 +158,17 @@ public class Board {
 					System.out.println("The king cannot catle into a check");
 					continue;
 				}
-
-				//move pieces
-				king.setSquare(3, king.getRank());
-				rook.setSquare(4, rook.getRank());
-				//add history entry
-				board.history.add(new Castling(king, king.getSquare()));
 				
-				((Rook) rook).setCastlable(false);
-				board.changeTurn();
+				board.move(new Castling(king, (Rook) rook));
+				
+//				//move pieces
+//				king.setSquare(3, king.getRank());
+//				rook.setSquare(4, rook.getRank());
+//				//add history entry
+//				board.history.add(new Castling(king, king.getSquare()));
+//				
+//				((Rook) rook).setCastlable(false);
+//				board.changeTurn();
 			}
 			
 			else if (input.length() == 4) {	//a move
@@ -191,13 +196,13 @@ public class Board {
 					int rankD = Character.getNumericValue(input.charAt(3));
 					int[] to = new int[] {parseFile(fileD), rankD};
 					Move m = new Move(piece, to);
-					if (!piece.move(m)) {
+					if (!board.move(m)) {
 						System.out.println("Illegal move");
 						continue;
 					}
-					//move verified legal
-					board.history.add(m);
-					board.changeTurn();
+//					//move verified legal
+//					board.history.add(m);
+//					board.changeTurn();
 				}
 				else {	//if the input did not start with abcdefgh
 					System.out.println("Invalid square coordinate");
@@ -256,7 +261,7 @@ public class Board {
 	/**
 	 * Change white's turn to black's turn or vice versa. This method also updates all pieces.
 	 */
-	public void changeTurn() {
+	protected void changeTurn() {
 		this.updatePieces();
 		whiteMove = !whiteMove;
 	}
@@ -298,12 +303,26 @@ public class Board {
 	}
 	
 	/**
+	 * Returns the equivalent Piece object of the specified Piece in the List of Pieces no the Board,
+	 * or null if none is found.
+	 * @param copy the Piece to find
+	 * @return the equivalent of the specified Piece, or null if such Piece is not on the Board
+	 */
+	public Piece getPiece(Piece copy) {
+		for (Piece p : pieces) {
+			if (p.equals(copy))
+				return p;
+		}
+		return null;
+	}
+	
+	/**
 	 * Removes the specified Piece object from the list of Pieces currently on the board.
 	 * 
 	 * @param p	the Piece to remove
 	 * @return true if this list contained the specified element
 	 */
-	public boolean removePiece(Piece p) {
+	protected boolean removePiece(Piece p) {
 		return this.pieces.remove(p);
 	}
 	
@@ -313,8 +332,18 @@ public class Board {
 	 * @param index	the index of the Piece to be removed
 	 * @return the Piece that was removed
 	 */
-	public Piece removePiece(int index) {
+	protected Piece removePiece(int index) {
 		return this.pieces.remove(index);
+	}
+	
+	/**
+	 * Add a Piece to the List of Piece objects on the Board.
+	 * 
+	 * @param piece the Piece to add
+	 * @return true if the Piece is added to the List
+	 */
+	protected boolean addPiece(Piece piece) {
+		return pieces.add(piece);
 	}
 	
 	/**
@@ -380,7 +409,7 @@ public class Board {
 	/**
 	 * Construct new Piece objects each with their standard starting position.
 	 */
-	public void setUpPieces() {
+	protected void setupPieces() {
 		//pawns
 		for (int y = 2; y < 8; y += 5) {
 			for (int x = 1; x < 9; x++) {
@@ -475,7 +504,7 @@ public class Board {
 	/**
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
 	 */
-	public void updatePieces() {
+	protected void updatePieces() {
 		for (Piece p : pieces) {
 			if (!(p instanceof King))
 				p.updatePiece();
@@ -484,4 +513,55 @@ public class Board {
 		whiteKing.updatePiece();
 		blackKing.updatePiece();
 	}
+	
+	/**
+	 * Execute the specified Move object. Returns true if the move described is legal, or false otherwise.
+	 * @param move the Move to execute
+	 * @return true if the move described is legal, false otherwise
+	 */
+	public boolean move(Move move) {
+		Piece init = move.getPiece();
+		if (init.isLegalMove(move)) {
+			if (move instanceof Castling) {
+				//implement details
+			}
+			else {
+				Piece subject = getPieceAt(move.getDestination());
+				init.setSquare(move.getDestination());
+				if (subject != null)
+					removePiece(subject);
+			}
+			this.history.add(move);
+			changeTurn();
+			return true;
+		}
+		return false;
+	}
+	
+//	/**
+//	 * Revert the specified number of moves.<br>
+//	 * Note that "move" is not to be confused with "turn". In this context, one move will be
+//	 * considered as one action taken by one side. Two moves make one full turn.
+//	 * @param numMoves the number of moves to revert
+//	 */
+//	protected void revert(int numMoves) {
+//		for (int i = numMoves; i > 0; i--) {
+//			Move move = history.remove(history.size()-1);
+//			move.getPiece().setSquare(move.getOrigin());	//reset location
+//			Piece subject = move.getSubject(); 
+//			if (subject != null)
+//				addPiece(subject);
+//		}
+//		if (numMoves % 2 == 0)
+//			updatePieces();
+//		else
+//			changeTurn();	//changeTurn() call updatePieces()
+//	}
+//	
+//	/**
+//	 * Revert one move.
+//	 */
+//	protected void revert() {
+//		revert(1);
+//	}
 }

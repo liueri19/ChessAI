@@ -19,7 +19,7 @@ public class Knight extends Piece {
 	}
 
 	@Override
-	public void updatePiece(int[] square) {
+	protected void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
 		//8 candidate moves
@@ -52,8 +52,8 @@ public class Knight extends Piece {
 	@Override
 	public Piece copy() {
 		Piece p = new Knight(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
-		for (Move move : this.getLegalMoves())
-			p.addLegalMove(move.copy());
+//		for (Move move : this.getLegalMoves())
+//			p.addLegalMove(move.copy());
 		return p;
 	}
 }

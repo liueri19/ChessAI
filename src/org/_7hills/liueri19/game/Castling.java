@@ -6,29 +6,40 @@ package org._7hills.liueri19.game;
  *
  */
 public class Castling extends Move {
+	private final Rook rook;
 	
 	/**
 	 * Constructs a new Castling object identifying the move.
 	 * 
 	 * @param king	the king
-	 * @param from	origin of the king
-	 * @param to	destination of the king
+	 * @param rook	the rook
 	 */
-	public Castling(King king, int[] from, int[] to) {
-		super(king, from, to);
+	public Castling(King king, Rook rook) {
+		super(king, king.getSquare(), rook.getSquare());	//just to satisfy the constructor
+		this.rook = rook;
 		king.setCastlable(false);
 	}
 	
+//	/**
+//	 * Constructs a new Castling object identifying the move.
+//	 * This constructor assumes the origin of the move is the current square of the specified King.
+//	 * 
+//	 * @param king	the king
+//	 * @param rook	the rook
+//	 * @param to	destination of the king
+//	 */
+//	public Castling(King king, Rook rook, int[] to) {
+//		super(king, to);
+//		this.rook = rook;
+//		king.setCastlable(false);
+//	}
+	
 	/**
-	 * Constructs a new Castling object identifying the move.
-	 * This constructor assumes the origin of the move is the current square of the specified King.
-	 * 
-	 * @param king	the king
-	 * @param to	destination of the king
+	 * Returns the Rook related to this Castling.
+	 * @return the Rook object related to this Castling
 	 */
-	public Castling(King king, int[] to) {
-		super(king, to);
-		king.setCastlable(false);
+	public Rook getRook() {
+		return rook;
 	}
 	
 	/**

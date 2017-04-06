@@ -25,7 +25,7 @@ public class King extends Piece {
 	}
 
 	@Override
-	public void updatePiece(int[] square) {
+	protected void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		
 		//8 candidate moves
@@ -58,7 +58,7 @@ public class King extends Piece {
 		return castlable;
 	}
 	
-	public void setCastlable(boolean castlable) {
+	protected void setCastlable(boolean castlable) {
 		this.castlable = castlable;
 	}
 	
@@ -68,25 +68,25 @@ public class King extends Piece {
 	}
 	
 	@Override
-	public void setThreats(List<Move> moves) {
+	protected void setThreats(List<Move> moves) {
 		attackedSquares = moves;
 	}
 	
 	@Override
-	public void clearThreats() {
+	protected void clearThreats() {
 		attackedSquares.clear();
 	}
 	
 	@Override
-	public void addThreat(Move move) {
+	protected void addThreat(Move move) {
 		attackedSquares.add(move);
 	}
 	
-	@Override
-	public boolean move(int file, int rank) {
-		setCastlable(false);
-		return super.move(file, rank);
-	}
+//	@Override
+//	public boolean move(int file, int rank) {
+//		setCastlable(false);
+//		return super.move(file, rank);
+//	}
 
 	@Override
 	public Piece copy() {
@@ -94,7 +94,7 @@ public class King extends Piece {
 		p.setCastlable(this.isCastlable());
 //		for (Move move : this.getLegalMoves())
 //			p.addLegalMove(move.copy());
-		this.getLegalMoves().forEach((Move m)->p.addLegalMove(m.copy()));
+//		this.getLegalMoves().forEach((Move m)->p.addLegalMove(m.copy()));
 		return p;
 	}
 }

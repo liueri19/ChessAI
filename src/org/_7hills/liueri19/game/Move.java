@@ -3,84 +3,37 @@ package org._7hills.liueri19.game;
 import java.util.Arrays;
 
 /**
- * Stores information related to a single move.<br>
- * Move objects are immutable.
+ * Stores information related to a single move.
  * 
  * @author liueri19
  *
  */
 public class Move {
-	private final Piece piece;	//the mover
-	private final Piece subject;	//may be null
+	private final Piece init;
 	private final int[] origin, destination;
 	
 	/**
-	 * Constructs a new Move object with <code>piece</code> as the initiator, moving from <code>from</code> to <code>to</code>.
+	 * Constructs a new Move object moving from <code>from</code> to <code>to</code>.
 	 * 
-	 * @param piece	the initiator of the move
-	 * @param subject	the piece taken by the initiator, maybe null if no piece is taken
-	 * @param from	the origin of the move
-	 * @param to	the destination of the move
-	 */
-	public Move(Piece piece, Piece subject, int[] from, int[] to) {
-		this.piece = piece.copy();
-		this.subject = subject == null ? null : subject.copy();
-		origin = Arrays.copyOf(from, from.length);
-		destination = Arrays.copyOf(to, to.length);
-	}
-	
-	/**
-	 * Constructs a new Move object with <code>piece</code> as the initiator, 
-	 * moving from the current location of <code>piece</code> to <code>to</code>.
-	 * 
-	 * @param piece	the initiator of the move
-	 * @param subject	the piece taken by the initiator, maybe null if no piece is taken
-	 * @param to	the destination of the move
-	 */
-	public Move(Piece piece, Piece subject, int[] to) {
-		this(piece, subject, Arrays.copyOf(piece.getSquare(), piece.getSquare().length), to);
-	}
-	
-	/**
-	 * Constructs a new Move object with <code>piece</code> as the initiator, moving from <code>from</code> to <code>to</code>. 
-	 * Note that this constructor assumes no piece is taken.
-	 * 
-	 * @param piece	the initiator of the move
 	 * @param from	the origin of the move
 	 * @param to	the destination of the move
 	 */
 	public Move(Piece piece, int[] from, int[] to) {
-		this(piece, null, from, to);
+		init = piece;	//a direct reference is desired
+		origin = Arrays.copyOf(from, from.length);
+		destination = Arrays.copyOf(to, to.length);
 	}
 	
-	/**
-	 * Constructs a new Move object with <code>piece</code> as the initiator, 
-	 * moving from the current location of <code>piece</code> to <code>to</code>. 
-	 * Note that this constructor assumes no piece is taken.
-	 * 
-	 * @param piece	the initiator of the move
-	 * @param to	the destination of the move
-	 */
 	public Move(Piece piece, int[] to) {
-		this(piece, null, Arrays.copyOf(piece.getSquare(), piece.getSquare().length), to);
+		this(piece, piece.getSquare(), to);
 	}
 	
 	/**
-	 * Returns the initiator of the move.
-	 * 
-	 * @return the Piece object been moved
+	 * Returns the Piece initiating the Move.
+	 * @return
 	 */
 	public Piece getPiece() {
-		return piece;
-	}
-	
-	/**
-	 * Returns the piece been taken during the move.
-	 * 
-	 * @return the Piece object been taken during the move
-	 */
-	public Piece getSubject() {
-		return subject;
+		return init;
 	}
 	
 	/**
@@ -105,13 +58,13 @@ public class Move {
 	 * Returns a String representation of this Move object.<br>
 	 * <p>
 	 * A move will be formated as:<br>
-	 * <code>[initiating_piece][origin_file][origin_rank][destination_file][destination_rank]</code><br>
-	 * A white Pawn move from E2 to E4 would be represented as:<br>
-	 * <code>WPe2e4</code>
+	 * <code>[origin_file][origin_rank][destination_file][destination_rank]</code><br>
+	 * A move from E2 to E4 would be represented as:<br>
+	 * <code>e2e4</code>
 	 */
 	@Override
 	public String toString() {
-		return "" + getPiece().toString() + Board.parseFile(origin[0]) + origin[1] + Board.parseFile(destination[0]) + destination[1];
+		return "" + Board.parseFile(origin[0]) + origin[1] + Board.parseFile(destination[0]) + destination[1];
 	}
 	
 	/**
@@ -129,8 +82,7 @@ public class Move {
 		if (!(move instanceof Move))
 			return false;
 		else if (Arrays.equals(getOrigin(), ((Move) move).getOrigin()) 
-				&& Arrays.equals(getDestination(), ((Move) move).getDestination()) 
-				&& getPiece().equals(((Move) move).getPiece()))
+				&& Arrays.equals(getDestination(), ((Move) move).getDestination()))
 			return true;
 		return false;
 	}
@@ -143,6 +95,6 @@ public class Move {
 	 * @return a deep copy of this Move object
 	 */
 	public Move copy() {
-		return new Move(getPiece(), getSubject(), getOrigin(), getDestination());
+		return new Move(getPiece(), getOrigin(), getDestination());
 	}
 }

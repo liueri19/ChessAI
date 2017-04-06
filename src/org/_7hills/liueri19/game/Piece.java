@@ -1,6 +1,7 @@
 package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -68,7 +69,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * 
 	 * @param square the new location to set the Piece on
 	 */
-	public void setSquare(int[] square) {
+	protected void setSquare(int[] square) {
 		coordinate = square;
 	}
 	
@@ -78,7 +79,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * @param file	the file of the new location
 	 * @param rank	the rank of the new location
 	 */
-	public void setSquare(int file, int rank) {
+	protected void setSquare(int file, int rank) {
 		setSquare(new int[] {file, rank});
 	}
 	
@@ -114,14 +115,14 @@ public abstract class Piece implements Comparable<Piece>{
 	 * 
 	 * @param moves	the new List of legal moves
 	 */
-	public void setLegalMoves(List<Move> moves) {
+	protected void setLegalMoves(List<Move> moves) {
 		legalMoves = moves;
 	}
 	
 	/**
 	 * Clear the list of legal moves. All moves are considered illegal after a call to this method.
 	 */
-	public void clearLegalMoves() {
+	protected void clearLegalMoves() {
 		legalMoves.clear();
 	}
 	
@@ -130,7 +131,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * 
 	 * @param move the new Move to add to the legal moves
 	 */
-	public void addLegalMove(Move move) {
+	protected void addLegalMove(Move move) {
 		legalMoves.add(move);
 	}
 	
@@ -161,7 +162,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * For pieces other than King and Pawn, this method is equivalent to <code>setLegalMoves()</code>.
 	 * @param moves the new List of threats
 	 */
-	public void setThreats(List<Move> moves) {
+	protected void setThreats(List<Move> moves) {
 		setLegalMoves(moves);
 	}
 	
@@ -169,7 +170,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * Clear the list of threats.<br>
 	 * For pieces other than King and Pawn, this method is equivalent to <code>clearLegalMoves()</code>.
 	 */
-	public void clearThreats() {
+	protected void clearThreats() {
 		clearLegalMoves();
 	}
 	
@@ -178,7 +179,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * For pieces other than King and Pawn, this method is equivalent to <code>addLegalMove()</code>.
 	 * @param move the new Move to add to the threats
 	 */
-	public void addThreat(Move move) {
+	protected void addThreat(Move move) {
 		addLegalMove(move);
 	}
 	
@@ -196,41 +197,41 @@ public abstract class Piece implements Comparable<Piece>{
 		return false;
 	}
 	
-	/**
-	 * Move this Piece to the specified location. Returns true if the move succeeds, and false if the move failed.
-	 * @param file	the file to move this Piece to
-	 * @param rank	the rank to move this Piece to
-	 * @return	true if the move succeeds, and false if the move failed
-	 */
-	public boolean move(int file, int rank) {
-		return move(new Move(this, new int[] {file, rank}));
-	}
-	
-	/**
-	 * Move this Piece to the specified location. Returns true if the move succeeds, and false if the move failed.
-	 * @param move	the Move to execute
-	 * @return true if the move succeeds, and false if the move failed
-	 */
-	public boolean move(Move move) {
-		if (isLegalMove(move)) {
-			if (move.getSubject() != null)
-				getBoard().removePiece(move.getSubject());
-			setSquare(move.getDestination());
-			return true;
-		}
-		return false;
-	}
+//	/**
+//	 * Move this Piece to the specified location. Returns true if the move succeeds, and false if the move failed.
+//	 * @param file	the file to move this Piece to
+//	 * @param rank	the rank to move this Piece to
+//	 * @return	true if the move succeeds, and false if the move failed
+//	 */
+//	public boolean move(int file, int rank) {
+//		return move(new Move(this, new int[] {file, rank}));
+//	}
+//	
+//	/**
+//	 * Move this Piece as described by the Move object. Returns true if the move succeeds, and false if the move failed.
+//	 * @param move	the Move to execute
+//	 * @return true if the move succeeds, and false if the move failed
+//	 */
+//	public boolean move(Move move) {
+//		if (isLegalMove(move)) {
+//			if (move.getSubject() != null)
+//				getBoard().removePiece(move.getSubject());
+//			setSquare(move.getDestination());
+//			return true;
+//		}
+//		return false;
+//	}
 	
 	/**
 	 * Update the legal moves and threatened squares of this Piece with the specified location.
 	 * @param square	the square for the legal moves and threatened squares generation algorithms to run on
 	 */
-	public abstract void updatePiece(int[] square);
+	protected abstract void updatePiece(int[] square);
 	
 	/**
 	 * Update the legal moves and threatened squares of this Piece using its current location.
 	 */
-	public void updatePiece() {
+	protected void updatePiece() {
 		updatePiece(this.getSquare());
 	}
 	
@@ -277,15 +278,24 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	/**
-	 * Indicates whether some other object is "equal to" this Piece. This method only checks if the
-	 * specified method is the same class as this Piece.
-	 * @param piece	the Object to be compared with
-	 * @return true if the specified Object is an instance of the same class as this Piece, false otherwise
+	 * Indicates whether some other object is "equal to" this Piece.<br>
+	 * Returns true if:<br>
+	 * the specified Object is of the same class as this Piece, and<br>
+	 * the specified Piece has the same color as this Piece, and<br>
+	 * the specified Piece has the same Board reference as this Piece, and<br>
+	 * both Piece objects have the same location.
+	 * @param o	the Object to be compared with
+	 * @return true if the specified Object meets all requirements, false otherwise
 	 */
 	@Override
-	public boolean equals(Object piece) {
-		if (this.getClass().equals(piece.getClass()))
-			return true;
+	public boolean equals(Object o) {
+		if (this.getClass().equals(o.getClass())) {
+			Piece piece = (Piece) o;
+			if (this.getColor() == piece.getColor()
+					&& this.getBoard() == piece.getBoard()	//the board reference should be exactly the same
+					&& Arrays.equals(this.getSquare(), piece.getSquare()))
+				return true;
+		}
 		return false;
 	}
 }

@@ -19,7 +19,7 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public void updatePiece(int[] square) {
+	protected void updatePiece(int[] square) {
 		this.clearLegalMoves();
 		Piece target;
 		if (this.getColor()) {
@@ -67,8 +67,8 @@ public class Pawn extends Piece {
 	@Override
 	public Piece copy() {
 		Piece p = new Pawn(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
-		for (Move move : this.getLegalMoves())
-			p.addLegalMove(move.copy());
+//		for (Move move : this.getLegalMoves())
+//			p.addLegalMove(move.copy());
 		return p;
 	}
 

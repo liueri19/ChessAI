@@ -7,6 +7,7 @@ package org._7hills.liueri19.game;
  */
 public class Castling extends Move {
 	private final Rook rook;
+	private final boolean kingSide;
 	
 	/**
 	 * Constructs a new Castling object identifying the move.
@@ -17,6 +18,7 @@ public class Castling extends Move {
 	public Castling(King king, Rook rook) {
 		super(king, king.getSquare(), rook.getSquare());	//just to satisfy the constructor
 		this.rook = rook;
+		kingSide = rook.getFile() == 8 ? true : false;
 		king.setCastlable(false);
 	}
 	
@@ -33,13 +35,21 @@ public class Castling extends Move {
 //		this.rook = rook;
 //		king.setCastlable(false);
 //	}
-	
+
 	/**
 	 * Returns the Rook related to this Castling.
-	 * @return the Rook object related to this Castling
+	 * @return the Rook related to this Castling
 	 */
 	public Rook getRook() {
 		return rook;
+	}
+	
+	/**
+	 * Returns true if the castling is to the King side, false otherwise.
+	 * @return true if the castling is to the King side, false otherwise
+	 */
+	public boolean isKingSide() {
+		return kingSide;
 	}
 	
 	/**

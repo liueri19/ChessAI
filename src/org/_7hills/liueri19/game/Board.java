@@ -523,7 +523,18 @@ public class Board {
 		Piece init = move.getPiece();
 		if (init.isLegalMove(move)) {
 			if (move instanceof Castling) {
-				//implement details
+				King king = (King) move.getPiece();
+				Rook rook = (Rook) ((Castling) move).getRook();
+				if (((Castling) move).isKingSide()) {
+					//move pieces
+					king.setSquare(7, king.getRank());
+					rook.setSquare(6, rook.getRank());
+				}
+				else {
+					king.setSquare(3, king.getRank());
+					rook.setSquare(4, rook.getRank());
+				}
+				rook.setCastlable(false);
 			}
 			else {
 				Piece subject = getPieceAt(move.getDestination());

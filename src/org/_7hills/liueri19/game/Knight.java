@@ -42,10 +42,8 @@ public class Knight extends Piece {
 //					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor())
 //				addLegalMove(move);
 			target = getBoard().getPieceAt(move[0], move[1]);
-			if (target == null)
+			if (target == null || target.getColor() != this.getColor())
 				addLegalMove(new Move(this, square, move));
-			else if (target.getColor() != this.getColor())
-				addLegalMove(new Move(this, target, square, move));
 		}
 	}
 

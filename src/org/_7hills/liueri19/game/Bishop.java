@@ -37,7 +37,7 @@ public class Bishop extends Piece {
 				else {
 					blockedPP = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileP, rankPP}));
+						addLegalMove(new Move(this, square, new int[] {fileP, rankPP}));
 				}
 			}
 			else
@@ -50,7 +50,7 @@ public class Bishop extends Piece {
 				else {
 					blockedPN = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileP, rankPN}));
+						addLegalMove(new Move(this, square, new int[] {fileP, rankPN}));
 				}
 			}
 			else
@@ -67,7 +67,7 @@ public class Bishop extends Piece {
 				else {
 					blockedNP = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileN, rankNP}));
+						addLegalMove(new Move(this, square, new int[] {fileN, rankNP}));
 				}
 			}
 			else
@@ -80,7 +80,7 @@ public class Bishop extends Piece {
 				else {
 					blockedNN = true;
 					if (getBoard().getPieceAt(fileN, rankNN).getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileN, rankNN}));
+						addLegalMove(new Move(this, square, new int[] {fileN, rankNN}));
 				}
 			}
 			else

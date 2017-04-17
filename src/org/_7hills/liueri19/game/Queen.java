@@ -29,7 +29,7 @@ public class Queen extends Piece {
 			if (target == null)	//if the square is empty
 				addLegalMove(new Move(this, square, new int[] {fileP, square[1]}));
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {fileP, square[1]}));
+				addLegalMove(new Move(this, square, new int[] {fileP, square[1]}));
 				break;
 			}
 			else	
@@ -41,7 +41,7 @@ public class Queen extends Piece {
 			if (target == null)
 				addLegalMove(new Move(this, square, new int[] {fileN, square[1]}));
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {fileN, square[1]}));
+				addLegalMove(new Move(this, square, new int[] {fileN, square[1]}));
 				break;
 			}
 			else
@@ -53,7 +53,7 @@ public class Queen extends Piece {
 			if (target == null)
 				addLegalMove(new Move(this, square, new int[] {square[0], rankP}));
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {square[0], rankP}));
+				addLegalMove(new Move(this, square, new int[] {square[0], rankP}));
 				break;
 			}
 			else
@@ -64,7 +64,7 @@ public class Queen extends Piece {
 			if (target == null)
 				addLegalMove(new Move(this, square, new int[] {square[0], rankN}));
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {square[0], rankN}));
+				addLegalMove(new Move(this, square, new int[] {square[0], rankN}));
 				break;
 			}
 			else
@@ -86,7 +86,7 @@ public class Queen extends Piece {
 				else {
 					blockedPP = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileP, rankPP}));
+						addLegalMove(new Move(this, square, new int[] {fileP, rankPP}));
 				}
 			}
 			else
@@ -99,7 +99,7 @@ public class Queen extends Piece {
 				else {
 					blockedPN = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileP, rankPN}));
+						addLegalMove(new Move(this, square, new int[] {fileP, rankPN}));
 				}
 			}
 			else
@@ -117,7 +117,7 @@ public class Queen extends Piece {
 				else {
 					blockedNP = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileN, rankNP}));
+						addLegalMove(new Move(this, square, new int[] {fileN, rankNP}));
 				}
 			}
 			else
@@ -130,7 +130,7 @@ public class Queen extends Piece {
 				else {
 					blockedNN = true;
 					if (getBoard().getPieceAt(fileN, rankNN).getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileN, rankNN}));
+						addLegalMove(new Move(this, square, new int[] {fileN, rankNN}));
 				}
 			}
 			else

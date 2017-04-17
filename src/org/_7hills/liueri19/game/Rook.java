@@ -30,7 +30,7 @@ public class Rook extends Piece {
 			if (target == null)	//if the square is empty
 				addLegalMove(new Move(this, square, new int[] {fileP, square[1]}));
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {fileP, square[1]}));
+				addLegalMove(new Move(this, square, new int[] {fileP, square[1]}));
 				break;
 			}
 			else	
@@ -42,7 +42,7 @@ public class Rook extends Piece {
 			if (target == null)
 				addLegalMove(new Move(this, square, new int[] {fileN, square[1]}));
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {fileN, square[1]}));
+				addLegalMove(new Move(this, square, new int[] {fileN, square[1]}));
 				break;
 			}
 			else
@@ -54,7 +54,7 @@ public class Rook extends Piece {
 			if (target == null)
 				addLegalMove(new Move(this, square, new int[] {square[0], rankP}));
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {square[0], rankP}));
+				addLegalMove(new Move(this, square, new int[] {square[0], rankP}));
 				break;
 			}
 			else
@@ -65,18 +65,12 @@ public class Rook extends Piece {
 			if (target == null)
 				addLegalMove(new Move(this, square, new int[] {square[0], rankN}));
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {square[0], rankN}));
+				addLegalMove(new Move(this, square, new int[] {square[0], rankN}));
 				break;
 			}
 			else
 				break;
 		}
-	}
-	
-	@Override
-	public boolean move(int file, int rank) {
-		setCastlable(false);
-		return super.move(file, rank);
 	}
 	
 	public boolean isCastlable() {

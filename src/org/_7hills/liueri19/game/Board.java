@@ -522,8 +522,8 @@ public class Board {
 	public boolean move(Move move) {
 		Piece init = move.getPiece();
 		if (init.isLegalMove(move)) {
-			if (move instanceof Castling) {
-				King king = (King) move.getPiece();
+			if (move instanceof Castling) {	//if we are castling
+				King king = (King) init;
 				Rook rook = (Rook) ((Castling) move).getRook();
 				if (((Castling) move).isKingSide()) {
 					//move pieces
@@ -534,13 +534,14 @@ public class Board {
 					king.setSquare(3, king.getRank());
 					rook.setSquare(4, rook.getRank());
 				}
+				king.setCastlable(false);
 				rook.setCastlable(false);
 			}
-			else {
+			else {	//otherwise, a usual move
 				Piece subject = getPieceAt(move.getDestination());
-				init.setSquare(move.getDestination());
 				if (subject != null)
 					removePiece(subject);
+				init.setSquare(move.getDestination());
 			}
 			this.history.add(move);
 			changeTurn();

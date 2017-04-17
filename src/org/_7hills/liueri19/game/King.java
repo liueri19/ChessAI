@@ -46,10 +46,8 @@ public class King extends Piece {
 			addThreat(new Move(this, square, move));
 			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1])) {
 				Piece target = getBoard().getPieceAt(move[0], move[1]);
-				if (target == null)
+				if (target == null || target.getColor() != this.getColor())
 					addLegalMove(new Move(this, square, move));
-				else if (target.getColor() != this.getColor())
-					addLegalMove(new Move(this, target, square, move));
 			}
 		}
 	}
@@ -58,7 +56,7 @@ public class King extends Piece {
 		return castlable;
 	}
 	
-	protected void setCastlable(boolean castlable) {
+	public void setCastlable(boolean castlable) {
 		this.castlable = castlable;
 	}
 	

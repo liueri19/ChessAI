@@ -30,10 +30,10 @@ public class Pawn extends Piece {
 			}
 			if ((target = getBoard().getPieceAt(square[0] - 1, square[1] + 1)) != null &&
 					target.getColor() != this.getColor())
-				addLegalMove(new Move(this, target, square, new int[] {square[0] - 1, square[1] + 1}));
+				addLegalMove(new Move(this, square, new int[] {square[0] - 1, square[1] + 1}));
 			if ((target = getBoard().getPieceAt(square[0] + 1, square[1] + 1)) != null &&
 					target.getColor() != this.getColor())
-				addLegalMove(new Move(this, target, square, new int[] {square[0] + 1, square[1] + 1}));
+				addLegalMove(new Move(this, square, new int[] {square[0] + 1, square[1] + 1}));
 			//en passant
 			/*
 			 * if (last move == file left || file right && is pawn move)
@@ -57,10 +57,10 @@ public class Pawn extends Piece {
 			}
 			if ((target = getBoard().getPieceAt(square[0] - 1, square[1] - 1)) != null &&
 					target.getColor() != this.getColor())
-				addLegalMove(new Move(this, target, square, new int[] {square[0] - 1, square[1] - 1}));
+				addLegalMove(new Move(this, square, new int[] {square[0] - 1, square[1] - 1}));
 			if ((target = getBoard().getPieceAt(square[0] + 1, square[1] - 1)) != null &&
 					target.getColor() != this.getColor())
-				addLegalMove(new Move(this, target, square, new int[] {square[0] + 1, square[1] - 1}));
+				addLegalMove(new Move(this, square, new int[] {square[0] + 1, square[1] - 1}));
 		}
 	}
 

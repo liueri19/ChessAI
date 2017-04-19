@@ -522,9 +522,9 @@ public class Board {
 	public boolean move(Move move) {
 		Piece init = move.getPiece();
 		if (init.isLegalMove(move)) {
-			if (move instanceof Castling) {	//if we are castling
+			if (move instanceof Castling) {	//BUG HERE
 				King king = (King) init;
-				Rook rook = (Rook) ((Castling) move).getRook();
+				Rook rook = ((Castling) move).getRook();
 				if (((Castling) move).isKingSide()) {
 					//move pieces
 					king.setSquare(7, king.getRank());

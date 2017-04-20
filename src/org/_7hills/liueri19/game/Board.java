@@ -284,7 +284,7 @@ public class Board {
 	 * @param rank	the rank of the piece represented as int
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
-	public Piece getPieceAt(int file, int rank) {
+	public Piece getPieceAt(int file, int rank) {	//should change implementation to use a map
 		for (Piece p : pieces) {
 			if (p.getFile() == file && p.getRank() == rank)
 				return p;
@@ -522,7 +522,7 @@ public class Board {
 	public boolean move(Move move) {
 		Piece init = move.getPiece();
 		if (init.isLegalMove(move)) {
-			if (move instanceof Castling) {	//BUG HERE
+			if (move instanceof Castling) {
 				King king = (King) init;
 				Rook rook = ((Castling) move).getRook();
 				if (((Castling) move).isKingSide()) {

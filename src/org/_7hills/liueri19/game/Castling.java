@@ -19,7 +19,7 @@ public class Castling extends Move {
 		super(king, king.getSquare(), rook.getSquare());	//just to satisfy the constructor
 		this.rook = rook;
 		kingSide = rook.getFile() == 8 ? true : false;
-		king.setCastlable(false);
+//		king.setCastlable(false);
 	}
 	
 //	/**

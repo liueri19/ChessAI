@@ -50,6 +50,15 @@ public class King extends Piece {
 					addLegalMove(new Move(this, square, move));
 			}
 		}
+		//add Castling
+		if (isCastlable()) {
+			Piece p;
+			for (int file = 1; file < 9; file += 7) {	//for only values 1 and 8
+				p = getBoard().getPieceAt(file, getRank());
+				if (p instanceof Rook && ((Rook) p).isCastlable())
+					addLegalMove(new Castling(this, (Rook) p));
+			}
+		}
 	}
 	
 	public boolean isCastlable() {

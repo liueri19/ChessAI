@@ -1,11 +1,11 @@
 package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  * The Board where Pieces rest on and the game would be played.
@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class Board {
 	//private List<Piece> pieces = new ArrayList<Piece>();
-	private Map<int[], Piece> pieces = new HashMap<>();
+	private Map<int[], Piece> pieces = new TreeMap<>(new SquareComparator());
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
 	private int gameResult;
@@ -349,6 +349,7 @@ public class Board {
 		String whiteSpace = "|    ";
 		String blackSpace = "|////";
 		boolean even, white;
+		int index = 0;
 		//first line, upper border
 		System.out.println("_________________________________________");
 		
@@ -365,8 +366,14 @@ public class Board {
 			System.out.println("|");
 			//rank second line
 			for (int file = 1; file < 9; file++) {
-				Piece p = pieces.get(new int[] {file, rank});
-				if (p != null) {
+				Piece p = new King(this, true, 0, 0);	//placeholder
+				try {
+				p = pieces.get(index);
+				}
+				catch (IndexOutOfBoundsException e) {
+				}
+				if (p.getRank() == rank && p.getFile() == file) {
+					index++;
 					if (white)
 						System.out.printf("| %s ", p);
 					else
@@ -501,20 +508,6 @@ public class Board {
 	}
 	
 	/**
-	 * Sets the location of the specified Piece to newKey and change the key-value mapping to match
-	 * the new location.<br>
-	 * Note that this method does NOT check the legitimacy of the location. To move a piece use <code>move()</code>.
-	 * @param piece	the Piece to be moved
-	 * @param newKey	the new location to move the Piece to
-	 * @return the previous value associated with key, or null if there was no mapping for key
-	 */
-	private Piece movePiece(Piece piece, int[] newKey) {
-		pieces.remove(piece.getSquare());
-		piece.setSquare(newKey);
-		return pieces.put(newKey, piece);
-	}
-	
-	/**
 	 * Execute the specified Move object. Returns true if the move described is legal, or false otherwise.
 	 * @param move the Move to execute
 	 * @return true if the move described is legal, false otherwise
@@ -527,12 +520,12 @@ public class Board {
 				Rook rook = ((Castling) move).getRook();
 				if (((Castling) move).isKingSide()) {
 					//move pieces
-					movePiece(king, new int[] {7, king.getRank()});
-					movePiece(rook, new int[] {6, rook.getRank()});
+					king.setSquare(7, king.getRank());
+					rook.setSquare(6, rook.getRank());
 				}
 				else {
-					movePiece(king, new int[] {3, king.getRank()});
-					movePiece(rook, new int[] {4, rook.getRank()});
+					king.setSquare(3, king.getRank());
+					rook.setSquare(4, rook.getRank());
 				}
 				king.setCastlable(false);
 				rook.setCastlable(false);
@@ -541,7 +534,7 @@ public class Board {
 				Piece subject = getPieceAt(move.getDestination());
 				if (subject != null)
 					removePiece(subject.getSquare());
-				movePiece(init, move.getDestination());
+				init.setSquare(move.getDestination());
 			}
 			this.history.add(move);
 			changeTurn();

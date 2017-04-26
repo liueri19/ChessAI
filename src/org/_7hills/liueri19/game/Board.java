@@ -1,9 +1,7 @@
 package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -12,13 +10,13 @@ import java.util.Scanner;
  * @author liueri19
  */
 public class Board {
-	//private List<Piece> pieces = new ArrayList<Piece>();
-	private Map<int[], Piece> pieces = new HashMap<>();
+	private List<Piece> pieces = new ArrayList<Piece>();
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
 	private int gameResult;
 	private boolean autoPrint = true;
 	private boolean whiteMove = true;
+	//private List<Object[]> history = new ArrayList<Object[]>();
 	private List<Move> history = new ArrayList<Move>();
 	
 	/**
@@ -412,15 +410,11 @@ public class Board {
 	 * Construct new Piece objects each with their standard starting position.
 	 */
 	protected void setupPieces() {
-		int[] location = new int[2];
 		//pawns
 		for (int y = 2; y < 8; y += 5) {
 			for (int x = 1; x < 9; x++) {
-				if (y == 2) {
-					location[0] = x;
-					location[1] = y;
-					pieces.put(location, new Pawn(this, true, location));
-				}
+				if (y == 2)
+					pieces.add(new Pawn(this, true, x, y));
 				else
 					pieces.add(new Pawn(this, false, x, y));
 			}

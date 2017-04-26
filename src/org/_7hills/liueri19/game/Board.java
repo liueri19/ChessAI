@@ -1,11 +1,10 @@
 package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 /**
  * The Board where Pieces rest on and the game would be played.
@@ -14,7 +13,7 @@ import java.util.TreeMap;
  */
 public class Board {
 	//private List<Piece> pieces = new ArrayList<Piece>();
-	private Map<int[], Piece> pieces = new TreeMap<>(new SquareComparator());
+	private Map<int[], Piece> pieces = new HashMap<>();
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
 	private int gameResult;
@@ -288,7 +287,11 @@ public class Board {
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
 	public Piece getPieceAt(int file, int rank) {	//should change implementation to use a map
-		return getPieceAt(new int[] {file, rank});
+		for (Piece p : pieces) {
+			if (p.getFile() == file && p.getRank() == rank)
+				return p;
+		}
+		return null;
 	}
 	
 	/**
@@ -298,7 +301,7 @@ public class Board {
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
 	public Piece getPieceAt(int[] square) {
-		return pieces.get(square);
+		return getPieceAt(square[0], square[1]);
 	}
 	
 	/**
@@ -307,31 +310,42 @@ public class Board {
 	 * @param copy the Piece to find
 	 * @return the equivalent of the specified Piece, or null if such Piece is not on the Board
 	 */
-//	public Piece getPiece(Piece copy) {
-//		for (Piece p : pieces) {
-//			if (p.equals(copy))
-//				return p;
-//		}
-//		return null;
-//	}
-	
-	/**
-	 * Removes the mapping for the specified key from this map if present.
-	 * @param key	the location of the Piece
-	 * @return the previous value associated with key, or null if there was no mapping for key
-	 */
-	protected Piece removePiece(int[] key) {
-		return pieces.remove(key);
+	public Piece getPiece(Piece copy) {
+		for (Piece p : pieces) {
+			if (p.equals(copy))
+				return p;
+		}
+		return null;
 	}
 	
 	/**
-	 * Add a Piece to the Map of Piece objects on the Board.
+	 * Removes the specified Piece object from the list of Pieces currently on the board.
+	 * 
+	 * @param p	the Piece to remove
+	 * @return true if this list contained the specified element
+	 */
+	protected boolean removePiece(Piece p) {
+		return this.pieces.remove(p);
+	}
+	
+	/**
+	 * Removes the Piece object at the specified location in the list of Pieces currently on the board.
+	 * 
+	 * @param index	the index of the Piece to be removed
+	 * @return the Piece that was removed
+	 */
+	protected Piece removePiece(int index) {
+		return this.pieces.remove(index);
+	}
+	
+	/**
+	 * Add a Piece to the List of Piece objects on the Board.
 	 * 
 	 * @param piece the Piece to add
-	 * @return the previous value associated with key, or null if there was no mapping for key
+	 * @return true if the Piece is added to the List
 	 */
-	protected Piece addPiece(Piece piece) {
-		return pieces.put(piece.getSquare(), piece);
+	protected boolean addPiece(Piece piece) {
+		return pieces.add(piece);
 	}
 	
 	/**
@@ -350,6 +364,7 @@ public class Board {
 		String blackSpace = "|////";
 		boolean even, white;
 		int index = 0;
+		pieces.sort(null);
 		//first line, upper border
 		System.out.println("_________________________________________");
 		
@@ -404,33 +419,33 @@ public class Board {
 				if (y == 2) {
 					location[0] = x;
 					location[1] = y;
-					pieces.put(location, new Pawn(this, true, x, y));
+					pieces.put(location, new Pawn(this, true, location));
 				}
 				else
-					pieces.put(location, new Pawn(this, false, x, y));
+					pieces.add(new Pawn(this, false, x, y));
 			}
 		}
 		//rooks
-		addPiece(new Rook(this, true, 1, 1));
-		addPiece(new Rook(this, true, 8, 1));
-		addPiece(new Rook(this, false, 1, 8));
-		addPiece(new Rook(this, false, 8, 8));
+		pieces.add(new Rook(this, true, 1, 1));
+		pieces.add(new Rook(this, true, 8, 1));
+		pieces.add(new Rook(this, false, 1, 8));
+		pieces.add(new Rook(this, false, 8, 8));
 		//knights
-		addPiece(new Knight(this, true, 2, 1));
-		addPiece(new Knight(this, true, 7, 1));
-		addPiece(new Knight(this, false, 2, 8));
-		addPiece(new Knight(this, false, 7, 8));
+		pieces.add(new Knight(this, true, 2, 1));
+		pieces.add(new Knight(this, true, 7, 1));
+		pieces.add(new Knight(this, false, 2, 8));
+		pieces.add(new Knight(this, false, 7, 8));
 		//bishops
-		addPiece(new Bishop(this, true, 3, 1));
-		addPiece(new Bishop(this, true, 6, 1));
-		addPiece(new Bishop(this, false, 3, 8));
-		addPiece(new Bishop(this, false, 6, 8));
+		pieces.add(new Bishop(this, true, 3, 1));
+		pieces.add(new Bishop(this, true, 6, 1));
+		pieces.add(new Bishop(this, false, 3, 8));
+		pieces.add(new Bishop(this, false, 6, 8));
 		//queens
-		addPiece(new Queen(this, true, 4, 1));
-		addPiece(new Queen(this, false, 4, 8));
+		pieces.add(new Queen(this, true, 4, 1));
+		pieces.add(new Queen(this, false, 4, 8));
 		//kings
-		addPiece(whiteKing = new King(this, true, 5, 1));
-		addPiece(blackKing = new King(this, false, 5, 8));
+		pieces.add(whiteKing = new King(this, true, 5, 1));
+		pieces.add(blackKing = new King(this, false, 5, 8));
 		
 		updatePieces();
 	}
@@ -475,8 +490,7 @@ public class Board {
 	 * @return true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise
 	 */
 	public boolean isSquareAttacked(boolean color, int file, int rank) {
-		for (Entry<int[], Piece> entry : pieces.entrySet()) {
-			Piece p = entry.getValue();
+		for (Piece p : pieces) {
 			if (p.getColor() != color && p.isThreatening(new Move(p, new int[] {file, rank})))
 				return true;
 		}
@@ -497,8 +511,7 @@ public class Board {
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
 	 */
 	protected void updatePieces() {
-		for (Entry<int[], Piece> entry : pieces.entrySet()) {
-			Piece p = entry.getValue();
+		for (Piece p : pieces) {
 			if (!(p instanceof King))
 				p.updatePiece();
 		}
@@ -533,7 +546,7 @@ public class Board {
 			else {	//otherwise, a usual move
 				Piece subject = getPieceAt(move.getDestination());
 				if (subject != null)
-					removePiece(subject.getSquare());
+					removePiece(subject);
 				init.setSquare(move.getDestination());
 			}
 			this.history.add(move);

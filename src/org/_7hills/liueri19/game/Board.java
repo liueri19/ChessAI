@@ -278,18 +278,41 @@ public class Board {
 	}
 	
 	/**
-	 * Iterates through the list of pieces currently on the board and returns the piece at the specified location.
+	 * Search through the list of pieces currently on the board and returns the piece at the specified location.
 	 * 
 	 * @param file	the file of the piece represented as int
 	 * @param rank	the rank of the piece represented as int
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
-	public Piece getPieceAt(int file, int rank) {	//should change implementation to use a map
-		for (Piece p : pieces) {
+	public Piece getPieceAt(int file, int rank) {	//binary search?
+		//Collections.binarySearch() not useful here, have to reinvent the wheel
+		int index, range;
+		index = range = pieces.size() / 2;
+		Piece p;
+		while (true) {
+			if (range > 1)
+				range /= 2;
+			p = pieces.get(index);
 			if (p.getFile() == file && p.getRank() == rank)
 				return p;
+			//p is not it
+			if (p.getRank() < rank)
+				index -= range;
+			else if (p.getRank() > rank)
+				index += range;
+			else {
+				if (p.getFile() < file)
+					index += range;
+				else
+					index -= range;
+			}
+			
 		}
-		return null;
+//		for (Piece p : pieces) {
+//			if (p.getFile() == file && p.getRank() == rank)
+//				return p;
+//		}
+//		return null;
 	}
 	
 	/**

@@ -286,33 +286,22 @@ public class Board {
 	 */
 	public Piece getPieceAt(int file, int rank) {	//binary search?
 		//Collections.binarySearch() not useful here, have to reinvent the wheel
-		int index, range;
-		index = range = pieces.size() / 2;
+		int leftBound, rightBound, index;
 		Piece p;
-		while (true) {
-			if (range > 1)
-				range /= 2;
+		int[] square = new int[] {file, rank};
+		leftBound = 0;
+		rightBound = pieces.size();
+		while (rightBound - leftBound > 1) {
+			index = leftBound + (rightBound - leftBound) / 2;
 			p = pieces.get(index);
-			if (p.getFile() == file && p.getRank() == rank)
+			if (p.compareTo(square) == 0)
 				return p;
-			//p is not it
-			if (p.getRank() < rank)
-				index -= range;
-			else if (p.getRank() > rank)
-				index += range;
-			else {
-				if (p.getFile() < file)
-					index += range;
-				else
-					index -= range;
-			}
-			
+			else if (p.compareTo(square) < 0)
+				rightBound = index;
+			else
+				leftBound = index;
 		}
-//		for (Piece p : pieces) {
-//			if (p.getFile() == file && p.getRank() == rank)
-//				return p;
-//		}
-//		return null;
+		return null;
 	}
 	
 	/**

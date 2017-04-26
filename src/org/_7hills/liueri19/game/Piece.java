@@ -278,6 +278,22 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	/**
+	 * Compares the location of this Piece to the specified square. This method has the same behavior as compareTo(Piece piece).
+	 * @param square	the square to be compared with
+	 * @return -1, 0, or 1 as this Piece's location is less than, equal to, or greater than the specified square.
+	 */
+	protected int compareTo(int[] square) {
+		if (this.getRank() == square[1]) {
+			if (this.getFile() < square[0])
+				return -1;
+			return 1;
+		}
+		if (this.getRank() > square[1])
+			return -1;
+		return 1;
+	}
+	
+	/**
 	 * Indicates whether some other object is "equal to" this Piece.<br>
 	 * Returns true if:<br>
 	 * the specified Object is of the same class as this Piece, and<br>

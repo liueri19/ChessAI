@@ -286,7 +286,7 @@ public class Board {
 	 */
 	public Piece getPieceAt(int file, int rank) {	//binary search?
 		//Collections.binarySearch() not useful here, have to reinvent the wheel
-		int leftBound, rightBound, index;
+		int leftBound, rightBound, index, compare;
 		Piece p;
 		int[] square = new int[] {file, rank};
 		leftBound = 0;
@@ -294,12 +294,13 @@ public class Board {
 		while (rightBound - leftBound > 1) {
 			index = leftBound + (rightBound - leftBound) / 2;
 			p = pieces.get(index);
-			if (p.compareTo(square) == 0)
+			compare = p.compareToSquare(square);
+			if (compare == 0)
 				return p;
-			else if (p.compareTo(square) < 0)
-				rightBound = index;
-			else
+			else if (compare < 0)
 				leftBound = index;
+			else
+				rightBound = index;
 		}
 		return null;
 	}
@@ -495,7 +496,7 @@ public class Board {
 	 * @param rank	the rank of the square
 	 * @return true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise
 	 */
-	public boolean isSquareAttacked(boolean color, int file, int rank) {
+	public boolean isSquareAttacked(boolean color, int file, int rank) {	//optimize this?
 		for (Piece p : pieces) {
 			if (p.getColor() != color && p.isThreatening(new Move(p, new int[] {file, rank})))
 				return true;
@@ -517,6 +518,7 @@ public class Board {
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
 	 */
 	protected void updatePieces() {
+		pieces.sort(null);
 		for (Piece p : pieces) {
 			if (!(p instanceof King))
 				p.updatePiece();

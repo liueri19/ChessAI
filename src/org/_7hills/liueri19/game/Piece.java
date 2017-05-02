@@ -270,7 +270,9 @@ public abstract class Piece implements Comparable<Piece>{
 		if (this.getRank() == piece.getRank()) {
 			if (this.getFile() < piece.getFile())
 				return -1;
-			return 1;
+			else if (this.getFile() > piece.getFile())
+				return 1;
+			return 0;
 		}
 		if (this.getRank() > piece.getRank())
 			return -1;
@@ -282,11 +284,13 @@ public abstract class Piece implements Comparable<Piece>{
 	 * @param square	the square to be compared with
 	 * @return -1, 0, or 1 as this Piece's location is less than, equal to, or greater than the specified square.
 	 */
-	protected int compareTo(int[] square) {
+	protected int compareToSquare(int[] square) {
 		if (this.getRank() == square[1]) {
 			if (this.getFile() < square[0])
 				return -1;
-			return 1;
+			else if (this.getFile() > square[0])
+				return 1;
+			return 0;
 		}
 		if (this.getRank() > square[1])
 			return -1;

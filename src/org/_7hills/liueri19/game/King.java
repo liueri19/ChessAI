@@ -61,11 +61,15 @@ public class King extends Piece {
 		}
 	}
 	
+	/**
+	 * Returns true if this King can be castled.
+	 * @return true if this King can be castled
+	 */
 	public boolean isCastlable() {
 		return castlable;
 	}
 	
-	public void setCastlable(boolean castlable) {
+	protected void setCastlable(boolean castlable) {
 		this.castlable = castlable;
 	}
 	
@@ -97,7 +101,7 @@ public class King extends Piece {
 
 	@Override
 	public Piece copy() {
-		King p = new King(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
+		King p = new King(null, this.getColor(), this.getFile(), this.getRank());
 		p.setCastlable(this.isCastlable());
 //		for (Move move : this.getLegalMoves())
 //			p.addLegalMove(move.copy());

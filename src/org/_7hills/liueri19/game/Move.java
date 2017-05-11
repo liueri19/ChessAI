@@ -95,6 +95,6 @@ public class Move {
 	 * @return a deep copy of this Move object
 	 */
 	public Move copy() {
-		return new Move(getPiece(), getOrigin(), getDestination());
+		return new Move(getPiece().copy(), getOrigin(), getDestination());
 	}
 }

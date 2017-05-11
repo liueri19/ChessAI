@@ -132,7 +132,10 @@ public abstract class Piece implements Comparable<Piece>{
 	 * @param move the new Move to add to the legal moves
 	 */
 	protected void addLegalMove(Move move) {
-		legalMoves.add(move);
+//		Board board = new Board(getBoard());
+//		board.uncheckedMove(move);
+//		if (!board.isInCheck(getColor()))
+			legalMoves.add(move);
 	}
 	
 	/**

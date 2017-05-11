@@ -36,6 +36,17 @@ public class Board {
 			setupPieces();
 	}
 	
+	/**
+	 * Constructs a new chess board with the same states of the specified board.
+	 * @param board	the board to copy from
+	 */
+	public Board(Board board) {
+		for (Piece p : board.getPieces())
+			this.pieces.add(p.copy());
+		whiteKing = (King) board.whiteKing.copy();
+		blackKing = (King) board.blackKing.copy();
+	}
+	
 	public static void main(String[] args) {
 		Board board = new Board();
 		Scanner sc = new Scanner(System.in);
@@ -267,6 +278,14 @@ public class Board {
 	}
 	
 	/**
+	 * Returns a list containing all the pieces on this board.
+	 * @return a list containing all the pieces on this board
+	 */
+	public List<Piece> getPieces() {
+		return new ArrayList<Piece>(pieces);
+	}
+	
+	/**
 	 * Iterates through the list of pieces currently on the board and returns the piece at the specified location.
 	 * 
 	 * @param file	the file of the piece represented as char
@@ -417,6 +436,10 @@ public class Board {
 			//rank third line
 			System.out.println("|____|____|____|____|____|____|____|____|");
 		}
+		
+		////print textual
+		for (Piece p : pieces)
+			System.out.printf("%s: %s%d\n", p.toString(), parseFile(p.getFile()), p.getRank());
 	}
 	
 	/**
@@ -562,6 +585,18 @@ public class Board {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Execute the specified Move object without any checking.
+	 * @param move	the move to execute
+	 */
+	protected void uncheckedMove(Move move) {
+		Piece init = move.getPiece();
+		Piece subject = getPieceAt(move.getDestination());
+		if (subject != null)
+			removePiece(subject);
+		init.setSquare(move.getDestination());
 	}
 	
 //	/**

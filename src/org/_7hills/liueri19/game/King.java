@@ -100,8 +100,8 @@ public class King extends Piece {
 //	}
 
 	@Override
-	public Piece copy() {
-		King p = new King(null, this.getColor(), this.getFile(), this.getRank());
+	public Piece copy(Board board) {
+		King p = new King(board, this.getColor(), this.getFile(), this.getRank());
 		p.setCastlable(this.isCastlable());
 //		for (Move move : this.getLegalMoves())
 //			p.addLegalMove(move.copy());

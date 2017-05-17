@@ -42,9 +42,9 @@ public class Board {
 	 */
 	public Board(Board board) {
 		for (Piece p : board.getPieces())
-			this.pieces.add(p.copy());
-		whiteKing = (King) board.whiteKing.copy();
-		blackKing = (King) board.blackKing.copy();
+			this.pieces.add(p.copy(this));
+		whiteKing = (King) board.whiteKing.copy(this);
+		blackKing = (King) board.blackKing.copy(this);
 	}
 	
 	public static void main(String[] args) {

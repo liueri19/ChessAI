@@ -82,8 +82,8 @@ public class Rook extends Piece {
 	}
 
 	@Override
-	public Piece copy() {
-		Piece p = new Pawn(null, this.getColor(), this.getFile(), this.getRank());
+	public Piece copy(Board board) {
+		Piece p = new Pawn(board, this.getColor(), this.getFile(), this.getRank());
 //		for (Move move : this.getLegalMoves())
 //			p.addLegalMove(move.copy());
 		return p;

@@ -32,10 +32,11 @@ public abstract class Piece implements Comparable<Piece>{
 	
 	/**
 	 * Returns a deep copy of this Piece object.
+	 * @param board the Board object to link this Piece to.
 	 * 
 	 * @return a deep copy of this Piece object
 	 */
-	public abstract Piece copy();
+	public abstract Piece copy(Board board);
 	
 	/**
 	 * Returns the Board object where this Piece is on.
@@ -132,9 +133,9 @@ public abstract class Piece implements Comparable<Piece>{
 	 * @param move the new Move to add to the legal moves
 	 */
 	protected void addLegalMove(Move move) {
-//		Board board = new Board(getBoard());
-//		board.uncheckedMove(move);
-//		if (!board.isInCheck(getColor()))
+		Board board = new Board(getBoard());
+		board.uncheckedMove(move);
+		if (!board.isInCheck(getColor()))
 			legalMoves.add(move);
 	}
 	

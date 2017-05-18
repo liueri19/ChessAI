@@ -438,8 +438,8 @@ public class Board {
 		}
 		
 		////print textual
-		for (Piece p : pieces)
-			System.out.printf("%s: %s%d\n", p.toString(), parseFile(p.getFile()), p.getRank());
+//		for (Piece p : pieces)
+//			System.out.printf("%s: %s%d\n", p.toString(), parseFile(p.getFile()), p.getRank());
 	}
 	
 	/**
@@ -592,7 +592,7 @@ public class Board {
 	 * @param move	the move to execute
 	 */
 	protected void uncheckedMove(Move move) {
-		Piece init = move.getPiece();
+		Piece init = getPieceAt(move.getOrigin());
 		Piece subject = getPieceAt(move.getDestination());
 		if (subject != null)
 			removePiece(subject);

@@ -16,7 +16,6 @@ public class Board {
 	private int gameResult;
 	private boolean autoPrint = true;
 	private boolean whiteMove = true;
-	//private List<Object[]> history = new ArrayList<Object[]>();
 	private List<Move> history = new ArrayList<>();
 	
 	/**
@@ -233,7 +232,7 @@ public class Board {
 	 * @param file	the char representation of a file, always lower-case
 	 * @return the int representation of the input file
 	 */
-	private static int parseFile(char file) {
+	protected static int parseFile(char file) {
 		int fileNum = 0;
 		switch (file) {
 			case 'a': fileNum = 1; break;
@@ -254,7 +253,7 @@ public class Board {
 	 * @param file	the int representation of a file
 	 * @return the char representation of the input file
 	 */
-	private static char parseFile(int file) {
+	protected static char parseFile(int file) {
 		char fileNum = '0';
 		switch (file) {
 			case 1: fileNum = 'a'; break;

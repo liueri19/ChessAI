@@ -10,14 +10,14 @@ import java.util.Scanner;
  * @author liueri19
  */
 public class Board {
-	private List<Piece> pieces = new ArrayList<Piece>();
+	private List<Piece> pieces = new ArrayList<>();
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
 	private int gameResult;
 	private boolean autoPrint = true;
 	private boolean whiteMove = true;
 	//private List<Object[]> history = new ArrayList<Object[]>();
-	private List<Move> history = new ArrayList<Move>();
+	private List<Move> history = new ArrayList<>();
 	
 	/**
 	 * Constructs a chess board with standard setup.
@@ -233,7 +233,7 @@ public class Board {
 	 * @param file	the char representation of a file, always lower-case
 	 * @return the int representation of the input file
 	 */
-	public static int parseFile(char file) {
+	private static int parseFile(char file) {
 		int fileNum = 0;
 		switch (file) {
 			case 'a': fileNum = 1; break;
@@ -254,7 +254,7 @@ public class Board {
 	 * @param file	the int representation of a file
 	 * @return the char representation of the input file
 	 */
-	public static char parseFile(int file) {
+	private static char parseFile(int file) {
 		char fileNum = '0';
 		switch (file) {
 			case 1: fileNum = 'a'; break;
@@ -282,7 +282,7 @@ public class Board {
 	 * @return a list containing all the pieces on this board
 	 */
 	public List<Piece> getPieces() {
-		return new ArrayList<Piece>(pieces);
+		return new ArrayList<>(pieces);
 	}
 	
 	/**

@@ -31,7 +31,7 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	/**
-	 * Returns a deep copy of this Piece object.
+	 * Returns a deep copy of this Piece object with reference to the specified Board.
 	 * @param board the Board object to link this Piece to.
 	 * 
 	 * @return a deep copy of this Piece object

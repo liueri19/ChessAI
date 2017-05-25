@@ -36,8 +36,7 @@ public class Rook extends Piece {
 			else	
 				break;
 		}
-		target = null;
-		for (int fileN = square[0] - 1; fileN > 0; fileN--) {
+        for (int fileN = square[0] - 1; fileN > 0; fileN--) {
 			target = getBoard().getPieceAt(fileN, square[1]);
 			if (target == null)
 				addLegalMove(new Move(this, square, new int[] {fileN, square[1]}));
@@ -48,8 +47,7 @@ public class Rook extends Piece {
 			else
 				break;
 		}
-		target = null;
-		for (int rankP = square[1] + 1; rankP < 9; rankP++) {
+        for (int rankP = square[1] + 1; rankP < 9; rankP++) {
 			target = getBoard().getPieceAt(square[0], rankP);
 			if (target == null)
 				addLegalMove(new Move(this, square, new int[] {square[0], rankP}));
@@ -83,7 +81,7 @@ public class Rook extends Piece {
 
 	@Override
 	public Piece copy(Board board) {
-		Piece p = new Pawn(board, this.getColor(), this.getFile(), this.getRank());
+		Piece p = new Rook(board, this.getColor(), this.getFile(), this.getRank());
 //		for (Move move : this.getLegalMoves())
 //			p.addLegalMove(move.copy());
 		return p;

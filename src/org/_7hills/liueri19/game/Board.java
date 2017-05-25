@@ -165,7 +165,7 @@ public class Board {
 					continue;
 				}
 				if (board.isSquareAttacked(king.getColor(), 3, king.getRank())) {
-					System.out.println("The king cannot catle into a check");
+					System.out.println("The king cannot castle into a check");
 					continue;
 				}
 				
@@ -302,7 +302,7 @@ public class Board {
 	 * @param rank	the rank of the piece represented as int
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
-	public Piece getPieceAt(int file, int rank) {	//binary search?
+	public Piece getPieceAt(int file, int rank) {	//TODO: bug: unable to find piece at index 0
 		//Collections.binarySearch() not useful here, have to reinvent the wheel
 		int leftBound, rightBound, index, compare;
 		Piece p;
@@ -462,7 +462,7 @@ public class Board {
 		//knights
 		pieces.add(new Knight(this, true, 2, 1));
 		pieces.add(new Knight(this, true, 7, 1));
-		pieces.add(new Knight(this, false, 2, 8));
+		//pieces.add(new Knight(this, false, 2, 8));
 		pieces.add(new Knight(this, false, 7, 8));
 		//bishops
 		pieces.add(new Bishop(this, true, 3, 1));
@@ -595,7 +595,7 @@ public class Board {
 		Piece subject = getPieceAt(move.getDestination());
 		if (subject != null)
 			removePiece(subject);
-		init.setSquare(move.getDestination());
+        init.setSquare(move.getDestination());
 	}
 	
 //	/**

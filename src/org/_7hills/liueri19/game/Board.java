@@ -303,24 +303,42 @@ public class Board {
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
 	public Piece getPieceAt(int file, int rank) {	//TODO: bug: unable to find piece at index 0
-		//Collections.binarySearch() not useful here, have to reinvent the wheel
-		int leftBound, rightBound, index, compare;
-		Piece p;
-		int[] square = new int[] {file, rank};
-		leftBound = 0;
-		rightBound = pieces.size();
-		while (rightBound - leftBound > 1) {
-			index = leftBound + (rightBound - leftBound) / 2;
-			p = pieces.get(index);
-			compare = p.compareToSquare(square);
-			if (compare == 0)
-				return p;
-			else if (compare < 0)
-				leftBound = index;
-			else
-				rightBound = index;
-		}
-		return null;
+//		int leftBound, rightBound, index, compare;
+//		Piece p;
+//		int[] square = new int[] {file, rank};
+//		leftBound = 0;
+//		rightBound = pieces.size();
+//		while (rightBound - leftBound > 1) {
+//			index = leftBound + (rightBound - leftBound) / 2;
+//			p = pieces.get(index);
+//			compare = p.compareToSquare(square);
+//			if (compare == 0)
+//				return p;
+//			else if (compare < 0)
+//				leftBound = index;
+//			else
+//				rightBound = index;
+//		}
+//		return null;
+
+        int index = pieces.size() / 2;
+        Piece p;
+        int[] square = new int[] {file, rank};
+        while (true) {
+            p = pieces.get(index);
+            int compare = p.compareToSquare(square);
+            if (compare <= 0)
+                return p;
+            if (compare < 0)
+                if (index == 0)
+                    break;
+                index /= 2;
+            if (compare > 0)
+                if (index >= pieces.size() - 1)
+                    break;
+                index += (pieces.size() - index) / 2;
+        }
+        return null;
 	}
 	
 	/**
@@ -375,7 +393,7 @@ public class Board {
 	 */
 	protected boolean addPiece(Piece piece) {
 		return pieces.add(piece);
-	}
+	}   //TODO add to sorted index
 	
 	/**
 	 * Prints a list of moves played to the console.
@@ -455,26 +473,26 @@ public class Board {
 			}
 		}
 		//rooks
-		pieces.add(new Rook(this, true, 1, 1));
-		pieces.add(new Rook(this, true, 8, 1));
-		pieces.add(new Rook(this, false, 1, 8));
-		pieces.add(new Rook(this, false, 8, 8));
+		addPiece(new Rook(this, true, 1, 1));
+        addPiece(new Rook(this, true, 8, 1));
+        addPiece(new Rook(this, false, 1, 8));
+        addPiece(new Rook(this, false, 8, 8));
 		//knights
-		pieces.add(new Knight(this, true, 2, 1));
-		pieces.add(new Knight(this, true, 7, 1));
+        addPiece(new Knight(this, true, 2, 1));
+        addPiece(new Knight(this, true, 7, 1));
 		//pieces.add(new Knight(this, false, 2, 8));
-		pieces.add(new Knight(this, false, 7, 8));
+        addPiece(new Knight(this, false, 7, 8));
 		//bishops
-		pieces.add(new Bishop(this, true, 3, 1));
-		pieces.add(new Bishop(this, true, 6, 1));
-		pieces.add(new Bishop(this, false, 3, 8));
-		pieces.add(new Bishop(this, false, 6, 8));
+        addPiece(new Bishop(this, true, 3, 1));
+        addPiece(new Bishop(this, true, 6, 1));
+        addPiece(new Bishop(this, false, 3, 8));
+        addPiece(new Bishop(this, false, 6, 8));
 		//queens
-		pieces.add(new Queen(this, true, 4, 1));
-		pieces.add(new Queen(this, false, 4, 8));
+        addPiece(new Queen(this, true, 4, 1));
+        addPiece(new Queen(this, false, 4, 8));
 		//kings
-		pieces.add(whiteKing = new King(this, true, 5, 1));
-		pieces.add(blackKing = new King(this, false, 5, 8));
+        addPiece(whiteKing = new King(this, true, 5, 1));
+        addPiece(blackKing = new King(this, false, 5, 8));
 		
 		updatePieces();
 	}

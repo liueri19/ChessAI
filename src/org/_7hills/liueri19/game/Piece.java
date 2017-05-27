@@ -282,12 +282,13 @@ public abstract class Piece implements Comparable<Piece>{
 			return -1;
 		return 1;
 	}
-	
+
 	/**
 	 * Compares the location of this Piece to the specified square. This method has the same behavior as compareTo(Piece piece).
 	 * @param square	the square to be compared with
 	 * @return -1, 0, or 1 as this Piece's location is less than, equal to, or greater than the specified square.
 	 */
+	@Deprecated
 	protected int compareToSquare(int[] square) {
 		if (this.getRank() == square[1]) {
 			if (this.getFile() < square[0])
@@ -321,5 +322,20 @@ public abstract class Piece implements Comparable<Piece>{
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 *
+	 * @return	a hash code value for this object.
+	 */
+	@Override
+	public int hashCode() {
+		int hash = 1;
+		if (getColor())
+			hash++;
+		hash += getBoard().hashCode() * 31;
+		hash += getFile() * 31;
+
+		return hash;
 	}
 }

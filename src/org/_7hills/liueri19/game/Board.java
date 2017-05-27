@@ -1,6 +1,7 @@
 package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -296,53 +297,30 @@ public class Board {
 	}
 	
 	/**
-	 * Search through the list of pieces currently on the board and returns the piece at the specified location.
+	 * Searches through the list of pieces currently on the board and returns the piece at the specified location.
 	 * 
 	 * @param file	the file of the piece represented as int
 	 * @param rank	the rank of the piece represented as int
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
-	public Piece getPieceAt(int file, int rank) {	//TODO: bug: unable to find piece at index 0
-//		int leftBound, rightBound, index, compare;
-//		Piece p;
-//		int[] square = new int[] {file, rank};
-//		leftBound = 0;
-//		rightBound = pieces.size();
-//		while (rightBound - leftBound > 1) {
-//			index = leftBound + (rightBound - leftBound) / 2;
-//			p = pieces.get(index);
-//			compare = p.compareToSquare(square);
-//			if (compare == 0)
-//				return p;
-//			else if (compare < 0)
-//				leftBound = index;
-//			else
-//				rightBound = index;
-//		}
-//		return null;
-
-        int index = pieces.size() / 2;
-        Piece p;
-        int[] square = new int[] {file, rank};
-        while (true) {
-            p = pieces.get(index);
-            int compare = p.compareToSquare(square);
-            if (compare <= 0)
-                return p;
-            if (compare < 0)
-                if (index == 0)
-                    break;
-                index /= 2;
-            if (compare > 0)
-                if (index >= pieces.size() - 1)
-                    break;
-                index += (pieces.size() - index) / 2;
-        }
-        return null;
+	public Piece getPieceAt(int file, int rank) {
+		//a placeholder to meet the arguments of Collections.binarySearch()
+		//the following methods are implemented only because they are abstract in Piece.
+			@Override
+			public Piece copy(Board board) {
+				return null;
+			}
+			@Override
+			public void updatePiece(int[] square) {}
+			@Override
+			public String toString() {
+				return "PLACEHOLDER";
+			}
+		});
 	}
 	
 	/**
-	 * Iterates through the list of pieces currently on the board and returns the piece at the specified location.
+	 * Searches through the list of pieces currently on the board and returns the piece at the specified location.
 	 * 
 	 * @param square	the file and rank in an int array
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
@@ -352,17 +330,16 @@ public class Board {
 	}
 	
 	/**
-	 * Returns the equivalent Piece object of the specified Piece in the List of Pieces no the Board,
+	 * Returns the equivalent Piece object of the specified Piece in the List of Pieces on the Board,
 	 * or null if none is found.
-	 * @param copy the Piece to find
+	 * @param piece the Piece to find
 	 * @return the equivalent of the specified Piece, or null if such Piece is not on the Board
 	 */
-	public Piece getPiece(Piece copy) {
-		for (Piece p : pieces) {
-			if (p.equals(copy))
-				return p;
-		}
-		return null;
+	public Piece getPiece(Piece piece) {
+		int index = Collections.binarySearch(pieces, piece);
+		if (index < 0)
+			return null;
+		return pieces.get(index);
 	}
 	
 	/**
@@ -372,7 +349,7 @@ public class Board {
 	 * @return true if this list contained the specified element
 	 */
 	protected boolean removePiece(Piece p) {
-		return this.pieces.remove(p);
+		return pieces.remove(p);
 	}
 	
 	/**
@@ -382,18 +359,19 @@ public class Board {
 	 * @return the Piece that was removed
 	 */
 	protected Piece removePiece(int index) {
-		return this.pieces.remove(index);
+		return pieces.remove(index);
 	}
 	
 	/**
 	 * Add a Piece to the List of Piece objects on the Board.
 	 * 
 	 * @param piece the Piece to add
-	 * @return true if the Piece is added to the List
 	 */
-	protected boolean addPiece(Piece piece) {
-		return pieces.add(piece);
-	}   //TODO add to sorted index
+	protected void addPiece(Piece piece) {
+		int index = Collections.binarySearch(pieces, piece);
+		index = -index - 1;	//see documentation of Collections.binarySearch()
+		pieces.add(index, piece);
+	}
 	
 	/**
 	 * Prints a list of moves played to the console.
@@ -411,7 +389,7 @@ public class Board {
 		String blackSpace = "|////";
 		boolean even, white;
 		int index = 0;
-		pieces.sort(null);
+		//pieces.sort(null);
 		//first line, upper border
 		System.out.println("_________________________________________");
 		
@@ -432,7 +410,7 @@ public class Board {
 				try {
 				p = pieces.get(index);
 				}
-				catch (IndexOutOfBoundsException e) {
+				catch (IndexOutOfBoundsException ignored) {
 				}
 				if (p.getRank() == rank && p.getFile() == file) {
 					index++;
@@ -467,9 +445,9 @@ public class Board {
 		for (int y = 2; y < 8; y += 5) {
 			for (int x = 1; x < 9; x++) {
 				if (y == 2)
-					pieces.add(new Pawn(this, true, x, y));
+					addPiece(new Pawn(this, true, x, y));
 				else
-					pieces.add(new Pawn(this, false, x, y));
+					addPiece(new Pawn(this, false, x, y));
 			}
 		}
 		//rooks
@@ -480,7 +458,7 @@ public class Board {
 		//knights
         addPiece(new Knight(this, true, 2, 1));
         addPiece(new Knight(this, true, 7, 1));
-		//pieces.add(new Knight(this, false, 2, 8));
+		addPiece(new Knight(this, false, 2, 8));
         addPiece(new Knight(this, false, 7, 8));
 		//bishops
         addPiece(new Bishop(this, true, 3, 1));
@@ -536,7 +514,7 @@ public class Board {
 	 * @param rank	the rank of the square
 	 * @return true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise
 	 */
-	public boolean isSquareAttacked(boolean color, int file, int rank) {	//optimize this?
+	public boolean isSquareAttacked(boolean color, int file, int rank) {	//TODO: optimize this?
 		for (Piece p : pieces) {
 			if (p.getColor() != color && p.isThreatening(new Move(p, new int[] {file, rank})))
 				return true;
@@ -558,7 +536,7 @@ public class Board {
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
 	 */
 	protected void updatePieces() {
-		pieces.sort(null);
+		///pieces.sort(null);
 		for (Piece p : pieces) {
 			if (!(p instanceof King))
 				p.updatePiece();

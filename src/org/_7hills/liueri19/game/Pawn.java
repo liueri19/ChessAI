@@ -34,7 +34,7 @@ public class Pawn extends Piece {
 			if ((target = getBoard().getPieceAt(square[0] + 1, square[1] + 1)) != null &&
 					target.getColor() != this.getColor())
 				addLegalMove(new Move(this, square, new int[] {square[0] + 1, square[1] + 1}));
-			//en passant
+			//TODO: en passant
 			/*
 			 * if (last move == file left || file right && is pawn move)
 			 *   add en passant;
@@ -67,8 +67,6 @@ public class Pawn extends Piece {
 	@Override
 	public Piece copy(Board board) {
 		Piece p = new Pawn(board, this.getColor(), this.getFile(), this.getRank());
-//		for (Move move : this.getLegalMoves())
-//			p.addLegalMove(move.copy());
 		return p;
 	}
 

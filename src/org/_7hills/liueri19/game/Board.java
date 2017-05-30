@@ -306,6 +306,7 @@ public class Board {
 	public Piece getPieceAt(int file, int rank) {
 		//a placeholder to meet the arguments of Collections.binarySearch()
 		//the following methods are implemented only because they are abstract in Piece.
+        return getPiece(new Piece(null, true, file, rank) {
 			@Override
 			public Piece copy(Board board) {
 				return null;
@@ -441,36 +442,41 @@ public class Board {
 	 * Construct new Piece objects each with their standard starting position.
 	 */
 	protected void setupPieces() {
-		//pawns
-		for (int y = 2; y < 8; y += 5) {
-			for (int x = 1; x < 9; x++) {
-				if (y == 2)
-					addPiece(new Pawn(this, true, x, y));
-				else
-					addPiece(new Pawn(this, false, x, y));
-			}
-		}
-		//rooks
-		addPiece(new Rook(this, true, 1, 1));
-        addPiece(new Rook(this, true, 8, 1));
-        addPiece(new Rook(this, false, 1, 8));
-        addPiece(new Rook(this, false, 8, 8));
-		//knights
-        addPiece(new Knight(this, true, 2, 1));
-        addPiece(new Knight(this, true, 7, 1));
-		addPiece(new Knight(this, false, 2, 8));
-        addPiece(new Knight(this, false, 7, 8));
-		//bishops
-        addPiece(new Bishop(this, true, 3, 1));
-        addPiece(new Bishop(this, true, 6, 1));
-        addPiece(new Bishop(this, false, 3, 8));
-        addPiece(new Bishop(this, false, 6, 8));
-		//queens
-        addPiece(new Queen(this, true, 4, 1));
-        addPiece(new Queen(this, false, 4, 8));
-		//kings
+//		//pawns
+//		for (int y = 2; y < 8; y += 5) {
+//			for (int x = 1; x < 9; x++) {
+//				if (y == 2)
+//					addPiece(new Pawn(this, true, x, y));
+//				else
+//					addPiece(new Pawn(this, false, x, y));
+//			}
+//		}
+//		//rooks
+//		addPiece(new Rook(this, true, 1, 1));
+//        addPiece(new Rook(this, true, 8, 1));
+//        addPiece(new Rook(this, false, 1, 8));
+//        addPiece(new Rook(this, false, 8, 8));
+//		//knights
+//        addPiece(new Knight(this, true, 2, 1));
+//        addPiece(new Knight(this, true, 7, 1));
+//		addPiece(new Knight(this, false, 2, 8));
+//        addPiece(new Knight(this, false, 7, 8));
+//		//bishops
+//        addPiece(new Bishop(this, true, 3, 1));
+//        addPiece(new Bishop(this, true, 6, 1));
+//        addPiece(new Bishop(this, false, 3, 8));
+//        addPiece(new Bishop(this, false, 6, 8));
+//		//queens
+//        addPiece(new Queen(this, true, 4, 1));
+//        addPiece(new Queen(this, false, 4, 8));
+//		//kings
         addPiece(whiteKing = new King(this, true, 5, 1));
         addPiece(blackKing = new King(this, false, 5, 8));
+
+        //test for illegal move check
+        addPiece(new Queen(this, false, 5, 7));
+        addPiece(new Knight(this, true, 5, 2));
+        //knight should not have any legal move
 		
 		updatePieces();
 	}
@@ -536,7 +542,7 @@ public class Board {
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
 	 */
 	protected void updatePieces() {
-		///pieces.sort(null);
+		pieces.sort(null);
 		for (Piece p : pieces) {
 			if (!(p instanceof King))
 				p.updatePiece();

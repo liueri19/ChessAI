@@ -57,7 +57,7 @@ public class Move {
 	/**
 	 * Returns a String representation of this Move object.<br>
 	 * <p>
-	 * A move will be formated as:<br>
+	 * A move will be formatted as:<br>
 	 * <code>[origin_file][origin_rank][destination_file][destination_rank]</code><br>
 	 * A move from E2 to E4 would be represented as:<br>
 	 * <code>e2e4</code>

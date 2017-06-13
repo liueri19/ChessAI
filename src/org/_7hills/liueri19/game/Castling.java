@@ -1,24 +1,61 @@
 package org._7hills.liueri19.game;
 
+/**
+ * This is the special move for castling.
+ * @author liueri19
+ *
+ */
 public class Castling extends Move {
+	private final Rook rook;
+	private final boolean kingSide;
 	
 	/**
-	 * This is the special move for castling.
+	 * Constructs a new Castling object identifying the move.
 	 * 
 	 * @param king	the king
-	 * @param from	origin of the king
-	 * @param to	destination of the king
+	 * @param rook	the rook
 	 */
-	public Castling(King king, int[] from, int[] to) {
-		super(king, from, to);
-		king.setCastlable(false);
+	public Castling(King king, Rook rook) {
+		super(king, king.getSquare(), rook.getSquare());	//just to satisfy the constructor
+		this.rook = rook;
+		kingSide = rook.getFile() == 8;
+//		king.setCastlable(false);
 	}
 	
-	public Castling(King king, int[] to) {
-		super(king, to);
-		king.setCastlable(false);
+//	/**
+//	 * Constructs a new Castling object identifying the move.
+//	 * This constructor assumes the origin of the move is the current square of the specified King.
+//	 * 
+//	 * @param king	the king
+//	 * @param rook	the rook
+//	 * @param to	destination of the king
+//	 */
+//	public Castling(King king, Rook rook, int[] to) {
+//		super(king, to);
+//		this.rook = rook;
+//		king.setCastlable(false);
+//	}
+
+	/**
+	 * Returns the Rook related to this Castling.
+	 * @return the Rook related to this Castling
+	 */
+	public Rook getRook() {
+		return rook;
 	}
 	
+	/**
+	 * Returns true if the castling is to the King side, false otherwise.
+	 * @return true if the castling is to the King side, false otherwise
+	 */
+	public boolean isKingSide() {
+		return kingSide;
+	}
+	
+	/**
+	 * Returns a string representation of this Castling object.
+	 * <code>"0-0"</code> for king side castling, <code>"0-0-0"</code> for queen side castling.
+	 */
 	@Override
 	public String toString() {
 		if (getDestination()[0] == 3)

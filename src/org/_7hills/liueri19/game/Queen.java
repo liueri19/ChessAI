@@ -1,5 +1,10 @@
 package org._7hills.liueri19.game;
 
+/**
+ * Represents a Queen. This class overrides certain methods in Piece.
+ * @author liueri19
+ *
+ */
 public class Queen extends Piece {
 
 	public Queen(Board board, boolean color, int x, int y) {
@@ -8,23 +13,37 @@ public class Queen extends Piece {
 
 	@Override
 	public String toString() {
+		String result;
 		if (this.getColor())
+			result = "WQ@";
+		else
+			result = "BQ@";
+		result += getFile();
+		result += getRank();
+		return result;
+	}
+
+	@Override
+	public String toBriefString() {
+		if (getColor())
 			return "WQ";
 		return "BQ";
 	}
 
 	@Override
-	public void updatePiece(int[] square) {
-		this.clearLegalMoves();
+	void updatePiece(boolean threatsOnly) {
+		if (!threatsOnly)
+			clearLegalMoves();
+		clearThreats();
+		int[] square = getSquare();
 		Piece target;
-		
 		// rook's
 		for (int fileP = square[0] + 1; fileP < 9; fileP++) {
 			target = getBoard().getPieceAt(fileP, square[1]);
 			if (target == null)	//if the square is empty
-				addLegalMove(new Move(this, square, new int[] {fileP, square[1]}));
+				checkMove(new Move(this, square, new int[] {fileP, square[1]}), threatsOnly);
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {fileP, square[1]}));
+				checkMove(new Move(this, target, square, new int[] {fileP, square[1]}), threatsOnly);
 				break;
 			}
 			else	
@@ -34,9 +53,9 @@ public class Queen extends Piece {
 		for (int fileN = square[0] - 1; fileN > 0; fileN--) {
 			target = getBoard().getPieceAt(fileN, square[1]);
 			if (target == null)
-				addLegalMove(new Move(this, square, new int[] {fileN, square[1]}));
+				checkMove(new Move(this, square, new int[] {fileN, square[1]}), threatsOnly);
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {fileN, square[1]}));
+				checkMove(new Move(this, target, square, new int[] {fileN, square[1]}), threatsOnly);
 				break;
 			}
 			else
@@ -46,9 +65,9 @@ public class Queen extends Piece {
 		for (int rankP = square[1] + 1; rankP < 9; rankP++) {
 			target = getBoard().getPieceAt(square[0], rankP);
 			if (target == null)
-				addLegalMove(new Move(this, square, new int[] {square[0], rankP}));
+				checkMove(new Move(this, square, new int[] {square[0], rankP}), threatsOnly);
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {square[0], rankP}));
+				checkMove(new Move(this, target, square, new int[] {square[0], rankP}), threatsOnly);
 				break;
 			}
 			else
@@ -57,9 +76,9 @@ public class Queen extends Piece {
 		for (int rankN = square[1] - 1; rankN > 0; rankN--) {
 			target = getBoard().getPieceAt(square[0], rankN);
 			if (target == null)
-				addLegalMove(new Move(this, square, new int[] {square[0], rankN}));
+				checkMove(new Move(this, square, new int[] {square[0], rankN}), threatsOnly);
 			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				addLegalMove(new Move(this, target, square, new int[] {square[0], rankN}));
+				checkMove(new Move(this, target, square, new int[] {square[0], rankN}), threatsOnly);
 				break;
 			}
 			else
@@ -77,11 +96,11 @@ public class Queen extends Piece {
 			if (!blockedPP && rankPP < 9) {
 				target = getBoard().getPieceAt(fileP, rankPP);	//may be null
 				if (target == null)
-					addLegalMove(new Move(this, square, new int[] {fileP, rankPP}));
+					checkMove(new Move(this, square, new int[] {fileP, rankPP}), threatsOnly);
 				else {
 					blockedPP = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileP, rankPP}));
+						checkMove(new Move(this, target, square, new int[] {fileP, rankPP}), threatsOnly);
 				}
 			}
 			else
@@ -90,11 +109,11 @@ public class Queen extends Piece {
 			if (!blockedPN && rankPN > 0) {
 				target = getBoard().getPieceAt(fileP, rankPN);
 				if (target == null)
-					addLegalMove(new Move(this, square, new int[] {fileP, rankPN}));
+					checkMove(new Move(this, square, new int[] {fileP, rankPN}), threatsOnly);
 				else {
 					blockedPN = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileP, rankPN}));
+						checkMove(new Move(this, target, square, new int[] {fileP, rankPN}), threatsOnly);
 				}
 			}
 			else
@@ -108,11 +127,11 @@ public class Queen extends Piece {
 			if (!blockedNP && rankNP < 9) {
 				target = getBoard().getPieceAt(fileN, rankNP);
 				if (target == null)
-					addLegalMove(new Move(this, square, new int[] {fileN, rankNP}));
+					checkMove(new Move(this, square, new int[] {fileN, rankNP}), threatsOnly);
 				else {
 					blockedNP = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileN, rankNP}));
+						checkMove(new Move(this, target, square, new int[] {fileN, rankNP}), threatsOnly);
 				}
 			}
 			else
@@ -121,11 +140,11 @@ public class Queen extends Piece {
 			if (!blockedNN && rankNN > 0) {
 				target = getBoard().getPieceAt(fileN, rankNN);
 				if (target == null)
-					addLegalMove(new Move(this, square, new int[] {fileN, rankNN}));
+					checkMove(new Move(this, square, new int[] {fileN, rankNN}), threatsOnly);
 				else {
 					blockedNN = true;
 					if (getBoard().getPieceAt(fileN, rankNN).getColor() != this.getColor())
-						addLegalMove(new Move(this, target, square, new int[] {fileN, rankNN}));
+						checkMove(new Move(this, target, square, new int[] {fileN, rankNN}), threatsOnly);
 				}
 			}
 			else
@@ -136,10 +155,10 @@ public class Queen extends Piece {
 	}
 
 	@Override
-	public Piece copy() {
-		Piece p = new Queen(this.getBoard(), this.getColor(), this.getFile(), this.getRank());
-		for (Move move : this.getLegalMoves())
-			p.addLegalMove(move.copy());
+	public Piece copy(Board board) {
+		Piece p = new Queen(board, this.getColor(), this.getFile(), this.getRank());
+//		for (Move move : this.getLegalMoves())
+//			p.checkMove(move.copy());
 		return p;
 	}
 }

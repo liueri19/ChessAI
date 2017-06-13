@@ -1,67 +1,165 @@
 package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public abstract class Piece implements Comparable<Piece>{
-	private boolean color;	//color the color of the piece. true for white, false for black
+/**
+ * Piece class is the super class of all pieces and defines most general methods.
+ * @author liueri19
+ *
+ */
+abstract class Piece implements Comparable<Piece> {
+	private final boolean color;	//color the color of the piece. true for white, false for black
 	private final Board board;
 	private int[] coordinate;
-	private List<Move> legalMoves = new ArrayList<Move>();
+	private List<Move> legalMoves = new ArrayList<>();
+	private List<Move> threats = new ArrayList<>();
 	
+	/**
+	 * Constructs a new Piece object. This is the super constructor for all Piece subclasses.
+	 * To construct a Piece object, use the constructor of the desired subclass.
+	 * 
+	 * @param board	the Board to set the piece on
+	 * @param color	the color of the Piece, true for white, false for black
+	 * @param x		the file to set the piece on
+	 * @param y		the rank to set the piece on
+	 */
 	public Piece(Board board, boolean color, int x, int y) {
 		this.board = board;
 		this.color = color;
 		coordinate = new int[] {x, y};
 	}
 	
-	public abstract Piece copy();
+	/**
+	 * Returns a deep copy of this Piece object with reference to the specified Board.
+	 * @param board the Board object to link this Piece to.
+	 *
+	 * @return a deep copy of this Piece object
+	 */
+	protected abstract Piece copy(Board board);	//Cloneable is not used. A specific Board reference is needed.
 	
-	
-	public Board getBoard() {
+	/**
+	 * Returns the Board object where this Piece is on.
+	 * 
+	 * @return the Board object where this Piece is on
+	 */
+	Board getBoard() {
 		return board;
 	}
 	
+	/**
+	 * Returns the color of this Piece.
+	 * 
+	 * @return the color of this Piece
+	 */
 	public boolean getColor() {
 		return color;
 	}
 	
-	public int[] getSquare() {
+	/**
+	 * Returns the current location of this Piece represented as an int array.
+	 * 
+	 * @return the current location of this Piece
+	 */
+	int[] getSquare() {
 		return coordinate;
 	}
 	
-	public void setSquare(int[] square) {
+	/**
+	 * Change the current location of this Piece to the specified square.
+	 * 
+	 * @param square the new location to set the Piece on
+	 */
+	void setSquare(int[] square) {
 		coordinate = square;
 	}
 	
-	public void setSquare(int file, int rank) {
-		setSquare(new int[] {file, rank});
+	/**
+	 * Change the current location of this Piece to the specified square.
+	 * 
+	 * @param file	the file of the new location
+	 * @param rank	the rank of the new location
+	 */
+	void setSquare(int file, int rank) {
+		coordinate[0] = file;
+		coordinate[1] = rank;
 	}
 	
+	/**
+	 * Returns the current file of this Piece.
+	 * 
+	 * @return the current file of this Piece represented in int
+	 */
 	public int getFile() {
 		return coordinate[0];
 	}
 	
+	/**
+	 * Returns the current rank of this Piece.
+	 * @return the current rank of this Piece
+	 */
 	public int getRank() {
 		return coordinate[1];
 	}
 	
-	public List<Move> getLegalMoves() {
+	/**
+	 * Returns a List of Move objects containing all legal moves.
+	 * All moves not on this List is considered illegal.
+	 * 
+	 * @return a List of Move objects containing all legal moves
+	 */
+	List<Move> getLegalMoves() {
 		return legalMoves;
 	}
 	
-	public void setLegalMoves(List<Move> moves) {
+	/**
+	 * Change the current List of legal moves to the specified List.
+	 * 
+	 * @param moves	the new List of legal moves
+	 */
+	void setLegalMoves(List<Move> moves) {
 		legalMoves = moves;
 	}
 	
-	public void clearLegalMoves() {
+	/**
+	 * Clear the list of legal moves. All moves are considered illegal after a call to this method.
+	 */
+	void clearLegalMoves() {
 		legalMoves.clear();
 	}
-	
-	public void addLegalMove(Move move) {
+
+	/**
+	 * Add a Move to the existing list of legal moves.
+	 * 
+	 * @param move the Move to add to the legal moves
+	 */
+	void addLegalMove(Move move) {
 		legalMoves.add(move);
 	}
+
+	/**
+	 * Add the specified move to threats. Perform a final legal move check to test if King becomes exposed to
+	 * threat after the specified move. Add move to legal moves if passes the test.
+	 * @param move	the Move to be checked
+	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
+	 */
+	void checkMove(Move move, boolean threatsOnly) {
+		addThreat(move);
+		if (!threatsOnly) {
+			board.uncheckedMove(move);
+			board.updatePieces(true);
+			if (!board.isInCheck(getColor()))
+				addLegalMove(move);
+			board.revert(move);
+		}
+	}
 	
+	/**
+	 * Returns true if the specified Move is legal (in the list of legal moves), and false otherwise.
+	 * @param move	the Move to be checked
+	 * @return true if the specified Move is legal, and false otherwise.
+	 */
 	public boolean isLegalMove(Move move) {
 		for (Move m : getLegalMoves()) {
 			if (move.equals(m))
@@ -71,71 +169,188 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	/**
-	 * For pieces other than King and Pawn, attacked squares are the same as legal moves
+	 * Returns a List of Move objects representing the threats this Piece is posing.
+	 * @return a List of Move objects representing the threats this Piece is posing
 	 */
-	public List<Move> getThreats() {
-		return getLegalMoves();
+	List<Move> getThreats() {
+		return threats;
 	}
 	
-	public void setThreats(List<Move> moves) {
-		setLegalMoves(moves);
+	/**
+	 * Change the current List of threats to the specified List.<br>
+	 * For pieces other than King and Pawn, this method is equivalent to <code>setLegalMoves()</code>.
+	 * @param moves the new List of threats
+	 */
+	void setThreats(List<Move> moves) {
+		threats = moves;
 	}
 	
-	public void clearThreats() {
-		clearLegalMoves();
+	/**
+	 * Clear the list of threats.<br>
+	 * For pieces other than King and Pawn, this method is equivalent to <code>clearLegalMoves()</code>.
+	 */
+	void clearThreats() {
+		threats.clear();
 	}
 	
-	public void addThreat(Move move) {
-		addLegalMove(move);
+	/**
+	 * Add a Move to the existing list of threats.<br>
+	 * For pieces other than King and Pawn, this method is equivalent to <code>checkMove()</code>.
+	 * @param move the new Move to add to the threats
+	 */
+	void addThreat(Move move) {
+		threats.add(move);
 	}
 	
-	public boolean isThreating(Move move) {
+	/**
+	 * Returns true if the specified Move is threatened, false otherwise.<br>
+	 * For pieces other than King and Pawn, this method is equivalent to <code>isLegalMove()</code>.
+	 * @param move	the Move to be checked
+	 * @return	true if the specified Move is threatened, false otherwise
+	 */
+	public boolean isThreatening(Move move) {
 		for (Move m : getThreats()) {
 			if (move.equals(m))
 				return true;
 		}
 		return false;
 	}
-	////
 	
-	public boolean move(int file, int rank) {
-		return move(new Move(this, new int[] {file, rank}));
-	}
+//	/**
+//	 * Move this Piece to the specified location. Returns true if the move succeeds, and false if the move failed.
+//	 * @param file	the file to move this Piece to
+//	 * @param rank	the rank to move this Piece to
+//	 * @return	true if the move succeeds, and false if the move failed
+//	 */
+//	public boolean move(int file, int rank) {
+//		return move(new Move(this, new int[] {file, rank}));
+//	}
+//	
+//	/**
+//	 * Move this Piece as described by the Move object. Returns true if the move succeeds, and false if the move failed.
+//	 * @param move	the Move to execute
+//	 * @return true if the move succeeds, and false if the move failed
+//	 */
+//	public boolean move(Move move) {
+//		if (isLegalMove(move)) {
+//			if (move.getSubject() != null)
+//				getBoard().removePiece(move.getSubject());
+//			setSquare(move.getDestination());
+//			return true;
+//		}
+//		return false;
+//	}
 	
-	public boolean move(Move move) {
-		if (isLegalMove(move)) {
-			if (move.getSubject() != null)
-				getBoard().removePiece(move.getSubject());
-			setSquare(move.getDestination());
-			return true;
-		}
-		return false;
-	}
+	/**
+	 * Update the legal moves and threatened squares of this Piece using its current location.
+	 * @param threatsOnly true to update only threats, false to update threats and legal moves
+	 */
+	abstract void updatePiece(boolean threatsOnly);
 	
-	public abstract void updatePiece(int[] square);
-	
-	public void updatePiece() {
-		updatePiece(this.getSquare());
-	}
-	
+	/**
+	 * Returns a String representation of this Piece object.<br>
+	 * <p>
+	 * The subclasses are represented as:<br>
+	 * Pawn - P<br>
+	 * Rook - R<br>
+	 * Bishop - B<br>
+	 * Knight - N<br>
+	 * Queen - Q<br>
+	 * King - K<br>
+	 * <br>
+	 * The colors are represented as:<br>
+	 * Black - B<br>
+	 * White - W<br>
+	 * <br>
+	 * A Piece will be formatted as: <code>[color][type]@[file][rank]</code><br>
+	 * A white Knight at B1 would be represented as <code>WN@B1</code>,
+	 * a black King at e8 would be represented as <code>BK@E8</code>.
+	 * @return a String representation of this Piece object
+	 */
 	public abstract String toString();
+
+	/**
+	 * Returns a brief String representation of this Piece. This method uses the same format as toString() but
+	 * without specifying the location of the Piece.<br>
+	 * A Piece will be formatted as: <code>[color][type]</code>
+	 * @return a brief String representation of this Piece
+	 */
+	public abstract String toBriefString();
 	
+	/**
+	 * Compares this Piece to the specified Piece based on their location on the board. The Piece with
+	 * a lower rank is considered greater; if two Piece objects have the same rank, the Piece with a
+	 * greater file is considered greater. Piece objects on the same location are considered equal.
+	 * @param piece the Piece to be compared
+	 * @return -1, 0, or 1 as this Piece is less than, equal to, or greater than the specified Piece.
+	 */
 	@Override
 	public int compareTo(Piece piece) {
-		if (this.getRank() == piece.getRank()) {
-			if (this.getFile() < piece.getFile())
-				return -1;
+		if (getRank() > piece.getRank())
+			return -1;
+		else if (getRank() < piece.getRank())
 			return 1;
+		else {
+			if (getFile() < piece.getFile())
+				return -1;
+			else if (getFile() > piece.getFile())
+				return 1;
+			return 0;
 		}
-		if (this.getRank() > piece.getRank())
+	}
+
+	/**
+	 * Compares the location of this Piece to the specified square. This method has the same behavior as compareTo(Piece piece).
+	 * @param square	the square to be compared with
+	 * @return -1, 0, or 1 as this Piece's location is less than, equal to, or greater than the specified square.
+	 */
+	@Deprecated
+	public int compareToSquare(int[] square) {
+		if (this.getRank() == square[1]) {
+			if (this.getFile() < square[0])
+				return -1;
+			else if (this.getFile() > square[0])
+				return 1;
+			return 0;
+		}
+		if (this.getRank() > square[1])
 			return -1;
 		return 1;
 	}
 	
+	/**
+	 * Indicates whether some other object is "equal to" this Piece.<br>
+	 * Returns true if:<br>
+	 * the specified Object is of the same class as this Piece, and<br>
+	 * the specified Piece has the same color as this Piece, and<br>
+	 * the specified Piece has the same Board reference as this Piece, and<br>
+	 * both Piece objects have the same location.
+	 * @param o	the Object to be compared with
+	 * @return true if the specified Object meets all requirements, false otherwise
+	 */
 	@Override
-	public boolean equals(Object piece) {
-		if (this.getClass().equals(piece.getClass()))
-			return true;
+	public boolean equals(Object o) {
+		if (this.getClass().equals(o.getClass())) {
+			Piece piece = (Piece) o;
+			if (this.getColor() == piece.getColor()
+					&& this.getBoard() == piece.getBoard()	//the board reference should be exactly the same
+					&& Arrays.equals(this.getSquare(), piece.getSquare()))
+				return true;
+		}
 		return false;
+	}
+
+	/**
+	 *
+	 * @return	hash code value of this object.
+	 */
+	@Override
+	public int hashCode() {
+		int hash = 1;
+		if (getColor())
+			hash++;
+		hash += getBoard().hashCode() * 31;
+		hash += getFile() * 31;
+		return hash;
 	}
 }

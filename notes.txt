@@ -52,9 +52,12 @@ Castling
 Move should be a class.
 Move class should be immutable.
 
-TODO
 En passant
 Implement check
 When checked, the check must be resolved (all other moves must be illegal)
 Legal move and attacked squares are not the same for Pawns.
 Promotion.
+
+User describe a move, internally represented as a Move object.
+Move object only store information about the move.
+Board execute base on Move object.

@@ -144,7 +144,7 @@ abstract class Piece implements Comparable<Piece> {
 	 * @param move	the Move to be checked
 	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
 	 */
-	void checkMove(Move move, boolean threatsOnly) {
+	void checkMove(Move move, boolean threatsOnly) {	//TODO "Illegal move" when attempting to block a threat
 		addThreat(move);
 		if (!threatsOnly) {
 			board.uncheckedMove(move);

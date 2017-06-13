@@ -440,7 +440,7 @@ public final class Board {
 	/**
 	 * Construct new Piece objects each with their standard starting position.
 	 */
-	protected void setupPieces() {
+	void setupPieces() {
 		//pawns
 		for (int y = 2; y < 8; y += 5) {
 			for (int x = 1; x < 9; x++) {
@@ -476,6 +476,12 @@ public final class Board {
 //        addPiece(new Queen(this, false, 5, 7));
 //        addPiece(new Rook(this, true, 5, 2));
 //        //knight should not have any legal move
+
+//		//test for en passant
+//		addPiece(new Pawn(this, true, 1, 2));
+//		addPiece(new Pawn(this, false, 2, 4));
+//		addPiece(new Pawn(this, true, 8, 5));
+//		addPiece(new Pawn(this, false, 7, 7));
 		
 		updatePieces(false);
 	}
@@ -496,6 +502,8 @@ public final class Board {
 	 * @return the Move object at the specified index in history
 	 */
 	public Move getMove(int moveNum) {
+		if (moveNum < 0 || moveNum >= history.size())
+			return null;
 		return history.get(moveNum);
 	}
 	
@@ -557,9 +565,12 @@ public final class Board {
 	 * @param move the Move to execute
 	 * @return true if the move described is legal, false otherwise
 	 */
-	public boolean move(Move move) {	//TODO pieces in wrong order after move
+	public boolean move(Move move) {
 		Piece init = move.getInit();
 		if (init.isLegalMove(move)) {
+			List<Move> moves = init.getLegalMoves();
+			//get the move from legal moves generated from Piece, Move passed in from main have null in subject field
+			move = moves.get(moves.indexOf(move));
 			if (move instanceof Castling) {
 				King king = (King) init;
 				Rook rook = ((Castling) move).getRook();
@@ -577,15 +588,15 @@ public final class Board {
 				Collections.swap(pieces, pieces.indexOf(king), pieces.indexOf(rook));	//ensure correct order in pieces
 			}
 			else {	//otherwise, a usual move
-				Piece subject = getPieceAt(move.getDestination());
+				Piece subject = move.getSubject();
 				if (subject != null)
 					removePiece(subject);
 				init.setSquare(move.getDestination());
 				//ensure correct order in pieces
 				int index = pieces.indexOf(init);
-				while (index >= 0 && init.compareTo(pieces.get(index - 1)) < 0)
+				while (index > 0 && init.compareTo(pieces.get(index - 1)) < 0)
 					Collections.swap(pieces, index, --index);
-				while (index < pieces.size() && init.compareTo(pieces.get(index + 1)) > 0)
+				while (index < pieces.size() -1 && init.compareTo(pieces.get(index + 1)) > 0)
 					Collections.swap(pieces, index, ++index);
 			}
 			history.add(move);

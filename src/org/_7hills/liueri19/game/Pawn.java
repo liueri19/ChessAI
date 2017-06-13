@@ -55,11 +55,14 @@ public class Pawn extends Piece {
 			 */
 			if (this.getRank() == 5) {
 				Move lastMove = getBoard().getMove(getBoard().getCurrentMoveNum() - 1);
-				if (lastMove.getInit() instanceof Pawn && lastMove.getOrigin()[1] - lastMove.getDestination()[1] == 2) {
-					int lastMoveFile = lastMove.getOrigin()[0];
-					if (lastMoveFile == getFile() -1 || lastMoveFile == getFile() +1) {
-						checkMove(new Move(this, lastMove.getInit(), getSquare(),
-								new int[] {lastMoveFile, lastMove.getDestination()[1] + 1}), threatsOnly);
+				if (lastMove != null) {
+					int[] origin = lastMove.getOrigin();
+					int[] des = lastMove.getDestination();
+					if (lastMove.getInit() instanceof Pawn && origin[1] - des[1] == 2) {
+						if (origin[0] == getFile() - 1 || origin[0] == getFile() + 1) {
+							checkMove(new Move(this, lastMove.getInit(), getSquare(),
+									new int[] {origin[0], des[1] + 1}), threatsOnly);
+						}
 					}
 				}
 			}
@@ -78,11 +81,15 @@ public class Pawn extends Piece {
 				checkMove(new Move(this, target, square, new int[] {square[0] + 1, square[1] - 1}), threatsOnly);
 			if (this.getRank() == 4) {
 				Move lastMove = getBoard().getMove(getBoard().getCurrentMoveNum() - 1);
-				if (lastMove.getInit() instanceof Pawn && lastMove.getDestination()[1] - lastMove.getOrigin()[1] == 2) {
-					int lastMoveFile = lastMove.getOrigin()[0];
-					if (lastMoveFile == getFile() -1 || lastMoveFile == getFile() +1) {
-						checkMove(new Move(this, lastMove.getInit(), getSquare(),
-								new int[] {lastMoveFile, lastMove.getDestination()[1] - 1}), threatsOnly);
+				if (lastMove != null) {
+					int[] origin = lastMove.getOrigin();
+					int[] des = lastMove.getDestination();
+					if (lastMove.getInit() instanceof Pawn && des[1] - origin[1] == 2) {
+						int lastMoveFile = origin[0];
+						if (lastMoveFile == getFile() - 1 || lastMoveFile == getFile() + 1) {
+							checkMove(new Move(this, lastMove.getInit(), getSquare(),
+									new int[] {lastMoveFile, des[1] - 1}), threatsOnly);
+						}
 					}
 				}
 			}

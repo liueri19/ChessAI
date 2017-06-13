@@ -9,11 +9,12 @@ import java.util.List;
  * @author liueri19
  *
  */
-public abstract class Piece implements Comparable<Piece>{
-	private boolean color;	//color the color of the piece. true for white, false for black
+abstract class Piece implements Comparable<Piece> {
+	private final boolean color;	//color the color of the piece. true for white, false for black
 	private final Board board;
 	private int[] coordinate;
-	private List<Move> legalMoves = new ArrayList<Move>();
+	private List<Move> legalMoves = new ArrayList<>();
+	private List<Move> threats = new ArrayList<>();
 	
 	/**
 	 * Constructs a new Piece object. This is the super constructor for all Piece subclasses.
@@ -33,17 +34,17 @@ public abstract class Piece implements Comparable<Piece>{
 	/**
 	 * Returns a deep copy of this Piece object with reference to the specified Board.
 	 * @param board the Board object to link this Piece to.
-	 * 
+	 *
 	 * @return a deep copy of this Piece object
 	 */
-	public abstract Piece copy(Board board);
+	protected abstract Piece copy(Board board);	//Cloneable is not used. A specific Board reference is needed.
 	
 	/**
 	 * Returns the Board object where this Piece is on.
 	 * 
 	 * @return the Board object where this Piece is on
 	 */
-	public Board getBoard() {
+	Board getBoard() {
 		return board;
 	}
 	
@@ -61,7 +62,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * 
 	 * @return the current location of this Piece
 	 */
-	public int[] getSquare() {
+	int[] getSquare() {
 		return coordinate;
 	}
 	
@@ -70,7 +71,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * 
 	 * @param square the new location to set the Piece on
 	 */
-	protected void setSquare(int[] square) {
+	void setSquare(int[] square) {
 		coordinate = square;
 	}
 	
@@ -80,8 +81,9 @@ public abstract class Piece implements Comparable<Piece>{
 	 * @param file	the file of the new location
 	 * @param rank	the rank of the new location
 	 */
-	protected void setSquare(int file, int rank) {
-		setSquare(new int[] {file, rank});
+	void setSquare(int file, int rank) {
+		coordinate[0] = file;
+		coordinate[1] = rank;
 	}
 	
 	/**
@@ -107,7 +109,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * 
 	 * @return a List of Move objects containing all legal moves
 	 */
-	public List<Move> getLegalMoves() {
+	List<Move> getLegalMoves() {
 		return legalMoves;
 	}
 	
@@ -116,31 +118,45 @@ public abstract class Piece implements Comparable<Piece>{
 	 * 
 	 * @param moves	the new List of legal moves
 	 */
-	protected void setLegalMoves(List<Move> moves) {
+	void setLegalMoves(List<Move> moves) {
 		legalMoves = moves;
 	}
 	
 	/**
 	 * Clear the list of legal moves. All moves are considered illegal after a call to this method.
 	 */
-	protected void clearLegalMoves() {
+	void clearLegalMoves() {
 		legalMoves.clear();
 	}
-	
+
 	/**
 	 * Add a Move to the existing list of legal moves.
 	 * 
-	 * @param move the new Move to add to the legal moves
+	 * @param move the Move to add to the legal moves
 	 */
-	protected void addLegalMove(Move move) {
-		Board board = new Board(getBoard());
-		board.uncheckedMove(move);
-		if (!board.isInCheck(getColor()))
-			legalMoves.add(move);
+	void addLegalMove(Move move) {
+		legalMoves.add(move);
+	}
+
+	/**
+	 * Add the specified move to threats. Perform a final legal move check to test if King becomes exposed to
+	 * threat after the specified move. Add move to legal moves if passes the test.
+	 * @param move	the Move to be checked
+	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
+	 */
+	void checkMove(Move move, boolean threatsOnly) {
+		addThreat(move);
+		if (!threatsOnly) {
+			board.uncheckedMove(move);
+			board.updatePieces(true);
+			if (!board.isInCheck(getColor()))
+				addLegalMove(move);
+			board.revert(move);
+		}
 	}
 	
 	/**
-	 * Returns true if the specified Move is legal (in the list of legal moves), and false otherwise.方
+	 * Returns true if the specified Move is legal (in the list of legal moves), and false otherwise.
 	 * @param move	the Move to be checked
 	 * @return true if the specified Move is legal, and false otherwise.
 	 */
@@ -153,12 +169,11 @@ public abstract class Piece implements Comparable<Piece>{
 	}
 	
 	/**
-	 * Returns a List of Move objects representing the threats this Piece is posing.<br>
-	 * For pieces other than King and Pawn, this method is equivalent to <code>getLegalMoves()</code>.
+	 * Returns a List of Move objects representing the threats this Piece is posing.
 	 * @return a List of Move objects representing the threats this Piece is posing
 	 */
-	public List<Move> getThreats() {
-		return getLegalMoves();
+	List<Move> getThreats() {
+		return threats;
 	}
 	
 	/**
@@ -166,25 +181,25 @@ public abstract class Piece implements Comparable<Piece>{
 	 * For pieces other than King and Pawn, this method is equivalent to <code>setLegalMoves()</code>.
 	 * @param moves the new List of threats
 	 */
-	protected void setThreats(List<Move> moves) {
-		setLegalMoves(moves);
+	void setThreats(List<Move> moves) {
+		threats = moves;
 	}
 	
 	/**
 	 * Clear the list of threats.<br>
 	 * For pieces other than King and Pawn, this method is equivalent to <code>clearLegalMoves()</code>.
 	 */
-	protected void clearThreats() {
-		clearLegalMoves();
+	void clearThreats() {
+		threats.clear();
 	}
 	
 	/**
 	 * Add a Move to the existing list of threats.<br>
-	 * For pieces other than King and Pawn, this method is equivalent to <code>addLegalMove()</code>.
+	 * For pieces other than King and Pawn, this method is equivalent to <code>checkMove()</code>.
 	 * @param move the new Move to add to the threats
 	 */
-	protected void addThreat(Move move) {
-		addLegalMove(move);
+	void addThreat(Move move) {
+		threats.add(move);
 	}
 	
 	/**
@@ -227,17 +242,10 @@ public abstract class Piece implements Comparable<Piece>{
 //	}
 	
 	/**
-	 * Update the legal moves and threatened squares of this Piece with the specified location.
-	 * @param square	the square for the legal moves and threatened squares generation algorithms to run on
-	 */
-	protected abstract void updatePiece(int[] square);
-	
-	/**
 	 * Update the legal moves and threatened squares of this Piece using its current location.
+	 * @param threatsOnly true to update only threats, false to update threats and legal moves
 	 */
-	protected void updatePiece() {
-		updatePiece(this.getSquare());
-	}
+	abstract void updatePiece(boolean threatsOnly);
 	
 	/**
 	 * Returns a String representation of this Piece object.<br>
@@ -254,33 +262,41 @@ public abstract class Piece implements Comparable<Piece>{
 	 * Black - B<br>
 	 * White - W<br>
 	 * <br>
-	 * A Piece will be formated as:<br>
-	 * <code>[color][type]</code><br>
-	 * A white Knight would be represented as <code>WN</code>,
-	 * a black King would be represented as <code>BK</code>.
+	 * A Piece will be formatted as: <code>[color][type]@[file][rank]</code><br>
+	 * A white Knight at B1 would be represented as <code>WN@B1</code>,
+	 * a black King at e8 would be represented as <code>BK@E8</code>.
 	 * @return a String representation of this Piece object
 	 */
 	public abstract String toString();
+
+	/**
+	 * Returns a brief String representation of this Piece. This method uses the same format as toString() but
+	 * without specifying the location of the Piece.<br>
+	 * A Piece will be formatted as: <code>[color][type]</code>
+	 * @return a brief String representation of this Piece
+	 */
+	public abstract String toBriefString();
 	
 	/**
 	 * Compares this Piece to the specified Piece based on their location on the board. The Piece with
-	 * a higher rank is considered greater; if two Piece objects have the same rank, the Piece with a
+	 * a lower rank is considered greater; if two Piece objects have the same rank, the Piece with a
 	 * greater file is considered greater. Piece objects on the same location are considered equal.
 	 * @param piece the Piece to be compared
 	 * @return -1, 0, or 1 as this Piece is less than, equal to, or greater than the specified Piece.
 	 */
 	@Override
 	public int compareTo(Piece piece) {
-		if (this.getRank() == piece.getRank()) {
-			if (this.getFile() < piece.getFile())
+		if (getRank() > piece.getRank())
+			return -1;
+		else if (getRank() < piece.getRank())
+			return 1;
+		else {
+			if (getFile() < piece.getFile())
 				return -1;
-			else if (this.getFile() > piece.getFile())
+			else if (getFile() > piece.getFile())
 				return 1;
 			return 0;
 		}
-		if (this.getRank() > piece.getRank())
-			return -1;
-		return 1;
 	}
 
 	/**
@@ -289,7 +305,7 @@ public abstract class Piece implements Comparable<Piece>{
 	 * @return -1, 0, or 1 as this Piece's location is less than, equal to, or greater than the specified square.
 	 */
 	@Deprecated
-	protected int compareToSquare(int[] square) {
+	public int compareToSquare(int[] square) {
 		if (this.getRank() == square[1]) {
 			if (this.getFile() < square[0])
 				return -1;
@@ -326,7 +342,7 @@ public abstract class Piece implements Comparable<Piece>{
 
 	/**
 	 *
-	 * @return	a hash code value for this object.
+	 * @return	hash code value of this object.
 	 */
 	@Override
 	public int hashCode() {
@@ -335,7 +351,6 @@ public abstract class Piece implements Comparable<Piece>{
 			hash++;
 		hash += getBoard().hashCode() * 31;
 		hash += getFile() * 31;
-
 		return hash;
 	}
 }

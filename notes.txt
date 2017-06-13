@@ -52,7 +52,6 @@ Castling
 Move should be a class.
 Move class should be immutable.
 
-TODO
 En passant
 Implement check
 When checked, the check must be resolved (all other moves must be illegal)

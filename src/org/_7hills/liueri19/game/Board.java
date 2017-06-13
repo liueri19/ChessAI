@@ -1,16 +1,14 @@
 package org._7hills.liueri19.game;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * The Board where Pieces rest on and the game would be played.
  * 
  * @author liueri19
  */
-public class Board {
+public final class Board {
+	//this list must always be sorted. all manipulations must not break the order of this list. see Pieces.compareTo()
 	private List<Piece> pieces = new ArrayList<>();
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
@@ -56,6 +54,9 @@ public class Board {
 		System.out.println("Use command 'prtboard' to see a visual representation of the board.\nUse command 'autoprt' to switch automatic board print on/off.\nUse command 'prthistory' to see previous moves.");
 		//board.printBoard();
 		while(!board.gameEnded) {
+			if (board.autoPrint)
+				board.printBoard();
+
 			input = sc.nextLine();
 			//parse input
 			if (input.equals("prtboard")) {
@@ -206,7 +207,7 @@ public class Board {
 					char fileD = input.charAt(2);
 					int rankD = Character.getNumericValue(input.charAt(3));
 					int[] to = new int[] {parseFile(fileD), rankD};
-					Move m = new Move(piece, to);
+					Move m = new Move(piece, piece.getSquare(), to);
 					if (!board.move(m)) {
 						System.out.println("Illegal move");
 						continue;
@@ -220,9 +221,6 @@ public class Board {
 					continue;
 				}
 			}
-			
-			if (board.autoPrint)
-				board.printBoard();
 		}
 		sc.close();
 	}
@@ -233,7 +231,7 @@ public class Board {
 	 * @param file	the char representation of a file, always lower-case
 	 * @return the int representation of the input file
 	 */
-	protected static int parseFile(char file) {
+	public static int parseFile(char file) {
 		int fileNum = 0;
 		switch (file) {
 			case 'a': fileNum = 1; break;
@@ -254,7 +252,7 @@ public class Board {
 	 * @param file	the int representation of a file
 	 * @return the char representation of the input file
 	 */
-	protected static char parseFile(int file) {
+	public static char parseFile(int file) {
 		char fileNum = '0';
 		switch (file) {
 			case 1: fileNum = 'a'; break;
@@ -272,8 +270,8 @@ public class Board {
 	/**
 	 * Change white's turn to black's turn or vice versa. This method also updates all pieces.
 	 */
-	protected void changeTurn() {
-		this.updatePieces();
+	void changeTurn() {
+		updatePieces(false);
 		whiteMove = !whiteMove;
 	}
 	
@@ -281,7 +279,7 @@ public class Board {
 	 * Returns a list containing all the pieces on this board.
 	 * @return a list containing all the pieces on this board
 	 */
-	public List<Piece> getPieces() {
+	List<Piece> getPieces() {
 		return new ArrayList<>(pieces);
 	}
 	
@@ -292,7 +290,7 @@ public class Board {
 	 * @param rank	the rank of the piece represented as int
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
-	public Piece getPieceAt(char file, int rank) {
+	Piece getPieceAt(char file, int rank) {
 		return getPieceAt(parseFile(file), rank);
 	}
 	
@@ -303,7 +301,7 @@ public class Board {
 	 * @param rank	the rank of the piece represented as int
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
-	public Piece getPieceAt(int file, int rank) {
+	Piece getPieceAt(int file, int rank) {
 		//a placeholder to meet the arguments of Collections.binarySearch()
 		//the following methods are implemented only because they are abstract in Piece.
         return getPiece(new Piece(null, true, file, rank) {
@@ -312,11 +310,13 @@ public class Board {
 				return null;
 			}
 			@Override
-			public void updatePiece(int[] square) {}
+			public void updatePiece(boolean threatsOnly) {}
 			@Override
 			public String toString() {
 				return "PLACEHOLDER";
 			}
+			@Override
+			public String toBriefString() { return "PLACEHOLDER"; }
 		});
 	}
 	
@@ -326,7 +326,7 @@ public class Board {
 	 * @param square	the file and rank in an int array
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
-	public Piece getPieceAt(int[] square) {
+	Piece getPieceAt(int[] square) {
 		return getPieceAt(square[0], square[1]);
 	}
 	
@@ -336,7 +336,7 @@ public class Board {
 	 * @param piece the Piece to find
 	 * @return the equivalent of the specified Piece, or null if such Piece is not on the Board
 	 */
-	public Piece getPiece(Piece piece) {
+	Piece getPiece(Piece piece) {
 		int index = Collections.binarySearch(pieces, piece);
 		if (index < 0)
 			return null;
@@ -349,7 +349,7 @@ public class Board {
 	 * @param p	the Piece to remove
 	 * @return true if this list contained the specified element
 	 */
-	protected boolean removePiece(Piece p) {
+	boolean removePiece(Piece p) {
 		return pieces.remove(p);
 	}
 	
@@ -359,7 +359,7 @@ public class Board {
 	 * @param index	the index of the Piece to be removed
 	 * @return the Piece that was removed
 	 */
-	protected Piece removePiece(int index) {
+	Piece removePiece(int index) {
 		return pieces.remove(index);
 	}
 	
@@ -368,7 +368,7 @@ public class Board {
 	 * 
 	 * @param piece the Piece to add
 	 */
-	protected void addPiece(Piece piece) {
+	void addPiece(Piece piece) {
 		int index = Collections.binarySearch(pieces, piece);
 		index = -index - 1;	//see documentation of Collections.binarySearch()
 		pieces.add(index, piece);
@@ -390,7 +390,6 @@ public class Board {
 		String blackSpace = "|////";
 		boolean even, white;
 		int index = 0;
-		//pieces.sort(null);
 		//first line, upper border
 		System.out.println("_________________________________________");
 		
@@ -416,9 +415,9 @@ public class Board {
 				if (p.getRank() == rank && p.getFile() == file) {
 					index++;
 					if (white)
-						System.out.printf("| %s ", p);
+						System.out.printf("| %s ", p.toBriefString());
 					else
-						System.out.printf("|/%s/", p);
+						System.out.printf("|/%s/", p.toBriefString());
 				}
 				else {
 					if (white)
@@ -433,52 +432,52 @@ public class Board {
 			System.out.println("|____|____|____|____|____|____|____|____|");
 		}
 		
-		////print textual
+		//print textual
 //		for (Piece p : pieces)
-//			System.out.printf("%s: %s%d\n", p.toString(), parseFile(p.getFile()), p.getRank());
+//			System.out.println(p);
 	}
 	
 	/**
 	 * Construct new Piece objects each with their standard starting position.
 	 */
 	protected void setupPieces() {
-//		//pawns
-//		for (int y = 2; y < 8; y += 5) {
-//			for (int x = 1; x < 9; x++) {
-//				if (y == 2)
-//					addPiece(new Pawn(this, true, x, y));
-//				else
-//					addPiece(new Pawn(this, false, x, y));
-//			}
-//		}
-//		//rooks
-//		addPiece(new Rook(this, true, 1, 1));
-//        addPiece(new Rook(this, true, 8, 1));
-//        addPiece(new Rook(this, false, 1, 8));
-//        addPiece(new Rook(this, false, 8, 8));
-//		//knights
-//        addPiece(new Knight(this, true, 2, 1));
-//        addPiece(new Knight(this, true, 7, 1));
-//		addPiece(new Knight(this, false, 2, 8));
-//        addPiece(new Knight(this, false, 7, 8));
-//		//bishops
-//        addPiece(new Bishop(this, true, 3, 1));
-//        addPiece(new Bishop(this, true, 6, 1));
-//        addPiece(new Bishop(this, false, 3, 8));
-//        addPiece(new Bishop(this, false, 6, 8));
-//		//queens
-//        addPiece(new Queen(this, true, 4, 1));
-//        addPiece(new Queen(this, false, 4, 8));
-//		//kings
+		//pawns
+		for (int y = 2; y < 8; y += 5) {
+			for (int x = 1; x < 9; x++) {
+				if (y == 2)
+					addPiece(new Pawn(this, true, x, y));
+				else
+					addPiece(new Pawn(this, false, x, y));
+			}
+		}
+		//rooks
+		addPiece(new Rook(this, true, 1, 1));
+        addPiece(new Rook(this, true, 8, 1));
+        addPiece(new Rook(this, false, 1, 8));
+        addPiece(new Rook(this, false, 8, 8));
+		//knights
+        addPiece(new Knight(this, true, 2, 1));
+        addPiece(new Knight(this, true, 7, 1));
+		addPiece(new Knight(this, false, 2, 8));
+        addPiece(new Knight(this, false, 7, 8));
+		//bishops
+        addPiece(new Bishop(this, true, 3, 1));
+        addPiece(new Bishop(this, true, 6, 1));
+        addPiece(new Bishop(this, false, 3, 8));
+        addPiece(new Bishop(this, false, 6, 8));
+		//queens
+        addPiece(new Queen(this, true, 4, 1));
+        addPiece(new Queen(this, false, 4, 8));
+		//kings
         addPiece(whiteKing = new King(this, true, 5, 1));
         addPiece(blackKing = new King(this, false, 5, 8));
 
-        //test for illegal move check
-        addPiece(new Queen(this, false, 5, 7));
-        addPiece(new Knight(this, true, 5, 2));
-        //knight should not have any legal move
+//        //test for illegal move check
+//        addPiece(new Queen(this, false, 5, 7));
+//        addPiece(new Rook(this, true, 5, 2));
+//        //knight should not have any legal move
 		
-		updatePieces();
+		updatePieces(false);
 	}
 	
 	/**
@@ -522,12 +521,12 @@ public class Board {
 	 */
 	public boolean isSquareAttacked(boolean color, int file, int rank) {	//TODO: optimize this?
 		for (Piece p : pieces) {
-			if (p.getColor() != color && p.isThreatening(new Move(p, new int[] {file, rank})))
+			if (p.getColor() != color && p.isThreatening(new Move(p, p.getSquare(), new int[] {file, rank})))
 				return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns true if the King of the specified color is in check, false otherwise.
 	 * 
@@ -540,16 +539,17 @@ public class Board {
 	
 	/**
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
+	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
 	 */
-	protected void updatePieces() {
-		pieces.sort(null);
-		for (Piece p : pieces) {
+	void updatePieces(boolean threatsOnly) {
+		for (Object o : pieces.toArray()) {	//to avoid concurrent mod, probably not very efficient
+			Piece p = (Piece) o;
 			if (!(p instanceof King))
-				p.updatePiece();
+				p.updatePiece(threatsOnly);
 		}
-		//kings need to be updated last
-		whiteKing.updatePiece();
-		blackKing.updatePiece();
+		//kings should be updated last
+		whiteKing.updatePiece(threatsOnly);
+		blackKing.updatePiece(threatsOnly);
 	}
 	
 	/**
@@ -557,8 +557,8 @@ public class Board {
 	 * @param move the Move to execute
 	 * @return true if the move described is legal, false otherwise
 	 */
-	public boolean move(Move move) {
-		Piece init = move.getPiece();
+	public boolean move(Move move) {	//TODO pieces in wrong order after move
+		Piece init = move.getInit();
 		if (init.isLegalMove(move)) {
 			if (move instanceof Castling) {
 				King king = (King) init;
@@ -574,15 +574,22 @@ public class Board {
 				}
 				king.setCastlable(false);
 				rook.setCastlable(false);
+				Collections.swap(pieces, pieces.indexOf(king), pieces.indexOf(rook));	//ensure correct order in pieces
 			}
 			else {	//otherwise, a usual move
 				Piece subject = getPieceAt(move.getDestination());
 				if (subject != null)
 					removePiece(subject);
 				init.setSquare(move.getDestination());
+				//ensure correct order in pieces
+				int index = pieces.indexOf(init);
+				while (index >= 0 && init.compareTo(pieces.get(index - 1)) < 0)
+					Collections.swap(pieces, index, --index);
+				while (index < pieces.size() && init.compareTo(pieces.get(index + 1)) > 0)
+					Collections.swap(pieces, index, ++index);
 			}
-			this.history.add(move);
-			changeTurn();
+			history.add(move);
+			changeTurn();	//calls updatePieces()
 			return true;
 		}
 		return false;
@@ -592,25 +599,37 @@ public class Board {
 	 * Execute the specified Move object without any checking.
 	 * @param move	the move to execute
 	 */
-	protected void uncheckedMove(Move move) {
-		Piece init = getPieceAt(move.getOrigin());
-		Piece subject = getPieceAt(move.getDestination());
+	void uncheckedMove(Move move) {
+		Piece init = move.getInit();
+		Piece subject = move.getSubject();
 		if (subject != null)
 			removePiece(subject);
-        init.setSquare(move.getDestination());
+		init.setSquare(move.getDestination());
 	}
-	
+
+	/**
+	 * Reverts the changes of uncheckedMove()
+	 * @param move	the move to revert
+	 */
+	void revert(Move move) {
+		Piece init = move.getInit();
+		Piece subject = move.getSubject();
+		init.setSquare(move.getOrigin());
+		if (subject != null)
+			addPiece(subject);
+	}
+
 //	/**
 //	 * Revert the specified number of moves.<br>
-//	 * Note that "move" is not to be confused with "turn". In this context, one move will be
-//	 * considered as one action taken by one side. Two moves make one full turn.
+//	 * Note that "move" is not to be confused with "turn". One move will be considered as one action
+//	 * taken by one side. Two moves make one full turn.
 //	 * @param numMoves the number of moves to revert
 //	 */
-//	protected void revert(int numMoves) {
+//	void revert(int numMoves) {
 //		for (int i = numMoves; i > 0; i--) {
 //			Move move = history.remove(history.size()-1);
-//			move.getPiece().setSquare(move.getOrigin());	//reset location
-//			Piece subject = move.getSubject(); 
+//			Piece subject = move.getSubject();
+//			subject.setSquare(move.getOrigin());	//reset location
 //			if (subject != null)
 //				addPiece(subject);
 //		}
@@ -619,11 +638,11 @@ public class Board {
 //		else
 //			changeTurn();	//changeTurn() call updatePieces()
 //	}
-//	
+//
 //	/**
 //	 * Revert one move.
 //	 */
-//	protected void revert() {
+//	void revert() {
 //		revert(1);
 //	}
 }

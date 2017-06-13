@@ -13,15 +13,29 @@ public class Bishop extends Piece {
 
 	@Override
 	public String toString() {
+		String result;
 		if (this.getColor())
+			result = "WB@";
+		else
+			result = "BB@";
+		result += getFile();
+		result += getRank();
+		return result;
+	}
+
+	@Override
+	public String toBriefString() {
+		if (getColor())
 			return "WB";
 		return "BB";
 	}
 
 	@Override
-	protected void updatePiece(int[] square) {
-		this.clearLegalMoves();
-		
+	void updatePiece(boolean threatsOnly) {
+		if (!threatsOnly)
+			clearLegalMoves();
+		clearThreats();
+		int[] square = getSquare();
 		boolean blockedPP, blockedPN, blockedNP, blockedNN;
 		blockedPP = blockedPN = blockedNP = blockedNN = false;
 		int rankPP, rankPN, rankNP, rankNN;
@@ -33,11 +47,11 @@ public class Bishop extends Piece {
 			if (!blockedPP && rankPP < 9) {
 				target = getBoard().getPieceAt(fileP, rankPP);	//may be null
 				if (target == null)
-					addLegalMove(new Move(this, square, new int[] {fileP, rankPP}));
+					checkMove(new Move(this, square, new int[] {fileP, rankPP}), threatsOnly);
 				else {
 					blockedPP = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, square, new int[] {fileP, rankPP}));
+						checkMove(new Move(this, target, square, new int[] {fileP, rankPP}), threatsOnly);
 				}
 			}
 			else
@@ -46,11 +60,11 @@ public class Bishop extends Piece {
 			if (!blockedPN && rankPN > 0) {
 				target = getBoard().getPieceAt(fileP, rankPN);
 				if (target == null)
-					addLegalMove(new Move(this, square, new int[] {fileP, rankPN}));
+					checkMove(new Move(this, square, new int[] {fileP, rankPN}), threatsOnly);
 				else {
 					blockedPN = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, square, new int[] {fileP, rankPN}));
+						checkMove(new Move(this, target, square, new int[] {fileP, rankPN}), threatsOnly);
 				}
 			}
 			else
@@ -63,11 +77,11 @@ public class Bishop extends Piece {
 			if (!blockedNP && rankNP < 9) {
 				target = getBoard().getPieceAt(fileN, rankNP);
 				if (target == null)
-					addLegalMove(new Move(this, square, new int[] {fileN, rankNP}));
+					checkMove(new Move(this, square, new int[] {fileN, rankNP}), threatsOnly);
 				else {
 					blockedNP = true;
 					if (target.getColor() != this.getColor())
-						addLegalMove(new Move(this, square, new int[] {fileN, rankNP}));
+						checkMove(new Move(this, target, square, new int[] {fileN, rankNP}), threatsOnly);
 				}
 			}
 			else
@@ -76,11 +90,11 @@ public class Bishop extends Piece {
 			if (!blockedNN && rankNN > 0) {
 				target = getBoard().getPieceAt(fileN, rankNN);
 				if (target == null)
-					addLegalMove(new Move(this, square, new int[] {fileN, rankNN}));
+					checkMove(new Move(this, square, new int[] {fileN, rankNN}), threatsOnly);
 				else {
 					blockedNN = true;
 					if (getBoard().getPieceAt(fileN, rankNN).getColor() != this.getColor())
-						addLegalMove(new Move(this, square, new int[] {fileN, rankNN}));
+						checkMove(new Move(this, target, square, new int[] {fileN, rankNN}), threatsOnly);
 				}
 			}
 			else
@@ -94,7 +108,7 @@ public class Bishop extends Piece {
 	public Piece copy(Board board) {
 		Piece p = new Bishop(board, this.getColor(), this.getFile(), this.getRank());
 //		for (Move move : this.getLegalMoves())	// ArrayList.clone() creates shallow copy
-//			p.addLegalMove(move.copy());
+//			p.checkMove(move.copy());
 		return p;
 	}
 }

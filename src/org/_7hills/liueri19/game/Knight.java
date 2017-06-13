@@ -13,15 +13,29 @@ public class Knight extends Piece {
 
 	@Override
 	public String toString() {
+		String result;
 		if (this.getColor())
+			result = "WN@";
+		else
+			result = "BN@";
+		result += getFile();
+		result += getRank();
+		return result;
+	}
+
+	@Override
+	public String toBriefString() {
+		if (getColor())
 			return "WN";
 		return "BN";
 	}
 
 	@Override
-	protected void updatePiece(int[] square) {
-		this.clearLegalMoves();
-		
+	void updatePiece(boolean threatsOnly) {
+		if (!threatsOnly)
+			clearLegalMoves();
+		clearThreats();
+		int[] square = getSquare();
 		//8 candidate moves
 		int[][] candidates = new int[][] {
 			new int[] {square[0] -2, square[1] +1},
@@ -34,24 +48,24 @@ public class Knight extends Piece {
 			new int[] {square[0] +2, square[1] -1}
 		};
 		//eliminate illegal moves
-		Piece target;
+		Piece subject;
 		for (int[] move : candidates) {
 			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
 				continue;
 //			else if (getBoard().getPieceAt(move[0], move[1]) == null ||
 //					getBoard().getPieceAt(move[0], move[1]).getColor() != this.getColor())
-//				addLegalMove(move);
-			target = getBoard().getPieceAt(move[0], move[1]);
-			if (target == null || target.getColor() != this.getColor())
-				addLegalMove(new Move(this, square, move));
+//				checkMove(move);
+			subject = getBoard().getPieceAt(move[0], move[1]);
+			if (subject == null || subject.getColor() != this.getColor())
+				checkMove(new Move(this, subject, square, move), threatsOnly);
 		}
 	}
 
 	@Override
-	public Piece copy(Board board) {
+	protected Piece copy(Board board) {
 		Piece p = new Knight(board, this.getColor(), this.getFile(), this.getRank());
 //		for (Move move : this.getLegalMoves())
-//			p.addLegalMove(move.copy());
+//			p.checkMove(move.copy());
 		return p;
 	}
 }

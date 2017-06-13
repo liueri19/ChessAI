@@ -19,15 +19,29 @@ public class King extends Piece {
 
 	@Override
 	public String toString() {
+		String result;
+		if (getColor())
+			result = "WK@";
+		else
+			result = "BK@";
+		result += getFile();
+		result += getRank();
+		return result;
+	}
+
+	@Override
+	public String toBriefString() {
 		if (this.getColor())
 			return "WK";
 		return "BK";
 	}
 
 	@Override
-	protected void updatePiece(int[] square) {
-		this.clearLegalMoves();
-		
+	void updatePiece(boolean threatsOnly) {
+		if (!threatsOnly)
+			clearLegalMoves();
+		clearThreats();
+		int[] square = getSquare();
 		//8 candidate moves
 		int[][] candidates = new int[][] {
 			new int[] {square[0] -1, square[1] +1},
@@ -43,12 +57,13 @@ public class King extends Piece {
 		for (int[] move : candidates) {
 			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
 				continue;
-			addThreat(new Move(this, square, move));
-			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1])) {
-				Piece target = getBoard().getPieceAt(move[0], move[1]);
-				if (target == null || target.getColor() != this.getColor())
-					addLegalMove(new Move(this, square, move));
-			}
+//			addThreat(new Move(this, square, move));
+//			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1])) {
+//				Piece target = getBoard().getPieceAt(move[0], move[1]);
+//				if (target == null || target.getColor() != this.getColor())
+//					checkMove(new Move(this, square, move), threatsOnly);
+//			}
+			checkMove(new Move(this, square, move), threatsOnly);
 		}
 		//add Castling
 		if (isCastlable()) {
@@ -56,7 +71,7 @@ public class King extends Piece {
 			for (int file = 1; file < 9; file += 7) {	//for only values 1 and 8
 				p = getBoard().getPieceAt(file, getRank());
 				if (p instanceof Rook && ((Rook) p).isCastlable())
-					addLegalMove(new Castling(this, (Rook) p));
+					checkMove(new Castling(this, (Rook) p), threatsOnly);
 			}
 		}
 	}
@@ -69,7 +84,7 @@ public class King extends Piece {
 		return castlable;
 	}
 	
-	protected void setCastlable(boolean castlable) {
+	void setCastlable(boolean castlable) {
 		this.castlable = castlable;
 	}
 	
@@ -104,8 +119,8 @@ public class King extends Piece {
 		King p = new King(board, this.getColor(), this.getFile(), this.getRank());
 		p.setCastlable(this.isCastlable());
 //		for (Move move : this.getLegalMoves())
-//			p.addLegalMove(move.copy());
-//		this.getLegalMoves().forEach((Move m)->p.addLegalMove(m.copy()));
+//			p.checkMove(move.copy());
+//		this.getLegalMoves().forEach((Move m)->p.checkMove(m.copy()));
 		return p;
 	}
 }

@@ -12,10 +12,24 @@ public final class Board {
 	private List<Piece> pieces = new ArrayList<>();
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
-	private int gameResult;
+	private int gameResult;	//1 white win, -1 black win, 0 draw
 	private boolean autoPrint = true;
 	private boolean whiteMove = true;
 	private List<Move> history = new ArrayList<>();
+	private final Piece PLACEHOLDER = new Piece(null, true, 0, 0) {	//serves as a placeholder
+		@Override
+		public Piece copy(Board board) {
+			return null;
+		}
+		@Override
+		public void updatePiece(boolean threatsOnly) {}
+		@Override
+		public String toString() {
+			return "PLACEHOLDER@" + getFile() + getRank();
+		}
+		@Override
+		public String toBriefString() { return "PLACEHOLDER"; }
+	};
 	
 	/**
 	 * Constructs a chess board with standard setup.
@@ -54,9 +68,6 @@ public final class Board {
 		System.out.println("Use command 'prtboard' to see a visual representation of the board.\nUse command 'autoprt' to switch automatic board print on/off.\nUse command 'prthistory' to see previous moves.");
 		//board.printBoard();
 		while(!board.gameEnded) {
-			if (board.autoPrint)
-				board.printBoard();
-
 			input = sc.nextLine();
 			//parse input
 			if (input.equals("prtboard")) {
@@ -71,9 +82,14 @@ public final class Board {
 				board.printHistory();
 				continue;
 			}
-			else if (input.equals("resign"))
+			else if (input.equals("resign")) {
 				board.gameEnded = true;
-//			else if (input.equals("draw"))
+				if (board.whiteMove)
+					board.gameResult = -1;
+				else
+					board.gameResult = 1;
+			}
+//			else if (input.equals("draw"))	//TODO implement draw
 //				//suggest draw to the opponent
 			
 			else if (input.equals("0-0")) {	//castling, king side
@@ -221,6 +237,8 @@ public final class Board {
 					continue;
 				}
 			}
+			if (board.autoPrint)
+				board.printBoard();
 		}
 		sc.close();
 	}
@@ -304,20 +322,8 @@ public final class Board {
 	Piece getPieceAt(int file, int rank) {
 		//a placeholder to meet the arguments of Collections.binarySearch()
 		//the following methods are implemented only because they are abstract in Piece.
-        return getPiece(new Piece(null, true, file, rank) {
-			@Override
-			public Piece copy(Board board) {
-				return null;
-			}
-			@Override
-			public void updatePiece(boolean threatsOnly) {}
-			@Override
-			public String toString() {
-				return "PLACEHOLDER";
-			}
-			@Override
-			public String toBriefString() { return "PLACEHOLDER"; }
-		});
+		PLACEHOLDER.setSquare(file, rank);
+        return getPiece(PLACEHOLDER);
 	}
 	
 	/**
@@ -337,7 +343,7 @@ public final class Board {
 	 * @return the equivalent of the specified Piece, or null if such Piece is not on the Board
 	 */
 	Piece getPiece(Piece piece) {
-		int index = Collections.binarySearch(pieces, piece);
+		int index = Collections.binarySearch(pieces, piece);	//binarySearch uses compareTo instead of equals
 		if (index < 0)
 			return null;
 		return pieces.get(index);
@@ -473,9 +479,8 @@ public final class Board {
         addPiece(blackKing = new King(this, false, 5, 8));
 
 //        //test for illegal move check
-//        addPiece(new Queen(this, false, 5, 7));
-//        addPiece(new Rook(this, true, 5, 2));
-//        //knight should not have any legal move
+//        addPiece(new Rook(this, false, 4, 7));
+//        addPiece(new Bishop(this, true, 5, 2));
 
 //		//test for en passant
 //		addPiece(new Pawn(this, true, 1, 2));
@@ -555,9 +560,31 @@ public final class Board {
 			if (!(p instanceof King))
 				p.updatePiece(threatsOnly);
 		}
-		//kings should be updated last
+		//kings should be updated last (shouldn't matter in current implementation, too lazy to change)
 		whiteKing.updatePiece(threatsOnly);
 		blackKing.updatePiece(threatsOnly);
+
+		//check for checkmate
+		if (!threatsOnly) {
+			boolean whiteCheckmate, blackCheckmate;
+			whiteCheckmate = blackCheckmate = true;
+			for (Piece p : pieces) {
+				if (whiteCheckmate && p.getColor()) {
+					whiteCheckmate = p.getLegalMoves().isEmpty();
+				}
+				else if (blackCheckmate) {
+					blackCheckmate = p.getLegalMoves().isEmpty();
+				}
+			}
+			if (whiteCheckmate) {
+				gameEnded = true;
+				gameResult = -1;
+			}
+			else if (blackCheckmate) {
+				gameEnded = true;
+				gameResult = 1;
+			}
+		}
 	}
 	
 	/**
@@ -593,11 +620,7 @@ public final class Board {
 					removePiece(subject);
 				init.setSquare(move.getDestination());
 				//ensure correct order in pieces
-				int index = pieces.indexOf(init);
-				while (index > 0 && init.compareTo(pieces.get(index - 1)) < 0)
-					Collections.swap(pieces, index, --index);
-				while (index < pieces.size() -1 && init.compareTo(pieces.get(index + 1)) > 0)
-					Collections.swap(pieces, index, ++index);
+				rearrange(pieces, init);
 			}
 			history.add(move);
 			changeTurn();	//calls updatePieces()
@@ -616,6 +639,7 @@ public final class Board {
 		if (subject != null)
 			removePiece(subject);
 		init.setSquare(move.getDestination());
+		rearrange(pieces, init);
 	}
 
 	/**
@@ -628,32 +652,21 @@ public final class Board {
 		init.setSquare(move.getOrigin());
 		if (subject != null)
 			addPiece(subject);
+		rearrange(pieces, init);
 	}
 
-//	/**
-//	 * Revert the specified number of moves.<br>
-//	 * Note that "move" is not to be confused with "turn". One move will be considered as one action
-//	 * taken by one side. Two moves make one full turn.
-//	 * @param numMoves the number of moves to revert
-//	 */
-//	void revert(int numMoves) {
-//		for (int i = numMoves; i > 0; i--) {
-//			Move move = history.remove(history.size()-1);
-//			Piece subject = move.getSubject();
-//			subject.setSquare(move.getOrigin());	//reset location
-//			if (subject != null)
-//				addPiece(subject);
-//		}
-//		if (numMoves % 2 == 0)
-//			updatePieces();
-//		else
-//			changeTurn();	//changeTurn() call updatePieces()
-//	}
-//
-//	/**
-//	 * Revert one move.
-//	 */
-//	void revert() {
-//		revert(1);
-//	}
+	/**
+	 * Rearrange the location of the moved piece in the specified list to match the order specified by compareTo.
+	 * The piece need not have the same reference as the matching one in the list, but they must be logical equivalents.
+	 * (a comparision using equals() must return true)
+	 * @param pieces	the list to rearrange
+	 * @param piece	the piece with the wrong index
+	 */
+	void rearrange(List<Piece> pieces, Piece piece) {
+		int index = pieces.indexOf(piece);
+		while (index > 0 && piece.compareTo(pieces.get(index - 1)) < 0)
+			Collections.swap(pieces, index, --index);
+		while (index < pieces.size() -1 && piece.compareTo(pieces.get(index + 1)) > 0)
+			Collections.swap(pieces, index, ++index);
+	}
 }

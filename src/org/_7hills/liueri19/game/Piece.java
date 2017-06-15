@@ -144,7 +144,7 @@ abstract class Piece implements Comparable<Piece> {
 	 * @param move	the Move to be checked
 	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
 	 */
-	void checkMove(Move move, boolean threatsOnly) {	//TODO "Illegal move" when attempting to block a threat
+	void checkMove(Move move, boolean threatsOnly) {
 		addThreat(move);
 		if (!threatsOnly) {
 			board.uncheckedMove(move);
@@ -330,11 +330,11 @@ abstract class Piece implements Comparable<Piece> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (this.getClass().equals(o.getClass())) {
+		if (o instanceof Piece) {
 			Piece piece = (Piece) o;
-			if (this.getColor() == piece.getColor()
-					&& this.getBoard() == piece.getBoard()	//the board reference should be exactly the same
-					&& Arrays.equals(this.getSquare(), piece.getSquare()))
+			if (getColor() == piece.getColor()
+					&& getBoard() == piece.getBoard()	//the board reference should be exactly the same
+					&& Arrays.equals(getSquare(), piece.getSquare()))
 				return true;
 		}
 		return false;

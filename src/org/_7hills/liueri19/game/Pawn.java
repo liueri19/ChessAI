@@ -5,7 +5,7 @@ package org._7hills.liueri19.game;
  * @author liueri19
  *
  */
-public class Pawn extends Piece {
+public class Pawn extends Piece {	//TODO promotion
 
 	public Pawn(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
@@ -98,8 +98,7 @@ public class Pawn extends Piece {
 
 	@Override
 	protected Piece copy(Board board) {
-		Piece p = new Pawn(board, this.getColor(), this.getFile(), this.getRank());
-		return p;
+		return new Pawn(board, this.getColor(), this.getFile(), this.getRank());
 	}
 
 }

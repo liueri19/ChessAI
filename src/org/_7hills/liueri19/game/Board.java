@@ -12,6 +12,7 @@ public final class Board {
 	private List<Piece> pieces = new ArrayList<>();
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
+	private boolean drawSuggested = false;
 	private int gameResult;	//1 white win, -1 black win, 0 draw
 	private boolean autoPrint = true;
 	private boolean whiteMove = true;
@@ -89,10 +90,18 @@ public final class Board {
 				else
 					board.gameResult = 1;
 			}
-//			else if (input.equals("draw"))	//TODO implement draw
-//				//suggest draw to the opponent
+			else if (input.equals("draw")) {    //TODO implement draw https://en.wikipedia.org/wiki/Draw_(chess)
+				//suggest draw to the opponent
+				if (board.drawSuggested) {
+					board.gameEnded = true;
+					board.gameResult = 0;
+				}
+				board.drawSuggested = true;
+				continue;
+			}
 			
 			else if (input.equals("0-0")) {	//castling, king side
+				board.drawSuggested = false;
 				//validate requirements
 				/*
 				 * The king and the chosen rook are on the player's first rank.
@@ -151,6 +160,7 @@ public final class Board {
 			}
 			
 			else if (input.equals("0-0-0")) {	//castling, queen side
+				board.drawSuggested = false;
 				King king;
 				Piece rook;
 				if (board.whiteMove) {	//acquire the pieces
@@ -200,6 +210,7 @@ public final class Board {
 			}
 			
 			else if (input.length() == 4) {	//a move
+				board.drawSuggested = false;
 				char fileO = input.charAt(0);
 				int rankO = Character.getNumericValue(input.charAt(1));
 				
@@ -240,6 +251,14 @@ public final class Board {
 			if (board.autoPrint)
 				board.printBoard();
 		}
+		System.out.println("GAME ENDED");
+		if (board.gameResult == 1)
+			System.out.println("White won");
+		else if (board.gameResult == -1)
+			System.out.println("Black won");
+		else
+			System.out.println("Game draw");
+
 		sc.close();
 	}
 	

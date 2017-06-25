@@ -11,6 +11,10 @@ public class Queen extends Piece {
 		super(board, color, x, y);
 	}
 
+	public Queen(Board board, boolean color, int[] coordinate) {
+		super(board, color, coordinate);
+	}
+
 	@Override
 	public String toString() {
 		String result;

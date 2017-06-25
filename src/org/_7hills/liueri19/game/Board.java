@@ -244,7 +244,7 @@ public final class Board {
 //					board.changeTurn();
 				}
 				else {	//if the input did not start with abcdefgh
-					System.out.println("Invalid square coordinate");
+					System.out.println("Invalid input");
 					continue;
 				}
 			}
@@ -618,26 +618,12 @@ public final class Board {
 			//get the move from legal moves generated from Piece, Move passed in from main have null in subject field
 			move = moves.get(moves.indexOf(move));
 			if (move instanceof Castling) {
-				King king = (King) init;
-				Rook rook = ((Castling) move).getRook();
-				if (((Castling) move).isKingSide()) {
-					//move pieces
-					king.setSquare(7, king.getRank());
-					rook.setSquare(6, rook.getRank());
-				}
-				else {
-					king.setSquare(3, king.getRank());
-					rook.setSquare(4, rook.getRank());
-				}
-				king.setCastlable(false);
-				rook.setCastlable(false);
-				Collections.swap(pieces, pieces.indexOf(king), pieces.indexOf(rook));	//ensure correct order in pieces
+				move.execute(this);
+				Collections.swap(pieces, pieces.indexOf(init),
+						pieces.indexOf(((Castling) move).getRook()));	//ensure correct order in pieces
 			}
 			else {	//otherwise, a usual move
-				Piece subject = move.getSubject();
-				if (subject != null)
-					removePiece(subject);
-				init.setSquare(move.getDestination());
+				move.execute(this);
 				//ensure correct order in pieces
 				rearrange(pieces, init);
 			}

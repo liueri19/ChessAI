@@ -113,7 +113,16 @@ public class Move {
 			return true;
 		return false;
 	}
-	
+
+	/**
+	 * Execute the move represented by this Move object.
+	 */
+	public void execute(Board board) {
+		if (subject != null)
+			board.removePiece(subject);
+		init.setSquare(getDestination());
+	}
+
 //	/**
 //	 * Returns a deep copy of this Move object.
 //	 * This method is effectively the same as calling <code>Move(Piece piece, Piece subject, int[] from, int[] to)</code>

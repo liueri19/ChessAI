@@ -1,7 +1,7 @@
 package org._7hills.liueri19.game;
 
 /**
- * This is the special move for castling.
+ * This class describes a castling.
  * @author liueri19
  *
  */
@@ -61,5 +61,21 @@ public class Castling extends Move {
 		if (getDestination()[0] == 3)
 			return "0-0-0";
 		return "0-0";
+	}
+
+	@Override
+	public void execute(Board board) {
+		King king = (King) getInit();
+		if (isKingSide()) {
+			//move pieces
+			king.setSquare(7, king.getRank());
+			rook.setSquare(6, rook.getRank());
+		}
+		else {
+			king.setSquare(3, king.getRank());
+			rook.setSquare(4, rook.getRank());
+		}
+		king.setCastlable(false);
+		rook.setCastlable(false);
 	}
 }

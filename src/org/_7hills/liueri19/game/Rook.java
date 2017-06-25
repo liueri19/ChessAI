@@ -13,6 +13,10 @@ public class Rook extends Piece {
 		super(board, color, x, y);
 	}
 
+	public Rook(Board board, boolean color, int[] coordinate) {
+		super(board, color, coordinate);
+	}
+
 	@Override
 	public String toString() {
 		String result;

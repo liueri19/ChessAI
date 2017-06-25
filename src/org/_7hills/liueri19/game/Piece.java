@@ -30,6 +30,17 @@ abstract class Piece implements Comparable<Piece> {
 		this.color = color;
 		coordinate = new int[] {x, y};
 	}
+
+	/**
+	 * Constructs a new Piece object. This is the super constructor for all Piece subclasses.
+	 * To construct a Piece object, use the constructor of the desired subclass.
+	 * @param board	the Board to set the piece on
+	 * @param color	the color of the Piece, true for white, false for black
+	 * @param coordinate	the location to set the piece at
+	 */
+	public Piece(Board board, boolean color, int[] coordinate) {
+		this(board, color, coordinate[0], coordinate[1]);
+	}
 	
 	/**
 	 * Returns a deep copy of this Piece object with reference to the specified Board.
@@ -352,5 +363,14 @@ abstract class Piece implements Comparable<Piece> {
 		hash += getBoard().hashCode() * 31;
 		hash += getFile() * 31;
 		return hash;
+	}
+
+	enum Pieces {
+		KNIGHT,
+		PAWN,
+		QUEEN,
+		ROOK,
+		BISHOP,
+		KING
 	}
 }

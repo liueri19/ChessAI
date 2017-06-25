@@ -11,6 +11,10 @@ public class Pawn extends Piece {	//TODO promotion
 		super(board, color, x, y);
 	}
 
+	public Pawn(Board board, boolean color, int[] coordinate) {
+		super(board, color, coordinate);
+	}
+
 	@Override
 	public String toString() {
 		String result;

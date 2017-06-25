@@ -11,6 +11,10 @@ public class Knight extends Piece {
 		super(board, color, x, y);
 	}
 
+	public Knight(Board board, boolean color, int[] coordinate) {
+		super(board, color, coordinate);
+	}
+
 	@Override
 	public String toString() {
 		String result;

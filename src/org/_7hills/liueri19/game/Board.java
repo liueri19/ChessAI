@@ -3,12 +3,12 @@ package org._7hills.liueri19.game;
 import java.util.*;
 
 /**
- * The Board where Pieces rest on and the game would be played.
+ * The Board where PieceTypes rest on and the game would be played.
  * 
  * @author liueri19
  */
 public final class Board {
-	//this list must always be sorted. all manipulations must not break the order of this list. see Pieces.compareTo()
+	//this list must always be sorted. all manipulations must not break the order of this list. see PieceTypes.compareTo()
 	private List<Piece> pieces = new ArrayList<>();
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
@@ -100,7 +100,7 @@ public final class Board {
 				continue;
 			}
 			
-			else if (input.equals("0-0")) {	//castling, king side
+			else if (input.equals("O-O")) {	//castling, king side
 				board.drawSuggested = false;
 				//validate requirements
 				/*
@@ -148,18 +148,9 @@ public final class Board {
 				
 				//move
 				board.move(new Castling(king, (Rook) rook));
-				
-//				//move pieces
-//				king.setSquare(7, king.getRank());
-//				rook.setSquare(6, rook.getRank());
-//				//add history entry
-//				board.history.add(new Castling(king, king.getSquare()));
-//				
-//				((Rook) rook).setCastlable(false);
-//				board.changeTurn();
 			}
 			
-			else if (input.equals("0-0-0")) {	//castling, queen side
+			else if (input.equals("O-O-O")) {	//castling, queen side
 				board.drawSuggested = false;
 				King king;
 				Piece rook;
@@ -198,18 +189,9 @@ public final class Board {
 				}
 				
 				board.move(new Castling(king, (Rook) rook));
-				
-//				//move pieces
-//				king.setSquare(3, king.getRank());
-//				rook.setSquare(4, rook.getRank());
-//				//add history entry
-//				board.history.add(new Castling(king, king.getSquare()));
-//				
-//				((Rook) rook).setCastlable(false);
-//				board.changeTurn();
 			}
 			
-			else if (input.length() == 4) {	//a move
+			else if (input.length() == 4 || input.length() == 5) {	//a move
 				board.drawSuggested = false;
 				char fileO = input.charAt(0);
 				int rankO = Character.getNumericValue(input.charAt(1));
@@ -234,19 +216,19 @@ public final class Board {
 					char fileD = input.charAt(2);
 					int rankD = Character.getNumericValue(input.charAt(3));
 					int[] to = new int[] {parseFile(fileD), rankD};
+
 					Move m = new Move(piece, piece.getSquare(), to);
+					if (input.length() == 5 && piece instanceof Pawn)	//promotion
+						m = new Promotion((Pawn) piece, input.charAt(4));
 					if (!board.move(m)) {
 						System.out.println("Illegal move");
 						continue;
 					}
-//					//move verified legal
-//					board.history.add(m);
-//					board.changeTurn();
 				}
-				else {	//if the input did not start with abcdefgh
-					System.out.println("Invalid input");
-					continue;
-				}
+			}
+			else {
+				System.out.println("Invalid input");
+				continue;
 			}
 			if (board.autoPrint)
 				board.printBoard();
@@ -356,7 +338,7 @@ public final class Board {
 	}
 	
 	/**
-	 * Returns the equivalent Piece object of the specified Piece in the List of Pieces on the Board,
+	 * Returns the equivalent Piece object of the specified Piece in the List of PieceTypes on the Board,
 	 * or null if none is found.
 	 * @param piece the Piece to find
 	 * @return the equivalent of the specified Piece, or null if such Piece is not on the Board
@@ -369,7 +351,7 @@ public final class Board {
 	}
 	
 	/**
-	 * Removes the specified Piece object from the list of Pieces currently on the board.
+	 * Removes the specified Piece object from the list of PieceTypes currently on the board.
 	 * 
 	 * @param p	the Piece to remove
 	 * @return true if this list contained the specified element
@@ -379,7 +361,7 @@ public final class Board {
 	}
 	
 	/**
-	 * Removes the Piece object at the specified location in the list of Pieces currently on the board.
+	 * Removes the Piece object at the specified location in the list of PieceTypes currently on the board.
 	 * 
 	 * @param index	the index of the Piece to be removed
 	 * @return the Piece that was removed
@@ -467,32 +449,32 @@ public final class Board {
 	 */
 	void setupPieces() {
 		//pawns
-		for (int y = 2; y < 8; y += 5) {
-			for (int x = 1; x < 9; x++) {
-				if (y == 2)
-					addPiece(new Pawn(this, true, x, y));
-				else
-					addPiece(new Pawn(this, false, x, y));
-			}
-		}
-		//rooks
-		addPiece(new Rook(this, true, 1, 1));
-        addPiece(new Rook(this, true, 8, 1));
-        addPiece(new Rook(this, false, 1, 8));
-        addPiece(new Rook(this, false, 8, 8));
-		//knights
-        addPiece(new Knight(this, true, 2, 1));
-        addPiece(new Knight(this, true, 7, 1));
-		addPiece(new Knight(this, false, 2, 8));
-        addPiece(new Knight(this, false, 7, 8));
-		//bishops
-        addPiece(new Bishop(this, true, 3, 1));
-        addPiece(new Bishop(this, true, 6, 1));
-        addPiece(new Bishop(this, false, 3, 8));
-        addPiece(new Bishop(this, false, 6, 8));
-		//queens
-        addPiece(new Queen(this, true, 4, 1));
-        addPiece(new Queen(this, false, 4, 8));
+//		for (int y = 2; y < 8; y += 5) {
+//			for (int x = 1; x < 9; x++) {
+//				if (y == 2)
+//					addPiece(new Pawn(this, true, x, y));
+//				else
+//					addPiece(new Pawn(this, false, x, y));
+//			}
+//		}
+//		//rooks
+//		addPiece(new Rook(this, true, 1, 1));
+//        addPiece(new Rook(this, true, 8, 1));
+//        addPiece(new Rook(this, false, 1, 8));
+//        addPiece(new Rook(this, false, 8, 8));
+//		//knights
+//        addPiece(new Knight(this, true, 2, 1));
+//        addPiece(new Knight(this, true, 7, 1));
+//		addPiece(new Knight(this, false, 2, 8));
+//        addPiece(new Knight(this, false, 7, 8));
+//		//bishops
+//        addPiece(new Bishop(this, true, 3, 1));
+//        addPiece(new Bishop(this, true, 6, 1));
+//        addPiece(new Bishop(this, false, 3, 8));
+//        addPiece(new Bishop(this, false, 6, 8));
+//		//queens
+//        addPiece(new Queen(this, true, 4, 1));
+//        addPiece(new Queen(this, false, 4, 8));
 		//kings
         addPiece(whiteKing = new King(this, true, 5, 1));
         addPiece(blackKing = new King(this, false, 5, 8));
@@ -506,6 +488,10 @@ public final class Board {
 //		addPiece(new Pawn(this, false, 2, 4));
 //		addPiece(new Pawn(this, true, 8, 5));
 //		addPiece(new Pawn(this, false, 7, 7));
+
+//		//test for promotion
+		addPiece(new Pawn(this, true, 1, 7));
+		addPiece(new Pawn(this, false, 7, 2));
 		
 		updatePieces(false);
 	}
@@ -616,14 +602,16 @@ public final class Board {
 		if (init.isLegalMove(move)) {
 			List<Move> moves = init.getLegalMoves();
 			//get the move from legal moves generated from Piece, Move passed in from main have null in subject field
-			move = moves.get(moves.indexOf(move));
-			if (move instanceof Castling) {
+			Move generatedMove = moves.get(moves.indexOf(move));
+			if (move instanceof  Promotion)
 				move.execute(this);
+			else if (move instanceof Castling) {
+				generatedMove.execute(this);
 				Collections.swap(pieces, pieces.indexOf(init),
-						pieces.indexOf(((Castling) move).getRook()));	//ensure correct order in pieces
+						pieces.indexOf(((Castling) generatedMove).getRook()));	//ensure correct order in pieces
 			}
 			else {	//otherwise, a usual move
-				move.execute(this);
+				generatedMove.execute(this);
 				//ensure correct order in pieces
 				rearrange(pieces, init);
 			}
@@ -651,7 +639,7 @@ public final class Board {
 	 * Reverts the changes of uncheckedMove()
 	 * @param move	the move to revert
 	 */
-	void revert(Move move) {
+	void revert(Move move) {	//TODO handle promotion and castling?
 		Piece init = move.getInit();
 		Piece subject = move.getSubject();
 		init.setSquare(move.getOrigin());

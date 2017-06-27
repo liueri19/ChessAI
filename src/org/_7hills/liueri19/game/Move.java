@@ -87,8 +87,10 @@ public class Move {
 	 * <p>
 	 * A move will be formatted as:<br>
 	 * <code>[origin_file][origin_rank][destination_file][destination_rank]</code><br>
-	 * A move from E2 to E4 would be represented as:<br>
-	 * <code>e2e4</code>
+	 * A move from E2 to E4 would be represented as: e2e4;<br>
+	 * King and queen side castling is: O-O and O-O-O;<br>
+	 * A promotion will have an extra character specifying the piece promoted to
+	 * (see {@link org._7hills.liueri19.game.Piece.PieceTypes PieceTypes}).
 	 */
 	@Override
 	public String toString() {

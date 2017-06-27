@@ -256,7 +256,7 @@ abstract class Piece implements Comparable<Piece> {
 	 * Update the legal moves and threatened squares of this Piece using its current location.
 	 * @param threatsOnly true to update only threats, false to update threats and legal moves
 	 */
-	abstract void updatePiece(boolean threatsOnly);
+	abstract void updatePiece(boolean threatsOnly);	//TODO some implementations need to be re-written for new Move class
 	
 	/**
 	 * Returns a String representation of this Piece object.<br>
@@ -365,12 +365,51 @@ abstract class Piece implements Comparable<Piece> {
 		return hash;
 	}
 
-	enum Pieces {
-		KNIGHT,
-		PAWN,
-		QUEEN,
-		ROOK,
-		BISHOP,
-		KING
+	/**
+	 * This enum represents all piece types and provides the short representations of each piece type.<br>
+	 * K for King;<br>
+	 * Q for Queen;<br>
+	 * R for Rook;<br>
+	 * B for Bishop;<br>
+	 * N for Knight;<br>
+	 * P for Pawn.
+	 */
+	public enum PieceTypes {
+		KNIGHT	('N'),
+		PAWN	('P'),
+		QUEEN	('Q'),
+		ROOK	('R'),
+		BISHOP	('B'),
+		KING	('K');
+
+		private char charRep;
+
+		PieceTypes(char charRep) {
+			this.charRep = charRep;
+		}
+
+		/**
+		 * Return the character representation of the corresponding piece type.
+		 * @return the character representation of the specified piece type
+		 */
+		char getCharRep() { return charRep; }
+
+		/**
+		 * Return an instance of PieceTypes corresponding to the specified character representation.
+		 * @param charRep	the short representation of a piece
+		 * @return the corresponding PieceTypes instance
+		 */
+		static PieceTypes getInstance(char charRep) {
+			switch (charRep) {
+				case 'Q': return QUEEN;
+				case 'N': return KNIGHT;
+				case 'R': return ROOK;
+				case 'B': return BISHOP;
+				case 'P': return PAWN;
+				case 'K': return KING;
+				default:
+					throw new IllegalArgumentException();
+			}
+		}
 	}
 }

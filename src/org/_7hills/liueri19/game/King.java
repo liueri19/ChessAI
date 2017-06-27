@@ -54,16 +54,13 @@ public class King extends Piece {
 			new int[] {square[0] +1, square[1] -1}
 		};
 		//eliminate illegal moves
-		for (int[] move : candidates) {
-			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
+		for (int[] m : candidates) {
+			if (m[0] < 1 || m[1] < 1 || m[0] > 8 || m[1] > 8)
 				continue;
-//			addThreat(new Move(this, square, move));
-//			if (!getBoard().isSquareAttacked(this.getColor(), move[0], move[1])) {
-//				Piece target = getBoard().getPieceAt(move[0], move[1]);
-//				if (target == null || target.getColor() != this.getColor())
-//					checkMove(new Move(this, square, move), threatsOnly);
-//			}
-			checkMove(new Move(this, square, move), threatsOnly);
+			Move move = new Move(this, square, m);	//constructor will attempt to find a subject
+			if (move.getSubject() != null && move.getSubject().getColor() == this.getColor())
+				continue;
+			checkMove(move, threatsOnly);
 		}
 		//add Castling
 		if (isCastlable()) {

@@ -10,7 +10,7 @@ public class Castling extends Move {
 	private final boolean kingSide;
 	
 	/**
-	 * Constructs a new Castling object identifying the move.
+	 * Constructs a new Castling object representing a castling move.
 	 * 
 	 * @param king	the king
 	 * @param rook	the rook
@@ -54,13 +54,13 @@ public class Castling extends Move {
 	
 	/**
 	 * Returns a string representation of this Castling object.
-	 * <code>"0-0"</code> for king side castling, <code>"0-0-0"</code> for queen side castling.
+	 * <code>"O-O"</code> for king side castling, <code>"O-O-O"</code> for queen side castling.
 	 */
 	@Override
 	public String toString() {
 		if (getDestination()[0] == 3)
-			return "0-0-0";
-		return "0-0";
+			return "O-O-O";
+		return "O-O";
 	}
 
 	@Override

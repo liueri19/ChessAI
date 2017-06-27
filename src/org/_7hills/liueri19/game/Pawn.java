@@ -5,7 +5,7 @@ package org._7hills.liueri19.game;
  * @author liueri19
  *
  */
-public class Pawn extends Piece {	//TODO promotion
+public class Pawn extends Piece {
 
 	public Pawn(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
@@ -43,9 +43,12 @@ public class Pawn extends Piece {	//TODO promotion
 		Piece target;
 		if (this.getColor()) {
 			if (getBoard().getPieceAt(square[0], square[1] + 1) == null) {	//white pawn, moving up
-				checkMove(new Move(this, square, new int[] {square[0], square[1] + 1}), threatsOnly);
 				if (square[1] == 2 && getBoard().getPieceAt(square[0], square[1] + 2) == null)	//on the second rank
 					checkMove(new Move(this, square, new int[] {square[0], square[1] + 2}), threatsOnly);
+				else if (square[1] == 7)	//on the 7th rank, promotion
+					checkMove(new Promotion(this), threatsOnly);
+				else
+					checkMove(new Move(this, square, new int[] {square[0], square[1] + 1}), threatsOnly);
 			}
 			if ((target = getBoard().getPieceAt(square[0] - 1, square[1] + 1)) != null &&
 					target.getColor() != this.getColor())
@@ -73,9 +76,12 @@ public class Pawn extends Piece {	//TODO promotion
 		}
 		else {
 			if (getBoard().getPieceAt(square[0], square[1] - 1) == null) {	//black pawn, moving down
-				checkMove(new Move(this, square, new int[] {square[0], square[1] - 1}), threatsOnly);
-				if (square[1] == 7 && getBoard().getPieceAt(square[0], square[1] - 2) == null)	//on the second rank
+				if (square[1] == 7 && getBoard().getPieceAt(square[0], square[1] - 2) == null)
 					checkMove(new Move(this, square, new int[] {square[0], square[1] - 2}), threatsOnly);
+				else if (square[1] == 2)
+					checkMove(new Promotion(this), threatsOnly);
+				else
+					checkMove(new Move(this, square, new int[] {square[0], square[1] - 1}), threatsOnly);
 			}
 			if ((target = getBoard().getPieceAt(square[0] - 1, square[1] - 1)) != null &&
 					target.getColor() != this.getColor())

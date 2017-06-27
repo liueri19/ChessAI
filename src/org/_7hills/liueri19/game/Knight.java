@@ -67,9 +67,6 @@ public class Knight extends Piece {
 
 	@Override
 	protected Piece copy(Board board) {
-		Piece p = new Knight(board, this.getColor(), this.getFile(), this.getRank());
-//		for (Move move : this.getLegalMoves())
-//			p.checkMove(move.copy());
-		return p;
+		return new Knight(board, this.getColor(), this.getFile(), this.getRank());
 	}
 }

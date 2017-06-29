@@ -3,12 +3,12 @@ package org._7hills.liueri19.game;
 import java.util.*;
 
 /**
- * The Board where PieceTypes rest on and the game would be played.
+ * The Board where PieceType rest on and the game would be played.
  * 
  * @author liueri19
  */
 public final class Board {
-	//this list must always be sorted. all manipulations must not break the order of this list. see PieceTypes.compareTo()
+	//this list must always be sorted. all manipulations must not break the order of this list. see PieceType.compareTo()
 	private List<Piece> pieces = new ArrayList<>();
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
@@ -102,15 +102,6 @@ public final class Board {
 			
 			else if (input.equals("O-O")) {	//castling, king side
 				board.drawSuggested = false;
-				//validate requirements
-				/*
-				 * The king and the chosen rook are on the player's first rank.
-				 * Neither the king nor the chosen rook has previously moved.
-				 * There are no pieces between the king and the chosen rook.
-				 * The king is not currently in check.
-				 * The king does not pass through a square that is attacked by an enemy piece.
-				 * The king does not end up in check. (True of any legal move.)
-				 */
 				King king;
 				Piece rook;
 				if (board.whiteMove) {	//acquire the pieces
@@ -121,28 +112,8 @@ public final class Board {
 					king = board.blackKing;
 					rook = board.getPieceAt(8, 8);
 				}
-				if (rook == null || !(rook instanceof Rook) || !((Rook) rook).isCastlable()) {
+				if (!(rook instanceof Rook)) {
 					System.out.println("The rook had been moved");
-					continue;
-				}
-				if (!king.isCastlable()) {
-					System.out.println("The king had been moved");
-					continue;
-				}
-				if (board.getPieceAt(6, king.getRank()) != null || board.getPieceAt(7, king.getRank()) != null) {
-					System.out.println("There are piece(s) blocking the castling");
-					continue;
-				}
-				if (board.isInCheck(king.getColor())) {
-					System.out.println("The king cannot castle while in check");
-					continue;
-				}
-				if (board.isSquareAttacked(king.getColor(), 6, king.getRank())) {
-					System.out.println("The king cannot move through an attacked square");
-					continue;
-				}
-				if (board.isSquareAttacked(king.getColor(), 7, king.getRank())) {
-					System.out.println("The king cannot castle into a check");
 					continue;
 				}
 				
@@ -162,29 +133,8 @@ public final class Board {
 					king = board.blackKing;
 					rook = board.getPieceAt(1, 8);
 				}
-				if (rook == null || !(rook instanceof Rook) || !((Rook) rook).isCastlable()) {
+				if (!(rook instanceof Rook)) {
 					System.out.println("The rook had been moved");
-					continue;
-				}
-				if (!king.isCastlable()) {
-					System.out.println("The king had been moved");
-					continue;
-				}
-				if (board.getPieceAt(2, king.getRank()) != null || board.getPieceAt(3, king.getRank()) != null ||
-						board.getPieceAt(4, king.getRank()) != null) {
-					System.out.println("There are piece(s) blocking the castling");
-					continue;
-				}
-				if (board.isInCheck(king.getColor())) {
-					System.out.println("The king cannot castle while in check");
-					continue;
-				}
-				if (board.isSquareAttacked(king.getColor(), 4, king.getRank())) {
-					System.out.println("The king cannot move through an attacked square");
-					continue;
-				}
-				if (board.isSquareAttacked(king.getColor(), 3, king.getRank())) {
-					System.out.println("The king cannot castle into a check");
 					continue;
 				}
 				
@@ -295,11 +245,12 @@ public final class Board {
 	}
 	
 	/**
-	 * Returns a list containing all the pieces on this board.
-	 * @return a list containing all the pieces on this board
+	 * Returns the list containing all the pieces on this board. Note that this method returns a direct reference.
+	 * @return the list containing all the pieces on this board
 	 */
 	List<Piece> getPieces() {
-		return new ArrayList<>(pieces);
+//		return new ArrayList<>(pieces);
+		return pieces;
 	}
 	
 	/**
@@ -324,7 +275,7 @@ public final class Board {
 		//a placeholder to meet the arguments of Collections.binarySearch()
 		//the following methods are implemented only because they are abstract in Piece.
 		PLACEHOLDER.setSquare(file, rank);
-        return getPiece(PLACEHOLDER);
+		return getPiece(PLACEHOLDER);
 	}
 	
 	/**
@@ -338,7 +289,7 @@ public final class Board {
 	}
 	
 	/**
-	 * Returns the equivalent Piece object of the specified Piece in the List of PieceTypes on the Board,
+	 * Returns the equivalent Piece object of the specified Piece in the List of PieceType on the Board,
 	 * or null if none is found.
 	 * @param piece the Piece to find
 	 * @return the equivalent of the specified Piece, or null if such Piece is not on the Board
@@ -351,7 +302,7 @@ public final class Board {
 	}
 	
 	/**
-	 * Removes the specified Piece object from the list of PieceTypes currently on the board.
+	 * Removes the specified Piece object from the list of PieceType currently on the board.
 	 * 
 	 * @param p	the Piece to remove
 	 * @return true if this list contained the specified element
@@ -361,7 +312,7 @@ public final class Board {
 	}
 	
 	/**
-	 * Removes the Piece object at the specified location in the list of PieceTypes currently on the board.
+	 * Removes the Piece object at the specified location in the list of PieceType currently on the board.
 	 * 
 	 * @param index	the index of the Piece to be removed
 	 * @return the Piece that was removed
@@ -438,10 +389,6 @@ public final class Board {
 			//rank third line
 			System.out.println("|____|____|____|____|____|____|____|____|");
 		}
-		
-		//print textual
-//		for (Piece p : pieces)
-//			System.out.println(p);
 	}
 	
 	/**
@@ -449,39 +396,39 @@ public final class Board {
 	 */
 	void setupPieces() {
 		//pawns
-//		for (int y = 2; y < 8; y += 5) {
-//			for (int x = 1; x < 9; x++) {
-//				if (y == 2)
-//					addPiece(new Pawn(this, true, x, y));
-//				else
-//					addPiece(new Pawn(this, false, x, y));
-//			}
-//		}
-//		//rooks
-//		addPiece(new Rook(this, true, 1, 1));
-//        addPiece(new Rook(this, true, 8, 1));
-//        addPiece(new Rook(this, false, 1, 8));
-//        addPiece(new Rook(this, false, 8, 8));
-//		//knights
-//        addPiece(new Knight(this, true, 2, 1));
-//        addPiece(new Knight(this, true, 7, 1));
-//		addPiece(new Knight(this, false, 2, 8));
-//        addPiece(new Knight(this, false, 7, 8));
-//		//bishops
-//        addPiece(new Bishop(this, true, 3, 1));
-//        addPiece(new Bishop(this, true, 6, 1));
-//        addPiece(new Bishop(this, false, 3, 8));
-//        addPiece(new Bishop(this, false, 6, 8));
-//		//queens
-//        addPiece(new Queen(this, true, 4, 1));
-//        addPiece(new Queen(this, false, 4, 8));
+		for (int y = 2; y < 8; y += 5) {
+			for (int x = 1; x < 9; x++) {
+				if (y == 2)
+					addPiece(new Pawn(this, true, x, y));
+				else
+					addPiece(new Pawn(this, false, x, y));
+			}
+		}
+		//rooks
+		addPiece(new Rook(this, true, 1, 1));
+		addPiece(new Rook(this, true, 8, 1));
+		addPiece(new Rook(this, false, 1, 8));
+		addPiece(new Rook(this, false, 8, 8));
+		//knights
+		addPiece(new Knight(this, true, 2, 1));
+		addPiece(new Knight(this, true, 7, 1));
+		addPiece(new Knight(this, false, 2, 8));
+		addPiece(new Knight(this, false, 7, 8));
+		//bishops
+		addPiece(new Bishop(this, true, 3, 1));
+		addPiece(new Bishop(this, true, 6, 1));
+		addPiece(new Bishop(this, false, 3, 8));
+		addPiece(new Bishop(this, false, 6, 8));
+		//queens
+		addPiece(new Queen(this, true, 4, 1));
+		addPiece(new Queen(this, false, 4, 8));
 		//kings
-        addPiece(whiteKing = new King(this, true, 5, 1));
-        addPiece(blackKing = new King(this, false, 5, 8));
+		addPiece(whiteKing = new King(this, true, 5, 1));
+		addPiece(blackKing = new King(this, false, 5, 8));
 
-//        //test for illegal move check
-//        addPiece(new Rook(this, false, 4, 7));
-//        addPiece(new Bishop(this, true, 5, 2));
+//		//test for illegal move check
+//		addPiece(new Rook(this, false, 4, 7));
+//		addPiece(new Bishop(this, true, 5, 2));
 
 //		//test for en passant
 //		addPiece(new Pawn(this, true, 1, 2));
@@ -490,8 +437,8 @@ public final class Board {
 //		addPiece(new Pawn(this, false, 7, 7));
 
 //		//test for promotion
-		addPiece(new Pawn(this, true, 1, 7));
-		addPiece(new Pawn(this, false, 7, 2));
+//		addPiece(new Pawn(this, true, 1, 7));
+//		addPiece(new Pawn(this, false, 7, 2));
 		
 		updatePieces(false);
 	}
@@ -603,18 +550,10 @@ public final class Board {
 			List<Move> moves = init.getLegalMoves();
 			//get the move from legal moves generated from Piece, Move passed in from main have null in subject field
 			Move generatedMove = moves.get(moves.indexOf(move));
-			if (move instanceof  Promotion)
+			if (move instanceof Promotion)
 				move.execute(this);
-			else if (move instanceof Castling) {
+			else
 				generatedMove.execute(this);
-				Collections.swap(pieces, pieces.indexOf(init),
-						pieces.indexOf(((Castling) generatedMove).getRook()));	//ensure correct order in pieces
-			}
-			else {	//otherwise, a usual move
-				generatedMove.execute(this);
-				//ensure correct order in pieces
-				rearrange(pieces, init);
-			}
 			history.add(move);
 			changeTurn();	//calls updatePieces()
 			return true;
@@ -622,40 +561,26 @@ public final class Board {
 		return false;
 	}
 	
-	/**
-	 * Execute the specified Move object without any checking.
-	 * @param move	the move to execute
-	 */
-	void uncheckedMove(Move move) {
-		Piece init = move.getInit();
-		Piece subject = move.getSubject();
-		if (subject != null)
-			removePiece(subject);
-		init.setSquare(move.getDestination());
-		rearrange(pieces, init);
-	}
+//	/**
+//	 * Execute the specified Move object without any checking.
+//	 * @param move	the move to execute
+//	 */
+//	void uncheckedMove(Move move) {
+//		Piece init = move.getInit();
+//		Piece subject = move.getSubject();
+//		if (subject != null)
+//			removePiece(subject);
+//		init.setSquare(move.getDestination());
+//		rearrange(init);
+//	}
 
 	/**
-	 * Reverts the changes of uncheckedMove()
-	 * @param move	the move to revert
-	 */
-	void revert(Move move) {	//TODO handle promotion and castling?
-		Piece init = move.getInit();
-		Piece subject = move.getSubject();
-		init.setSquare(move.getOrigin());
-		if (subject != null)
-			addPiece(subject);
-		rearrange(pieces, init);
-	}
-
-	/**
-	 * Rearrange the location of the moved piece in the specified list to match the order specified by compareTo.
+	 * Rearrange the location of the moved piece to match the order specified by compareTo.
 	 * The piece need not have the same reference as the matching one in the list, but they must be logical equivalents.
 	 * (a comparision using equals() must return true)
-	 * @param pieces	the list to rearrange
 	 * @param piece	the piece with the wrong index
 	 */
-	void rearrange(List<Piece> pieces, Piece piece) {
+	void rearrange(Piece piece) {
 		int index = pieces.indexOf(piece);
 		while (index > 0 && piece.compareTo(pieces.get(index - 1)) < 0)
 			Collections.swap(pieces, index, --index);

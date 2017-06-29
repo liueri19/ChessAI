@@ -2,6 +2,7 @@ package org._7hills.liueri19.game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -158,11 +159,11 @@ abstract class Piece implements Comparable<Piece> {
 	void checkMove(Move move, boolean threatsOnly) {
 		addThreat(move);
 		if (!threatsOnly) {
-			board.uncheckedMove(move);
+			move.execute(board);
 			board.updatePieces(true);
 			if (!board.isInCheck(getColor()))
 				addLegalMove(move);
-			board.revert(move);
+			move.revert(board);
 		}
 	}
 	
@@ -226,31 +227,6 @@ abstract class Piece implements Comparable<Piece> {
 		}
 		return false;
 	}
-	
-//	/**
-//	 * Move this Piece to the specified location. Returns true if the move succeeds, and false if the move failed.
-//	 * @param file	the file to move this Piece to
-//	 * @param rank	the rank to move this Piece to
-//	 * @return	true if the move succeeds, and false if the move failed
-//	 */
-//	public boolean move(int file, int rank) {
-//		return move(new Move(this, new int[] {file, rank}));
-//	}
-//	
-//	/**
-//	 * Move this Piece as described by the Move object. Returns true if the move succeeds, and false if the move failed.
-//	 * @param move	the Move to execute
-//	 * @return true if the move succeeds, and false if the move failed
-//	 */
-//	public boolean move(Move move) {
-//		if (isLegalMove(move)) {
-//			if (move.getSubject() != null)
-//				getBoard().removePiece(move.getSubject());
-//			setSquare(move.getDestination());
-//			return true;
-//		}
-//		return false;
-//	}
 	
 	/**
 	 * Update the legal moves and threatened squares of this Piece using its current location.
@@ -374,7 +350,7 @@ abstract class Piece implements Comparable<Piece> {
 	 * N for Knight;<br>
 	 * P for Pawn.
 	 */
-	public enum PieceTypes {
+	public enum PieceType {
 		KNIGHT	('N'),
 		PAWN	('P'),
 		QUEEN	('Q'),
@@ -383,8 +359,11 @@ abstract class Piece implements Comparable<Piece> {
 		KING	('K');
 
 		private char charRep;
+		/** List of PieceTypes that can be promoted to, containing QUEEN, KNIGHT, ROOK and BISHOP. */
+		public static final List<PieceType> PROMOTABLES =
+				Collections.unmodifiableList(Arrays.asList(QUEEN, KNIGHT, ROOK, BISHOP));
 
-		PieceTypes(char charRep) {
+		PieceType(char charRep) {
 			this.charRep = charRep;
 		}
 
@@ -395,11 +374,11 @@ abstract class Piece implements Comparable<Piece> {
 		char getCharRep() { return charRep; }
 
 		/**
-		 * Return an instance of PieceTypes corresponding to the specified character representation.
+		 * Return an instance of PieceType corresponding to the specified character representation.
 		 * @param charRep	the short representation of a piece
-		 * @return the corresponding PieceTypes instance
+		 * @return the corresponding PieceType instance
 		 */
-		static PieceTypes getInstance(char charRep) {
+		static PieceType getInstance(char charRep) {
 			switch (charRep) {
 				case 'Q': return QUEEN;
 				case 'N': return KNIGHT;

@@ -63,12 +63,37 @@ public class King extends Piece {
 			checkMove(move, threatsOnly);
 		}
 		//add Castling
+		//validate requirements
+		/*
+		 * The king and the chosen rook are on the player's first rank.
+		 * Neither the king nor the chosen rook has previously moved.
+		 * There are no pieces between the king and the chosen rook.
+		 * The king is not currently in check.
+		 * The king does not pass through a square that is attacked by an enemy piece.
+		 * The king does not end up in check. (True of any legal move.)
+		 */
 		if (isCastlable()) {
-			Piece p;
 			for (int file = 1; file < 9; file += 7) {	//for only values 1 and 8
-				p = getBoard().getPieceAt(file, getRank());
-				if (p instanceof Rook && ((Rook) p).isCastlable())
+				Piece p = getBoard().getPieceAt(file, getRank());
+				Board board = getBoard();
+				if (p instanceof Rook && ((Rook) p).isCastlable() && !board.isInCheck(this.getColor())) {
+					if (file == 1) {
+						if (board.getPieceAt(4, getRank()) != null || board.getPieceAt(3, getRank()) != null
+								|| board.getPieceAt(2, getRank()) != null)
+							continue;
+						if (board.isSquareAttacked(getColor(), 4, getRank())
+								|| board.isSquareAttacked(getColor(), 3, getRank()))
+							continue;
+					}
+					else {
+						if (board.getPieceAt(6, getRank()) != null || board.getPieceAt(7, getRank()) != null)
+							continue;
+						if (board.isSquareAttacked(getColor(), 6, getRank())
+								|| board.isSquareAttacked(getColor(), 7, getRank()))
+							continue;
+					}
 					checkMove(new Castling(this, (Rook) p), threatsOnly);
+				}
 			}
 		}
 	}
@@ -104,20 +129,11 @@ public class King extends Piece {
 	protected void addThreat(Move move) {
 		attackedSquares.add(move);
 	}
-	
-//	@Override
-//	public boolean move(int file, int rank) {
-//		setCastlable(false);
-//		return super.move(file, rank);
-//	}
 
 	@Override
 	public Piece copy(Board board) {
 		King p = new King(board, this.getColor(), this.getFile(), this.getRank());
 		p.setCastlable(this.isCastlable());
-//		for (Move move : this.getLegalMoves())
-//			p.checkMove(move.copy());
-//		this.getLegalMoves().forEach((Move m)->p.checkMove(m.copy()));
 		return p;
 	}
 }

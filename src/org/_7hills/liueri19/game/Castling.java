@@ -1,5 +1,8 @@
 package org._7hills.liueri19.game;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * This class describes a castling.
  * @author liueri19
@@ -19,22 +22,7 @@ public class Castling extends Move {
 		super(king, king.getSquare(), rook.getSquare());	//just to satisfy the constructor
 		this.rook = rook;
 		kingSide = rook.getFile() == 8;
-//		king.setCastlable(false);
 	}
-	
-//	/**
-//	 * Constructs a new Castling object identifying the move.
-//	 * This constructor assumes the origin of the move is the current square of the specified King.
-//	 * 
-//	 * @param king	the king
-//	 * @param rook	the rook
-//	 * @param to	destination of the king
-//	 */
-//	public Castling(King king, Rook rook, int[] to) {
-//		super(king, to);
-//		this.rook = rook;
-//		king.setCastlable(false);
-//	}
 
 	/**
 	 * Returns the Rook related to this Castling.
@@ -77,5 +65,18 @@ public class Castling extends Move {
 		}
 		king.setCastlable(false);
 		rook.setCastlable(false);
+		List<Piece> pieces = board.getPieces();
+		Collections.swap(pieces, pieces.indexOf(king), pieces.indexOf(rook));
+	}
+
+	@Override
+	public void revert(Board board) {
+		King king = (King) getInit();
+		king.setSquare(getOrigin());
+		rook.setSquare(getDestination());
+		king.setCastlable(true);
+		rook.setCastlable(true);
+		List<Piece> pieces = board.getPieces();
+		Collections.swap(pieces, pieces.indexOf(king), pieces.indexOf(rook));
 	}
 }

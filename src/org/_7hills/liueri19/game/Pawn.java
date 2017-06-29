@@ -42,13 +42,16 @@ public class Pawn extends Piece {
 		int[] square = getSquare();
 		Piece target;
 		if (this.getColor()) {
-			if (getBoard().getPieceAt(square[0], square[1] + 1) == null) {	//white pawn, moving up
-				if (square[1] == 2 && getBoard().getPieceAt(square[0], square[1] + 2) == null)	//on the second rank
-					checkMove(new Move(this, square, new int[] {square[0], square[1] + 2}), threatsOnly);
-				else if (square[1] == 7)	//on the 7th rank, promotion
-					checkMove(new Promotion(this), threatsOnly);
-				else
+			if (getBoard().getPieceAt(square[0], square[1] + 1) == null) {	//white pawn, moving up, new int[] {square[0], square[1] + 1}), threatsOnly);
+				if (square[1] == 7) {
+					for (PieceType type : PieceType.PROMOTABLES)
+						checkMove(new Promotion(this, type), threatsOnly);
+				}
+				else {
 					checkMove(new Move(this, square, new int[] {square[0], square[1] + 1}), threatsOnly);
+					if (square[1] == 2 && getBoard().getPieceAt(square[0], square[1] + 2) == null)	//on the second rank
+						checkMove(new Move(this, square, new int[] {square[0], square[1] + 2}), threatsOnly);
+				}
 			}
 			if ((target = getBoard().getPieceAt(square[0] - 1, square[1] + 1)) != null &&
 					target.getColor() != this.getColor())
@@ -76,12 +79,15 @@ public class Pawn extends Piece {
 		}
 		else {
 			if (getBoard().getPieceAt(square[0], square[1] - 1) == null) {	//black pawn, moving down
-				if (square[1] == 7 && getBoard().getPieceAt(square[0], square[1] - 2) == null)
-					checkMove(new Move(this, square, new int[] {square[0], square[1] - 2}), threatsOnly);
-				else if (square[1] == 2)
-					checkMove(new Promotion(this), threatsOnly);
-				else
+				if (square[1] == 2) {
+					for (PieceType type : PieceType.PROMOTABLES)
+						checkMove(new Promotion(this, type), threatsOnly);
+				}
+				else {
 					checkMove(new Move(this, square, new int[] {square[0], square[1] - 1}), threatsOnly);
+					if (square[1] == 7 && getBoard().getPieceAt(square[0], square[1] - 2) == null)	//on the second rank
+						checkMove(new Move(this, square, new int[] {square[0], square[1] - 2}), threatsOnly);
+				}
 			}
 			if ((target = getBoard().getPieceAt(square[0] - 1, square[1] - 1)) != null &&
 					target.getColor() != this.getColor())
@@ -110,5 +116,4 @@ public class Pawn extends Piece {
 	protected Piece copy(Board board) {
 		return new Pawn(board, this.getColor(), this.getFile(), this.getRank());
 	}
-
 }

@@ -110,9 +110,6 @@ public class Bishop extends Piece {
 
 	@Override
 	public Piece copy(Board board) {
-		Piece p = new Bishop(board, this.getColor(), this.getFile(), this.getRank());
-//		for (Move move : this.getLegalMoves())	// ArrayList.clone() creates shallow copy
-//			p.checkMove(move.copy());
-		return p;
+		return new Bishop(board, this.getColor(), this.getFile(), this.getRank());
 	}
 }

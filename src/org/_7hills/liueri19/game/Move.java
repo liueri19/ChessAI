@@ -90,7 +90,7 @@ public class Move {
 	 * A move from E2 to E4 would be represented as: e2e4;<br>
 	 * King and queen side castling is: O-O and O-O-O;<br>
 	 * A promotion will have an extra character specifying the piece promoted to
-	 * (see {@link org._7hills.liueri19.game.Piece.PieceTypes PieceTypes}).
+	 * (see {@link Piece.PieceType PieceType}).
 	 */
 	@Override
 	public String toString() {
@@ -107,7 +107,7 @@ public class Move {
 	 * @param move the Object to be compared with
 	 */
 	@Override
-	public boolean equals(Object move) {
+	public boolean equals(Object move) {	//not a great implementation
 		if (!(move instanceof Move))
 			return false;
 		else if (Arrays.equals(getOrigin(), ((Move) move).getOrigin()) 
@@ -117,22 +117,26 @@ public class Move {
 	}
 
 	/**
-	 * Execute the move represented by this Move object.
+	 * Execute the move represented by this Move object. All subclasses should override this method.
+	 * @param board	the board to execute this move on
 	 */
 	public void execute(Board board) {
 		if (subject != null)
 			board.removePiece(subject);
 		init.setSquare(getDestination());
+		board.rearrange(init);
 	}
 
-//	/**
-//	 * Returns a deep copy of this Move object.
-//	 * This method is effectively the same as calling <code>Move(Piece piece, Piece subject, int[] from, int[] to)</code>
-//	 * with the same values from this object.
-//	 *
-//	 * @return a deep copy of this Move object
-//	 */
-//	public Move copy() {
-//		return new Move(getPiece().copy(null), getOrigin(), getDestination());
-//	}
+	/**
+	 * Undo changes of execute(). All subclasses must implement this method.
+	 * @param board	the board to revert this move on
+	 */
+	public void revert(Board board) {
+		Piece init = getInit();
+		Piece subject = getSubject();
+		init.setSquare(getOrigin());
+		if (subject != null)
+			board.addPiece(subject);
+		board.rearrange(init);
+	}
 }

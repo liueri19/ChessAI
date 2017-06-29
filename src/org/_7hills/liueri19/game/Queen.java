@@ -160,9 +160,6 @@ public class Queen extends Piece {
 
 	@Override
 	public Piece copy(Board board) {
-		Piece p = new Queen(board, this.getColor(), this.getFile(), this.getRank());
-//		for (Move move : this.getLegalMoves())
-//			p.checkMove(move.copy());
-		return p;
+		return new Queen(board, this.getColor(), this.getFile(), this.getRank());
 	}
 }

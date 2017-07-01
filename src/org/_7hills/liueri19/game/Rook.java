@@ -97,8 +97,4 @@ public class Rook extends Piece {
 		this.castlable = castlable;
 	}
 
-	@Override
-	public Piece copy(Board board) {
-		return new Rook(board, this.getColor(), this.getFile(), this.getRank());
-	}
 }

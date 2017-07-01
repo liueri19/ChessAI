@@ -98,12 +98,8 @@ public class Move {
 	}
 	
 	/**
-	 * Indicates whether some other object is "equal to" this Move.<br>
-	 * <p>
-	 * Returns true if and only if:<br>
-	 * the specified object is an instance of Move, and<br>
-	 * this Move has the same origin as the specified Move, and<br>
-	 * this Move has the same destination as the specified Move.
+	 * Indicates whether some other object is "equal to" this Move. Returns true if
+	 * and only if this Move has the same origin and destination of the specified Move.
 	 * @param move the Object to be compared with
 	 */
 	@Override

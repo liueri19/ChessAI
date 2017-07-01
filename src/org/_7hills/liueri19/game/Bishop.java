@@ -108,8 +108,4 @@ public class Bishop extends Piece {
 		}
 	}
 
-	@Override
-	public Piece copy(Board board) {
-		return new Bishop(board, this.getColor(), this.getFile(), this.getRank());
-	}
 }

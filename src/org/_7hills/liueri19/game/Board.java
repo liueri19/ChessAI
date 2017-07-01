@@ -17,20 +17,6 @@ public final class Board {
 	private boolean autoPrint = true;
 	private boolean whiteMove = true;
 	private List<Move> history = new ArrayList<>();
-	private final Piece PLACEHOLDER = new Piece(null, true, 0, 0) {	//serves as a placeholder
-		@Override
-		public Piece copy(Board board) {
-			return null;
-		}
-		@Override
-		public void updatePiece(boolean threatsOnly) {}
-		@Override
-		public String toString() {
-			return "PLACEHOLDER@" + getFile() + getRank();
-		}
-		@Override
-		public String toBriefString() { return "PLACEHOLDER"; }
-	};
 	
 	/**
 	 * Constructs a chess board with standard setup.
@@ -47,17 +33,6 @@ public final class Board {
 	public Board(boolean doSetUp) {
 		if (doSetUp)
 			setupPieces();
-	}
-	
-	/**
-	 * Constructs a new chess board with the same states of the specified board.
-	 * @param board	the board to copy from
-	 */
-	public Board(Board board) {
-		for (Piece p : board.getPieces())
-			this.pieces.add(p.copy(this));
-		whiteKing = (King) board.whiteKing.copy(this);
-		blackKing = (King) board.blackKing.copy(this);
 	}
 	
 	public static void main(String[] args) {
@@ -169,7 +144,7 @@ public final class Board {
 
 					Move m = new Move(piece, piece.getSquare(), to);
 					if (input.length() == 5 && piece instanceof Pawn)	//promotion
-						m = new Promotion((Pawn) piece, input.charAt(4));
+						m = new Promotion((Pawn) piece, to, input.charAt(4));
 					if (!board.move(m)) {
 						System.out.println("Illegal move");
 						continue;
@@ -272,8 +247,17 @@ public final class Board {
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
 	Piece getPieceAt(int file, int rank) {
+		Piece PLACEHOLDER = new Piece(null, true, 0, 0) {
+			@Override
+			public void updatePiece(boolean threatsOnly) {}
+			@Override
+			public String toString() {
+				return "PLACEHOLDER@" + getFile() + getRank();
+			}
+			@Override
+			public String toBriefString() { return "PLACEHOLDER"; }
+		};
 		//a placeholder to meet the arguments of Collections.binarySearch()
-		//the following methods are implemented only because they are abstract in Piece.
 		PLACEHOLDER.setSquare(file, rank);
 		return getPiece(PLACEHOLDER);
 	}
@@ -364,20 +348,23 @@ public final class Board {
 			System.out.println("|");
 			//rank second line
 			for (int file = 1; file < 9; file++) {
-				Piece p = new King(this, true, 0, 0);	//placeholder
-				try {
-				p = pieces.get(index);
+				if (index < pieces.size()) {
+					Piece p = pieces.get(index);
+					if (p.getRank() == rank && p.getFile() == file) {
+						index++;
+						if (white)
+							System.out.printf("| %s ", p.toBriefString());
+						else
+							System.out.printf("|/%s/", p.toBriefString());
+					}
+					else {
+						if (white)
+							System.out.print("|    ");
+						else
+							System.out.print("|////");
+					}
 				}
-				catch (IndexOutOfBoundsException ignored) {
-				}
-				if (p.getRank() == rank && p.getFile() == file) {
-					index++;
-					if (white)
-						System.out.printf("| %s ", p.toBriefString());
-					else
-						System.out.printf("|/%s/", p.toBriefString());
-				}
-				else {
+				else {	//eliminate this repetition
 					if (white)
 						System.out.print("|    ");
 					else
@@ -396,32 +383,32 @@ public final class Board {
 	 */
 	void setupPieces() {
 		//pawns
-		for (int y = 2; y < 8; y += 5) {
-			for (int x = 1; x < 9; x++) {
-				if (y == 2)
-					addPiece(new Pawn(this, true, x, y));
-				else
-					addPiece(new Pawn(this, false, x, y));
-			}
-		}
-		//rooks
-		addPiece(new Rook(this, true, 1, 1));
-		addPiece(new Rook(this, true, 8, 1));
-		addPiece(new Rook(this, false, 1, 8));
-		addPiece(new Rook(this, false, 8, 8));
-		//knights
-		addPiece(new Knight(this, true, 2, 1));
-		addPiece(new Knight(this, true, 7, 1));
-		addPiece(new Knight(this, false, 2, 8));
-		addPiece(new Knight(this, false, 7, 8));
-		//bishops
-		addPiece(new Bishop(this, true, 3, 1));
-		addPiece(new Bishop(this, true, 6, 1));
-		addPiece(new Bishop(this, false, 3, 8));
-		addPiece(new Bishop(this, false, 6, 8));
-		//queens
-		addPiece(new Queen(this, true, 4, 1));
-		addPiece(new Queen(this, false, 4, 8));
+//		for (int y = 2; y < 8; y += 5) {
+//			for (int x = 1; x < 9; x++) {
+//				if (y == 2)
+//					addPiece(new Pawn(this, true, x, y));
+//				else
+//					addPiece(new Pawn(this, false, x, y));
+//			}
+//		}
+//		//rooks
+//		addPiece(new Rook(this, true, 1, 1));
+//		addPiece(new Rook(this, true, 8, 1));
+//		addPiece(new Rook(this, false, 1, 8));
+//		addPiece(new Rook(this, false, 8, 8));
+//		//knights
+//		addPiece(new Knight(this, true, 2, 1));
+//		addPiece(new Knight(this, true, 7, 1));
+//		addPiece(new Knight(this, false, 2, 8));
+//		addPiece(new Knight(this, false, 7, 8));
+//		//bishops
+//		addPiece(new Bishop(this, true, 3, 1));
+//		addPiece(new Bishop(this, true, 6, 1));
+//		addPiece(new Bishop(this, false, 3, 8));
+//		addPiece(new Bishop(this, false, 6, 8));
+//		//queens
+//		addPiece(new Queen(this, true, 4, 1));
+//		addPiece(new Queen(this, false, 4, 8));
 		//kings
 		addPiece(whiteKing = new King(this, true, 5, 1));
 		addPiece(blackKing = new King(this, false, 5, 8));
@@ -436,9 +423,9 @@ public final class Board {
 //		addPiece(new Pawn(this, true, 8, 5));
 //		addPiece(new Pawn(this, false, 7, 7));
 
-//		//test for promotion
-//		addPiece(new Pawn(this, true, 1, 7));
-//		addPiece(new Pawn(this, false, 7, 2));
+		//test for promotion
+		addPiece(new Pawn(this, true, 1, 7));
+		addPiece(new Pawn(this, false, 7, 2));
 		
 		updatePieces(false);
 	}
@@ -499,7 +486,9 @@ public final class Board {
 	 * @return true if the King of the specified color is in check, false otherwise
 	 */
 	public boolean isInCheck(boolean color) {
-		return color ? isSquareAttacked(color, whiteKing.getFile(), whiteKing.getRank()) : isSquareAttacked(color, blackKing.getFile(), blackKing.getRank());
+		return color ?
+				isSquareAttacked(color, whiteKing.getFile(), whiteKing.getRank())
+				: isSquareAttacked(color, blackKing.getFile(), blackKing.getRank());
 	}
 	
 	/**

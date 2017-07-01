@@ -46,7 +46,7 @@ public class Castling extends Move {
 	 */
 	@Override
 	public String toString() {
-		if (getDestination()[0] == 3)
+		if (getDestination()[0] == 1)
 			return "O-O-O";
 		return "O-O";
 	}

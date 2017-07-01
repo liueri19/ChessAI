@@ -130,10 +130,4 @@ public class King extends Piece {
 		attackedSquares.add(move);
 	}
 
-	@Override
-	public Piece copy(Board board) {
-		King p = new King(board, this.getColor(), this.getFile(), this.getRank());
-		p.setCastlable(this.isCastlable());
-		return p;
-	}
 }

@@ -42,15 +42,7 @@ abstract class Piece implements Comparable<Piece> {
 	public Piece(Board board, boolean color, int[] coordinate) {
 		this(board, color, coordinate[0], coordinate[1]);
 	}
-	
-	/**
-	 * Returns a deep copy of this Piece object with reference to the specified Board.
-	 * @param board the Board object to link this Piece to.
-	 *
-	 * @return a deep copy of this Piece object
-	 */
-	protected abstract Piece copy(Board board);	//Cloneable is not used. A specific Board reference is needed.
-	
+
 	/**
 	 * Returns the Board object where this Piece is on.
 	 * 
@@ -157,13 +149,22 @@ abstract class Piece implements Comparable<Piece> {
 	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
 	 */
 	void checkMove(Move move, boolean threatsOnly) {
-		addThreat(move);
+		addThreat(move);	//TODO should not add threat for normal pawn move
 		if (!threatsOnly) {
-			move.execute(board);
-			board.updatePieces(true);
-			if (!board.isInCheck(getColor()))
-				addLegalMove(move);
-			move.revert(board);
+			if (!(move instanceof Promotion) || ((Promotion) move).getPromoteTo() != null) {
+				move.execute(board);
+				board.updatePieces(true);
+				if (!board.isInCheck(getColor()))
+					addLegalMove(move);
+				move.revert(board);
+			}
+			else {
+				Promotion promotion = (Promotion) move;
+				for (PieceType type : PieceType.PROMOTABLES) {
+					promotion.setPromoteTo(type);
+					checkMove(promotion, false);
+				}
+			}
 		}
 	}
 	

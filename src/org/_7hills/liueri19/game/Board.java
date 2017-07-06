@@ -143,8 +143,10 @@ public final class Board {
 					int[] to = new int[] {parseFile(fileD), rankD};
 
 					Move m = new Move(piece, piece.getSquare(), to);
-					if (input.length() == 5 && piece instanceof Pawn)	//promotion
-						m = new Promotion((Pawn) piece, to, input.charAt(4));
+					if (input.length() == 5 && piece instanceof Pawn) {    //promotion
+						Piece.PieceType type = Piece.PieceType.getInstance(input.charAt(4));
+						m = new Promotion((Pawn) piece, to, type);
+					}
 					if (!board.move(m)) {
 						System.out.println("Illegal move");
 						continue;
@@ -310,10 +312,15 @@ public final class Board {
 	 * 
 	 * @param piece the Piece to add
 	 */
-	void addPiece(Piece piece) {
+	void addPiece(Piece piece) {	//see documentation for Collections.binarySearch()
 		int index = Collections.binarySearch(pieces, piece);
-		index = -index - 1;	//see documentation of Collections.binarySearch()
-		pieces.add(index, piece);
+		index = -index - 1;	//if not found, return (-(insertion point) - 1)
+		if (index < 0)
+			throw new IllegalArgumentException("Adding " + piece + " on square with " + pieces.get(-index-1));
+		if (!(index == pieces.size()))    //or size() if should be inserted at the end
+			pieces.add(index, piece);
+		else
+			pieces.add(piece);
 	}
 	
 	/**
@@ -426,7 +433,9 @@ public final class Board {
 		//test for promotion
 		addPiece(new Pawn(this, true, 1, 7));
 		addPiece(new Pawn(this, false, 7, 2));
-		
+		addPiece(new Knight(this, false, 2, 8));
+		addPiece(new Knight(this, true, 8, 1));
+
 		updatePieces(false);
 	}
 	
@@ -495,7 +504,7 @@ public final class Board {
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
 	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
 	 */
-	void updatePieces(boolean threatsOnly) {
+	void updatePieces(boolean threatsOnly) {	//TODO handle checkmates
 		for (Object o : pieces.toArray()) {	//to avoid concurrent mod, probably not very efficient
 			Piece p = (Piece) o;
 			if (!(p instanceof King))
@@ -577,3 +586,17 @@ public final class Board {
 			Collections.swap(pieces, index, ++index);
 	}
 }
+
+/*
+public class MyClass {
+    String name;
+
+    public class MyClass {
+        String name;
+
+        public String getOuterName() {
+            return MyClass.this.name;
+        }
+    }
+}
+ */

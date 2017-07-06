@@ -148,7 +148,7 @@ abstract class Piece implements Comparable<Piece> {
 	 * @param move	the Move to be checked
 	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
 	 */
-	void checkMove(Move move, boolean threatsOnly) {
+	final void checkMove(Move move, boolean threatsOnly) {
 		addThreat(move);	//TODO should not add threat for normal pawn move
 		if (!threatsOnly) {
 			if (!(move instanceof Promotion) || ((Promotion) move).getPromoteTo() != null) {
@@ -233,7 +233,7 @@ abstract class Piece implements Comparable<Piece> {
 	 * Update the legal moves and threatened squares of this Piece using its current location.
 	 * @param threatsOnly true to update only threats, false to update threats and legal moves
 	 */
-	abstract void updatePiece(boolean threatsOnly);	//TODO some implementations need to be re-written for new Move class
+	abstract void updatePiece(boolean threatsOnly);
 	
 	/**
 	 * Returns a String representation of this Piece object.<br>

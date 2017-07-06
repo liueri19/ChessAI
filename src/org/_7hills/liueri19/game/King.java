@@ -57,8 +57,9 @@ public class King extends Piece {
 		for (int[] m : candidates) {
 			if (m[0] < 1 || m[1] < 1 || m[0] > 8 || m[1] > 8)
 				continue;
-			Move move = new Move(this, square, m);	//constructor will attempt to find a subject
-			if (move.getSubject() != null && move.getSubject().getColor() == this.getColor())
+			Move move = new Move(this, null, square, m);	//constructor will attempt to find a subject
+			Piece subject = move.getSubject();
+			if (subject != null && subject.getColor() == getColor())
 				continue;
 			checkMove(move, threatsOnly);
 		}

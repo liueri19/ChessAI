@@ -57,7 +57,9 @@ public class Knight extends Piece {
 			if (move[0] < 1 || move[1] < 1 || move[0] > 8 || move[1] > 8)
 				continue;
 			subject = getBoard().getPieceAt(move[0], move[1]);
-			if (subject == null || subject.getColor() != this.getColor())
+			if (subject == null)
+				checkMove(new Move(this, square, move), threatsOnly);
+			else if (subject.getColor() != getColor())	//avoid redundant getPieceAt() call
 				checkMove(new Move(this, subject, square, move), threatsOnly);
 		}
 	}

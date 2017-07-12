@@ -149,8 +149,16 @@ abstract class Piece implements Comparable<Piece> {
 	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
 	 */
 	final void checkMove(Move move, boolean threatsOnly) {
-		addThreat(move);	//TODO should not add threat for normal pawn move
+		if (!(move.getInit() instanceof Pawn) || move.getSubject() != null)	//don't add regular pawn move
+			addThreat(move);
+		/*
+		Although should be fixed, this does not cause pawns to check kings in front.
+		Move is executed first, then pieces are updated (updating the pawn's threats),
+		finally checking is king in check. A pawn with a piece in front does not attempt
+		to check a forward move.
+		 */
 		if (!threatsOnly) {
+			//if move is not promotion OR (if it is promotion) getPromoteTo() is not null
 			if (!(move instanceof Promotion) || ((Promotion) move).getPromoteTo() != null) {
 				move.execute(board);
 				board.updatePieces(true);

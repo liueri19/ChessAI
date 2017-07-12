@@ -43,7 +43,7 @@ public class Move {
 	 */
 	public Move(Piece init, int[] from, int[] to) {
 		this.init = init;
-		subject = init.getBoard().getPieceAt(to);
+		subject = null;
 		origin = Arrays.copyOf(from, from.length);
 		destination = Arrays.copyOf(to, to.length);
 	}
@@ -98,12 +98,12 @@ public class Move {
 	}
 	
 	/**
-	 * Indicates whether some other object is "equal to" this Move. Returns true if
+	 * Indicates whether some other move is "equal to" this Move. Returns true if
 	 * and only if this Move has the same origin and destination of the specified Move.
 	 * @param move the Object to be compared with
 	 */
 	@Override
-	public boolean equals(Object move) {	//not a great implementation
+	public boolean equals(Object move) {
 		if (!(move instanceof Move))
 			return false;
 		else if (Arrays.equals(getOrigin(), ((Move) move).getOrigin()) 

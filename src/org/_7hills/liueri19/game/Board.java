@@ -13,7 +13,8 @@ public final class Board {
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
 	private boolean drawSuggested = false;
-	private int gameResult;	//1 white win, -1 black win, 0 draw
+	/** 1 white win, -1 black win, 0 draw */
+	private int gameResult;
 	private boolean autoPrint = true;
 	private boolean whiteMove = true;
 	private List<Move> history = new ArrayList<>();
@@ -390,32 +391,32 @@ public final class Board {
 	 */
 	void setupPieces() {
 		//pawns
-//		for (int y = 2; y < 8; y += 5) {
-//			for (int x = 1; x < 9; x++) {
-//				if (y == 2)
-//					addPiece(new Pawn(this, true, x, y));
-//				else
-//					addPiece(new Pawn(this, false, x, y));
-//			}
-//		}
-//		//rooks
-//		addPiece(new Rook(this, true, 1, 1));
-//		addPiece(new Rook(this, true, 8, 1));
-//		addPiece(new Rook(this, false, 1, 8));
-//		addPiece(new Rook(this, false, 8, 8));
-//		//knights
-//		addPiece(new Knight(this, true, 2, 1));
-//		addPiece(new Knight(this, true, 7, 1));
-//		addPiece(new Knight(this, false, 2, 8));
-//		addPiece(new Knight(this, false, 7, 8));
-//		//bishops
-//		addPiece(new Bishop(this, true, 3, 1));
-//		addPiece(new Bishop(this, true, 6, 1));
-//		addPiece(new Bishop(this, false, 3, 8));
-//		addPiece(new Bishop(this, false, 6, 8));
-//		//queens
-//		addPiece(new Queen(this, true, 4, 1));
-//		addPiece(new Queen(this, false, 4, 8));
+		for (int y = 2; y < 8; y += 5) {
+			for (int x = 1; x < 9; x++) {
+				if (y == 2)
+					addPiece(new Pawn(this, true, x, y));
+				else
+					addPiece(new Pawn(this, false, x, y));
+			}
+		}
+		//rooks
+		addPiece(new Rook(this, true, 1, 1));
+		addPiece(new Rook(this, true, 8, 1));
+		addPiece(new Rook(this, false, 1, 8));
+		addPiece(new Rook(this, false, 8, 8));
+		//knights
+		addPiece(new Knight(this, true, 2, 1));
+		addPiece(new Knight(this, true, 7, 1));
+		addPiece(new Knight(this, false, 2, 8));
+		addPiece(new Knight(this, false, 7, 8));
+		//bishops
+		addPiece(new Bishop(this, true, 3, 1));
+		addPiece(new Bishop(this, true, 6, 1));
+		addPiece(new Bishop(this, false, 3, 8));
+		addPiece(new Bishop(this, false, 6, 8));
+		//queens
+		addPiece(new Queen(this, true, 4, 1));
+		addPiece(new Queen(this, false, 4, 8));
 		//kings
 		addPiece(whiteKing = new King(this, true, 5, 1));
 		addPiece(blackKing = new King(this, false, 5, 8));
@@ -431,10 +432,10 @@ public final class Board {
 //		addPiece(new Pawn(this, false, 7, 7));
 
 		//test for promotion
-		addPiece(new Pawn(this, true, 1, 7));
-		addPiece(new Pawn(this, false, 7, 2));
-		addPiece(new Knight(this, false, 2, 8));
-		addPiece(new Knight(this, true, 8, 1));
+//		addPiece(new Pawn(this, true, 1, 6));
+//		addPiece(new Pawn(this, false, 5, 3));
+//		addPiece(new Knight(this, false, 2, 8));
+//		addPiece(new Knight(this, true, 8, 1));
 
 		updatePieces(false);
 	}
@@ -480,7 +481,7 @@ public final class Board {
 	 * @param rank	the rank of the square
 	 * @return true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise
 	 */
-	public boolean isSquareAttacked(boolean color, int file, int rank) {	//TODO: optimize this?
+	public boolean isSquareAttacked(boolean color, int file, int rank) {	//TODO: not very efficient
 		for (Piece p : pieces) {
 			if (p.getColor() != color && p.isThreatening(new Move(p, p.getSquare(), new int[] {file, rank})))
 				return true;
@@ -504,26 +505,36 @@ public final class Board {
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
 	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
 	 */
-	void updatePieces(boolean threatsOnly) {	//TODO handle checkmates
-		for (Object o : pieces.toArray()) {	//to avoid concurrent mod, probably not very efficient
+	void updatePieces(boolean threatsOnly) {
+		Object[] piecesArray = pieces.toArray();
+		for (Object o : piecesArray) {
 			Piece p = (Piece) o;
 			if (!(p instanceof King))
 				p.updatePiece(threatsOnly);
 		}
-		//kings should be updated last (shouldn't matter in current implementation, too lazy to change)
+		//kings should be updated last (shouldn't really matter)
 		whiteKing.updatePiece(threatsOnly);
 		blackKing.updatePiece(threatsOnly);
 
-		//check for checkmate
+		//check for checkmate and draw
 		if (!threatsOnly) {
-			boolean whiteCheckmate, blackCheckmate;
-			whiteCheckmate = blackCheckmate = true;
+			boolean whiteCheckmate, blackCheckmate, isWhiteInCheck, isBlackInCheck, isDrawW, isDrawB;
+			whiteCheckmate = blackCheckmate = isDrawW = isDrawB = true;
+			isWhiteInCheck = isInCheck(true);	//isInCheck() is expensive
+			isBlackInCheck = isInCheck(false);
 			for (Piece p : pieces) {
-				if (whiteCheckmate && p.getColor()) {
-					whiteCheckmate = p.getLegalMoves().isEmpty();
+				boolean noLegalMoves = p.getLegalMoves().isEmpty();
+				if (p.getColor()) {
+					if (whiteCheckmate)
+						whiteCheckmate = noLegalMoves && isWhiteInCheck;
+					if (isDrawW)
+						isDrawW = noLegalMoves;
 				}
-				else if (blackCheckmate) {
-					blackCheckmate = p.getLegalMoves().isEmpty();
+				else {
+					if (blackCheckmate)
+						blackCheckmate = noLegalMoves && isBlackInCheck;
+					if (isDrawB)
+						isDrawB = noLegalMoves;
 				}
 			}
 			if (whiteCheckmate) {
@@ -534,6 +545,10 @@ public final class Board {
 				gameEnded = true;
 				gameResult = 1;
 			}
+			if (isDrawW || isDrawB) {
+				gameEnded = true;
+				gameResult = 0;
+			}
 		}
 	}
 	
@@ -542,7 +557,7 @@ public final class Board {
 	 * @param move the Move to execute
 	 * @return true if the move described is legal, false otherwise
 	 */
-	public boolean move(Move move) {
+	public boolean move(Move move) {	//documentation needs to be rewritten
 		Piece init = move.getInit();
 		if (init.isLegalMove(move)) {
 			List<Move> moves = init.getLegalMoves();

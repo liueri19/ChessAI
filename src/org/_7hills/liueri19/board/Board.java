@@ -1,13 +1,18 @@
-package org._7hills.liueri19.game;
+package org._7hills.liueri19.board;
+
+import org._7hills.liueri19.algorithm.Algorithm;
+import org._7hills.liueri19.algorithm.BruteForce;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
- * The Board where PieceType rest on and the game would be played.
+ * The Board where PieceType rest on and the board would be played.
  * 
  * @author liueri19
  */
-public final class Board {
+public final class Board {	//TODO change pieces list to 2d array
 	//this list must always be sorted. all manipulations must not break the order of this list. see PieceType.compareTo()
 	private List<Piece> pieces = new ArrayList<>();
 	private King whiteKing, blackKing;
@@ -15,9 +20,23 @@ public final class Board {
 	private boolean drawSuggested = false;
 	/** 1 white win, -1 black win, 0 draw */
 	private int gameResult;
-	private boolean autoPrint = true;
 	private boolean whiteMove = true;
 	private List<Move> history = new ArrayList<>();
+	/** a placeholder to meet the arguments of Collections.binarySearch() */
+	private final Piece PLACEHOLDER = new Piece(null, true, 0, 0) {	//reuse the same object
+		@Override
+		public void updatePiece(boolean threatsOnly) {}
+		@Override
+		public String toString() {
+			return "PLACEHOLDER@" + getFile() + getRank();
+		}
+		@Override
+		public String toBriefString() { return "PLACEHOLDER"; }
+	};
+
+	/** the Algorithm to use */
+	private Algorithm ALGORITHM;
+	private final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 	
 	/**
 	 * Constructs a chess board with standard setup.
@@ -26,140 +45,134 @@ public final class Board {
 		setupPieces();
 	}
 	
-	/**
-	 * Constructs a chess board with setup optional.
-	 * 
-	 * @param doSetUp	option for setup pieces.
-	 */
-	public Board(boolean doSetUp) {
-		if (doSetUp)
-			setupPieces();
-	}
+//	/**
+//	 * Constructs a chess board with setup optional.
+//	 *
+//	 * @param doSetUp	option for setup pieces.
+//	 */
+//	public Board(boolean doSetUp) {
+//		if (doSetUp)
+//			setupPieces();
+//	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Board board = new Board();
 		Scanner sc = new Scanner(System.in);
 		String input;
 		Piece piece;
 		
-		System.out.println("Use command 'prtboard' to see a visual representation of the board.\nUse command 'autoprt' to switch automatic board print on/off.\nUse command 'prthistory' to see previous moves.");
-		//board.printBoard();
+		System.out.println("Use command 'prtboard' to see a visual representation of the board.%nUse command 'prthistory' to see previous moves.");
+		System.out.println("White side or black side (W/B)");
+		boolean b = sc.hasNextLine();
+		boolean playerTurn = !sc.nextLine().equalsIgnoreCase("B");	//if not "B", default white
+		board.ALGORITHM = new BruteForce(board, !playerTurn);
+		board.EXECUTOR.submit(board.ALGORITHM);
 		while(!board.gameEnded) {
-			input = sc.nextLine();
-			//parse input
-			if (input.equals("prtboard")) {
-				board.printBoard();
-				continue;
-			}
-			else if (input.equals("autoprt")) {
-				board.autoPrint = !board.autoPrint;
-				System.out.println("autoprt changed to " + board.autoPrint);
-			}
-			else if (input.equals("prthistory")) {
-				board.printHistory();
-				continue;
-			}
-			else if (input.equals("resign")) {
-				board.gameEnded = true;
-				if (board.whiteMove)
-					board.gameResult = -1;
-				else
-					board.gameResult = 1;
-			}
-			else if (input.equals("draw")) {    //TODO implement draw https://en.wikipedia.org/wiki/Draw_(chess)
-				//suggest draw to the opponent
-				if (board.drawSuggested) {
+			b = !b;
+			if (playerTurn) {
+				input = sc.nextLine();
+				//parse input
+				if (input.equals("prtboard")) {
+					board.printBoard();
+					continue;
+				} else if (input.equals("prthistory")) {
+					board.printHistory();
+					continue;
+				} else if (input.equals("resign")) {
 					board.gameEnded = true;
-					board.gameResult = 0;
-				}
-				board.drawSuggested = true;
-				continue;
-			}
-			
-			else if (input.equals("O-O")) {	//castling, king side
-				board.drawSuggested = false;
-				King king;
-				Piece rook;
-				if (board.whiteMove) {	//acquire the pieces
-					king = board.whiteKing;
-					rook = board.getPieceAt(8, 1);
-				}
-				else {
-					king = board.blackKing;
-					rook = board.getPieceAt(8, 8);
-				}
-				if (!(rook instanceof Rook)) {
-					System.out.println("The rook had been moved");
+					if (board.whiteMove)
+						board.gameResult = -1;
+					else
+						board.gameResult = 1;
+				} else if (input.equals("draw")) {    //TODO implement draw https://en.wikipedia.org/wiki/Draw_(chess)
+					//suggest draw to the opponent
+					if (board.drawSuggested) {
+						board.gameEnded = true;
+						board.gameResult = 0;
+					}
+					board.drawSuggested = true;
 					continue;
-				}
-				
-				//move
-				board.move(new Castling(king, (Rook) rook));
-			}
-			
-			else if (input.equals("O-O-O")) {	//castling, queen side
-				board.drawSuggested = false;
-				King king;
-				Piece rook;
-				if (board.whiteMove) {	//acquire the pieces
-					king = board.whiteKing;
-					rook = board.getPieceAt(1, 1);
-				}
-				else {
-					king = board.blackKing;
-					rook = board.getPieceAt(1, 8);
-				}
-				if (!(rook instanceof Rook)) {
-					System.out.println("The rook had been moved");
-					continue;
-				}
-				
-				board.move(new Castling(king, (Rook) rook));
-			}
-			
-			else if (input.length() == 4 || input.length() == 5) {	//a move
-				board.drawSuggested = false;
-				char fileO = input.charAt(0);
-				int rankO = Character.getNumericValue(input.charAt(1));
-				
-				if (Character.toString(fileO).matches("[abcdefgh]")) {	//if the first character is a, b, c, d, e, f, g, or h
-					piece = board.getPieceAt(fileO, rankO);
-					if (piece == null) {
-						System.out.println("No piece on the selected square");
+				} else if (input.equals("O-O")) {    //castling, king side
+					board.drawSuggested = false;
+					King king;
+					Piece rook;
+					if (board.whiteMove) {    //acquire the pieces
+						king = board.whiteKing;
+						rook = board.getPieceAt(8, 1);
+					} else {
+						king = board.blackKing;
+						rook = board.getPieceAt(8, 8);
+					}
+					if (!(rook instanceof Rook)) {
+						System.out.println("The rook had been moved");
 						continue;
 					}
-					//a valid piece selected, validate turn
-					if (piece.getColor() && !board.whiteMove) {
-						System.out.println("Cannot move white piece on black's turn");
-						continue;
-					}
-					else if (!piece.getColor() && board.whiteMove) {
-						System.out.println("Cannot move black piece on white's turn");
-						continue;
-					}
-					
-					//get the target square
-					char fileD = input.charAt(2);
-					int rankD = Character.getNumericValue(input.charAt(3));
-					int[] to = new int[] {parseFile(fileD), rankD};
 
-					Move m = new Move(piece, piece.getSquare(), to);
-					if (input.length() == 5 && piece instanceof Pawn) {    //promotion
-						Piece.PieceType type = Piece.PieceType.getInstance(input.charAt(4));
-						m = new Promotion((Pawn) piece, to, type);
+					//move
+					board.move(new Castling(king, (Rook) rook));
+				} else if (input.equals("O-O-O")) {    //castling, queen side
+					board.drawSuggested = false;
+					King king;
+					Piece rook;
+					if (board.whiteMove) {    //acquire the pieces
+						king = board.whiteKing;
+						rook = board.getPieceAt(1, 1);
+					} else {
+						king = board.blackKing;
+						rook = board.getPieceAt(1, 8);
 					}
-					if (!board.move(m)) {
-						System.out.println("Illegal move");
+					if (!(rook instanceof Rook)) {
+						System.out.println("The rook had been moved");
 						continue;
 					}
+
+					board.move(new Castling(king, (Rook) rook));
+				} else if (input.length() == 4 || input.length() == 5) {    //a move
+					board.drawSuggested = false;
+					char fileO = input.charAt(0);
+					int rankO = Character.getNumericValue(input.charAt(1));
+
+					if (Character.toString(fileO).matches("[abcdefgh]")) {    //if the first character is a, b, c, d, e, f, g, or h
+						piece = board.getPieceAt(fileO, rankO);
+						if (piece == null) {
+							System.out.println("No piece on the selected square");
+							continue;
+						}
+						//a valid piece selected, validate turn
+						if (piece.getColor() && !board.whiteMove) {
+							System.out.println("Cannot move white piece on black's turn");
+							continue;
+						} else if (!piece.getColor() && board.whiteMove) {
+							System.out.println("Cannot move black piece on white's turn");
+							continue;
+						}
+
+						//get the target square
+						char fileD = input.charAt(2);
+						int rankD = Character.getNumericValue(input.charAt(3));
+						int[] to = new int[]{parseFile(fileD), rankD};
+
+						Move m = new Move(piece, piece.getSquare(), to);
+						if (input.length() == 5 && piece instanceof Pawn) {    //promotion
+							Piece.PieceType type = Piece.PieceType.getInstance(input.charAt(4));
+							m = new Promotion((Pawn) piece, to, type);
+						}
+						if (!board.move(m)) {
+							System.out.println("Illegal move");
+							continue;
+						}
+					}
+				} else {
+					System.out.println("Invalid input");
+					continue;
 				}
 			}
-			else {
-				System.out.println("Invalid input");
-				continue;
+			else {	//if not userInput
+				//wait for 3 minutes (or 5 minutes max)
+//				board.ALGORITHM.
 			}
-			if (board.autoPrint)
-				board.printBoard();
+			playerTurn = !playerTurn;
+			board.printBoard();
 		}
 		System.out.println("GAME ENDED");
 		if (board.gameResult == 1)
@@ -217,7 +230,7 @@ public final class Board {
 	/**
 	 * Change white's turn to black's turn or vice versa. This method also updates all pieces.
 	 */
-	void changeTurn() {
+	private void changeTurn() {
 		updatePieces(false);
 		whiteMove = !whiteMove;
 	}
@@ -229,6 +242,20 @@ public final class Board {
 	List<Piece> getPieces() {
 //		return new ArrayList<>(pieces);
 		return pieces;
+	}
+
+	/**
+	 * Returns all legal moves of all pieces of the specified color.
+	 * @param color	the color of the side to collect legal moves from
+	 * @return a collection containing the moves of all pieces of the specified color
+	 */
+	Collection<Move> getLegalMoves(boolean color) {
+		Collection<Move> moves = new HashSet<>();
+		for (Piece p : getPieces()) {
+			if (p.getColor() == color)
+				moves.addAll(p.getLegalMoves());
+		}
+		return moves;
 	}
 	
 	/**
@@ -250,17 +277,6 @@ public final class Board {
 	 * @return the Piece object with the specified file and rank, or null if none has the specified value
 	 */
 	Piece getPieceAt(int file, int rank) {
-		Piece PLACEHOLDER = new Piece(null, true, 0, 0) {
-			@Override
-			public void updatePiece(boolean threatsOnly) {}
-			@Override
-			public String toString() {
-				return "PLACEHOLDER@" + getFile() + getRank();
-			}
-			@Override
-			public String toBriefString() { return "PLACEHOLDER"; }
-		};
-		//a placeholder to meet the arguments of Collections.binarySearch()
 		PLACEHOLDER.setSquare(file, rank);
 		return getPiece(PLACEHOLDER);
 	}
@@ -325,7 +341,7 @@ public final class Board {
 	}
 	
 	/**
-	 * Prints a list of moves played to the console.
+	 * Prints a list of played moves to the console.
 	 */
 	public void printHistory() {
 		for (Move move : history)
@@ -557,7 +573,7 @@ public final class Board {
 	 * @param move the Move to execute
 	 * @return true if the move described is legal, false otherwise
 	 */
-	public boolean move(Move move) {	//documentation needs to be rewritten
+	public boolean move(Move move) {
 		Piece init = move.getInit();
 		if (init.isLegalMove(move)) {
 			List<Move> moves = init.getLegalMoves();
@@ -601,17 +617,3 @@ public final class Board {
 			Collections.swap(pieces, index, ++index);
 	}
 }
-
-/*
-public class MyClass {
-    String name;
-
-    public class MyClass {
-        String name;
-
-        public String getOuterName() {
-            return MyClass.this.name;
-        }
-    }
-}
- */

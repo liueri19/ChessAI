@@ -1,4 +1,4 @@
-package org._7hills.liueri19.game;
+package org._7hills.liueri19.board;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,7 +19,7 @@ public class Castling extends Move {
 	 * @param rook	the rook
 	 */
 	public Castling(King king, Rook rook) {
-		super(king, king.getSquare(), rook.getSquare());	//just to satisfy the constructor
+		super(king, king.getSquare(), rook.getSquare());
 		this.rook = rook;
 		kingSide = rook.getFile() == 8;
 	}

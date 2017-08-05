@@ -1,4 +1,4 @@
-package org._7hills.liueri19.game;
+package org._7hills.liueri19.board;
 
 import java.util.Arrays;
 
@@ -7,6 +7,12 @@ import java.util.Arrays;
  * 
  * @author liueri19
  *
+ */
+/*
+Making this class would require a defensive copy for every piece, and return defensive copies
+for getters, which is too expensive for frequent operations.
+Returning defensive copies would also require most uses of getters to call getPieceAt() on board,
+which is also expensive.
  */
 public class Move {
 	private final Piece init, subject;

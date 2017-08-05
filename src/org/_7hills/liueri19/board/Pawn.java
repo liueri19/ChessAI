@@ -1,4 +1,4 @@
-package org._7hills.liueri19.game;
+package org._7hills.liueri19.board;
 
 /**
  * Represents a Pawn. This class overrides certain methods in Piece.

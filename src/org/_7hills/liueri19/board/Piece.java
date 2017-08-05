@@ -1,4 +1,4 @@
-package org._7hills.liueri19.game;
+package org._7hills.liueri19.board;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.List;
  * @author liueri19
  *
  */
-abstract class Piece implements Comparable<Piece> {
+public abstract class Piece implements Comparable<Piece> {
 	private final boolean color;	//color the color of the piece. true for white, false for black
 	private final Board board;
 	private int[] coordinate;

@@ -1,17 +1,17 @@
-package org._7hills.liueri19.game;
+package org._7hills.liueri19.board;
 
 /**
- * Represents a Queen. This class overrides certain methods in Piece.
+ * Represents a Bishop. This class overrides certain methods in Piece.
  * @author liueri19
  *
  */
-public class Queen extends Piece {
+public class Bishop extends Piece {
 
-	public Queen(Board board, boolean color, int x, int y) {
+	public Bishop(Board board, boolean color, int x, int y) {
 		super(board, color, x, y);
 	}
 
-	public Queen(Board board, boolean color, int[] coordinate) {
+	public Bishop(Board board, boolean color, int[] coordinate) {
 		super(board, color, coordinate);
 	}
 
@@ -19,9 +19,9 @@ public class Queen extends Piece {
 	public String toString() {
 		String result;
 		if (this.getColor())
-			result = "WQ@";
+			result = "WB@";
 		else
-			result = "BQ@";
+			result = "BB@";
 		result += getFile();
 		result += getRank();
 		return result;
@@ -30,8 +30,8 @@ public class Queen extends Piece {
 	@Override
 	public String toBriefString() {
 		if (getColor())
-			return "WQ";
-		return "BQ";
+			return "WB";
+		return "BB";
 	}
 
 	@Override
@@ -40,62 +40,13 @@ public class Queen extends Piece {
 			clearLegalMoves();
 		clearThreats();
 		int[] square = getSquare();
-		Piece target;
-		// rook's
-		for (int fileP = square[0] + 1; fileP < 9; fileP++) {
-			target = getBoard().getPieceAt(fileP, square[1]);
-			if (target == null)	//if the square is empty
-				checkMove(new Move(this, square, new int[] {fileP, square[1]}), threatsOnly);
-			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				checkMove(new Move(this, target, square, new int[] {fileP, square[1]}), threatsOnly);
-				break;
-			}
-			else	
-				break;
-		}
-		target = null;
-		for (int fileN = square[0] - 1; fileN > 0; fileN--) {
-			target = getBoard().getPieceAt(fileN, square[1]);
-			if (target == null)
-				checkMove(new Move(this, square, new int[] {fileN, square[1]}), threatsOnly);
-			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				checkMove(new Move(this, target, square, new int[] {fileN, square[1]}), threatsOnly);
-				break;
-			}
-			else
-				break;
-		}
-		target = null;
-		for (int rankP = square[1] + 1; rankP < 9; rankP++) {
-			target = getBoard().getPieceAt(square[0], rankP);
-			if (target == null)
-				checkMove(new Move(this, square, new int[] {square[0], rankP}), threatsOnly);
-			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				checkMove(new Move(this, target, square, new int[] {square[0], rankP}), threatsOnly);
-				break;
-			}
-			else
-				break;
-		}
-		for (int rankN = square[1] - 1; rankN > 0; rankN--) {
-			target = getBoard().getPieceAt(square[0], rankN);
-			if (target == null)
-				checkMove(new Move(this, square, new int[] {square[0], rankN}), threatsOnly);
-			else if (target.getColor() != this.getColor()) {	//if the square has an piece of the opposite color
-				checkMove(new Move(this, target, square, new int[] {square[0], rankN}), threatsOnly);
-				break;
-			}
-			else
-				break;
-		}
-		//bishop's
 		boolean blockedPP, blockedPN, blockedNP, blockedNN;
 		blockedPP = blockedPN = blockedNP = blockedNN = false;
 		int rankPP, rankPN, rankNP, rankNN;
 		rankPP = rankNP = square[1] + 1;
 		rankPN = rankNN = square[1] - 1;
-		target = null;	// not necessary, but just for safety
 		
+		Piece target;
 		for (int fileP = square[0] + 1; fileP < 9; fileP++) {
 			if (!blockedPP && rankPP < 9) {
 				target = getBoard().getPieceAt(fileP, rankPP);	//may be null
@@ -125,7 +76,6 @@ public class Queen extends Piece {
 			rankPP++;
 			rankPN--;
 		}
-		target = null;
 		
 		for (int fileN = square[0] - 1; fileN > 0; fileN--) {
 			if (!blockedNP && rankNP < 9) {

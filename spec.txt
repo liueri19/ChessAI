@@ -50,3 +50,9 @@ Upon selecting black, the program prints the board, generate and execute a move,
 
 The Board class should be able to take inputs both from user and program.
 
+Board represented with a 9x9 array oriented as follow:
+null ------- null
+ |   a1 ------ h1
+ |   |         |
+ |   |         |
+null a8 ------ h8

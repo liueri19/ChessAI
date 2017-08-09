@@ -3,48 +3,54 @@ package org._7hills.liueri19.board;
 import org._7hills.liueri19.algorithm.Algorithm;
 import org._7hills.liueri19.algorithm.BruteForce;
 
+import java.rmi.activation.ActivationException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
  * The Board where PieceType rest on and the board would be played.
- * 
+ *
  * @author liueri19
  */
-public final class Board {	//TODO change pieces list to 2d array
+public final class Board {
 	//this list must always be sorted. all manipulations must not break the order of this list. see PieceType.compareTo()
-	private List<Piece> pieces = new ArrayList<>();
+//	private List<Piece> pieces = new ArrayList<>();
+	//9*9 array for the board, Piece should be accessed with pieces[rank][file]
+	private final Piece[][] pieces = new Piece[9][9];
 	private King whiteKing, blackKing;
 	private boolean gameEnded = false;
 	private boolean drawSuggested = false;
-	/** 1 white win, -1 black win, 0 draw */
+	/**
+	 * 1 white win, -1 black win, 0 draw
+	 */
 	private int gameResult;
-	private boolean whiteMove = true;
 	private List<Move> history = new ArrayList<>();
-	/** a placeholder to meet the arguments of Collections.binarySearch() */
-	private final Piece PLACEHOLDER = new Piece(null, true, 0, 0) {	//reuse the same object
-		@Override
-		public void updatePiece(boolean threatsOnly) {}
-		@Override
-		public String toString() {
-			return "PLACEHOLDER@" + getFile() + getRank();
-		}
-		@Override
-		public String toBriefString() { return "PLACEHOLDER"; }
-	};
+//	/** a placeholder to meet the arguments of Collections.binarySearch() */
+//	private final Piece PLACEHOLDER = new Piece(null, true, 0, 0) {	//reuse the same object
+//		@Override
+//		public void updatePiece(boolean threatsOnly) {}
+//		@Override
+//		public String toString() {
+//			return "PLACEHOLDER@" + getFile() + getRank();
+//		}
+//		@Override
+//		public String toBriefString() { return "PLACEHOLDER"; }
+//	};
 
-	/** the Algorithm to use */
+	/**
+	 * the Algorithm to use
+	 */
 	private Algorithm ALGORITHM;
 	private final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
-	
+
 	/**
 	 * Constructs a chess board with standard setup.
 	 */
 	public Board() {
 		setupPieces();
 	}
-	
+
 //	/**
 //	 * Constructs a chess board with setup optional.
 //	 *
@@ -54,37 +60,40 @@ public final class Board {	//TODO change pieces list to 2d array
 //		if (doSetUp)
 //			setupPieces();
 //	}
-	
+
 	public static void main(String[] args) throws Exception {
 		Board board = new Board();
 		Scanner sc = new Scanner(System.in);
 		String input;
 		Piece piece;
-		
-		System.out.println("Use command 'prtboard' to see a visual representation of the board.%nUse command 'prthistory' to see previous moves.");
+		boolean whiteMove = true;
+
+		System.out.println("Use command 'prtboard' to see a visual representation of the board.");
+		System.out.println("Use command 'prthistory' to see previous moves.");
 		System.out.println("White side or black side (W/B)");
-		boolean b = sc.hasNextLine();
-		boolean playerTurn = !sc.nextLine().equalsIgnoreCase("B");	//if not "B", default white
+		boolean playerTurn = !sc.nextLine().equalsIgnoreCase("B");    //if not "B", default white
 		board.ALGORITHM = new BruteForce(board, !playerTurn);
 		board.EXECUTOR.submit(board.ALGORITHM);
-		while(!board.gameEnded) {
-			b = !b;
+		while (!board.gameEnded) {
 			if (playerTurn) {
 				input = sc.nextLine();
 				//parse input
 				if (input.equals("prtboard")) {
 					board.printBoard();
 					continue;
-				} else if (input.equals("prthistory")) {
+				}
+				else if (input.equals("prthistory")) {
 					board.printHistory();
 					continue;
-				} else if (input.equals("resign")) {
+				}
+				else if (input.equals("resign")) {
 					board.gameEnded = true;
-					if (board.whiteMove)
+					if (whiteMove)
 						board.gameResult = -1;
 					else
 						board.gameResult = 1;
-				} else if (input.equals("draw")) {    //TODO implement draw https://en.wikipedia.org/wiki/Draw_(chess)
+				}
+				else if (input.equals("draw")) {    //TODO implement draw https://en.wikipedia.org/wiki/Draw_(chess)
 					//suggest draw to the opponent
 					if (board.drawSuggested) {
 						board.gameEnded = true;
@@ -92,14 +101,16 @@ public final class Board {	//TODO change pieces list to 2d array
 					}
 					board.drawSuggested = true;
 					continue;
-				} else if (input.equals("O-O")) {    //castling, king side
+				}
+				else if (input.equals("O-O")) {    //castling, king side
 					board.drawSuggested = false;
 					King king;
 					Piece rook;
-					if (board.whiteMove) {    //acquire the pieces
+					if (whiteMove) {    //acquire the pieces
 						king = board.whiteKing;
 						rook = board.getPieceAt(8, 1);
-					} else {
+					}
+					else {
 						king = board.blackKing;
 						rook = board.getPieceAt(8, 8);
 					}
@@ -110,14 +121,16 @@ public final class Board {	//TODO change pieces list to 2d array
 
 					//move
 					board.move(new Castling(king, (Rook) rook));
-				} else if (input.equals("O-O-O")) {    //castling, queen side
+				}
+				else if (input.equals("O-O-O")) {    //castling, queen side
 					board.drawSuggested = false;
 					King king;
 					Piece rook;
-					if (board.whiteMove) {    //acquire the pieces
+					if (whiteMove) {    //acquire the pieces
 						king = board.whiteKing;
 						rook = board.getPieceAt(1, 1);
-					} else {
+					}
+					else {
 						king = board.blackKing;
 						rook = board.getPieceAt(1, 8);
 					}
@@ -127,7 +140,8 @@ public final class Board {	//TODO change pieces list to 2d array
 					}
 
 					board.move(new Castling(king, (Rook) rook));
-				} else if (input.length() == 4 || input.length() == 5) {    //a move
+				}
+				else if (input.length() == 4 || input.length() == 5) {    //a move
 					board.drawSuggested = false;
 					char fileO = input.charAt(0);
 					int rankO = Character.getNumericValue(input.charAt(1));
@@ -139,11 +153,15 @@ public final class Board {	//TODO change pieces list to 2d array
 							continue;
 						}
 						//a valid piece selected, validate turn
-						if (piece.getColor() && !board.whiteMove) {
-							System.out.println("Cannot move white piece on black's turn");
-							continue;
-						} else if (!piece.getColor() && board.whiteMove) {
-							System.out.println("Cannot move black piece on white's turn");
+//						if (piece.getColor() && !whiteMove) {
+//							System.out.println("Cannot move white piece on black's turn");
+//							continue;
+//						} else if (!piece.getColor() && whiteMove) {
+//							System.out.println("Cannot move black piece on white's turn");
+//							continue;
+//						}
+						if (piece.getColor() != whiteMove) {
+							System.out.println("Cannot ");
 							continue;
 						}
 
@@ -162,16 +180,18 @@ public final class Board {	//TODO change pieces list to 2d array
 							continue;
 						}
 					}
-				} else {
+				}
+				else {
 					System.out.println("Invalid input");
 					continue;
 				}
 			}
-			else {	//if not userInput
+			else {    //if not userInput
 				//wait for 3 minutes (or 5 minutes max)
 //				board.ALGORITHM.
 			}
 			playerTurn = !playerTurn;
+			whiteMove = !whiteMove;	//merge two booleans into one?
 			board.printBoard();
 		}
 		System.out.println("GAME ENDED");
@@ -184,162 +204,261 @@ public final class Board {	//TODO change pieces list to 2d array
 
 		sc.close();
 	}
-	
+
 	/**
 	 * Parse the file represented as a char into an int.
-	 * 
-	 * @param file	the char representation of a file, always lower-case
+	 *
+	 * @param file the char representation of a file, always lower-case
 	 * @return the int representation of the input file
 	 */
 	public static int parseFile(char file) {
 		int fileNum = 0;
 		switch (file) {
-			case 'a': fileNum = 1; break;
-			case 'b': fileNum = 2; break;
-			case 'c': fileNum = 3; break;
-			case 'd': fileNum = 4; break;
-			case 'e': fileNum = 5; break;
-			case 'f': fileNum = 6; break;
-			case 'g': fileNum = 7; break;
-			case 'h': fileNum = 8; break;
+			case 'a':
+				fileNum = 1;
+				break;
+			case 'b':
+				fileNum = 2;
+				break;
+			case 'c':
+				fileNum = 3;
+				break;
+			case 'd':
+				fileNum = 4;
+				break;
+			case 'e':
+				fileNum = 5;
+				break;
+			case 'f':
+				fileNum = 6;
+				break;
+			case 'g':
+				fileNum = 7;
+				break;
+			case 'h':
+				fileNum = 8;
+				break;
 		}
 		return fileNum;
 	}
-	
+
 	/**
 	 * Parse the file represented as an int into a char.
-	 * 
-	 * @param file	the int representation of a file
+	 *
+	 * @param file the int representation of a file
 	 * @return the char representation of the input file
 	 */
 	public static char parseFile(int file) {
 		char fileNum = '0';
 		switch (file) {
-			case 1: fileNum = 'a'; break;
-			case 2: fileNum = 'b'; break;
-			case 3: fileNum = 'c'; break;
-			case 4: fileNum = 'd'; break;
-			case 5: fileNum = 'e'; break;
-			case 6: fileNum = 'f'; break;
-			case 7: fileNum = 'g'; break;
-			case 8: fileNum = 'h'; break;
+			case 1:
+				fileNum = 'a';
+				break;
+			case 2:
+				fileNum = 'b';
+				break;
+			case 3:
+				fileNum = 'c';
+				break;
+			case 4:
+				fileNum = 'd';
+				break;
+			case 5:
+				fileNum = 'e';
+				break;
+			case 6:
+				fileNum = 'f';
+				break;
+			case 7:
+				fileNum = 'g';
+				break;
+			case 8:
+				fileNum = 'h';
+				break;
 		}
 		return fileNum;
 	}
-	
+
+//	/**
+//	 * Change white's turn to black's turn or vice versa. This method also updates all pieces.
+//	 */
+//	private void changeTurn() {
+//		updatePieces(false);
+//		whiteMove = !whiteMove;
+//	}
+
 	/**
-	 * Change white's turn to black's turn or vice versa. This method also updates all pieces.
+	 * Returns a list containing the pieces on the board. Note: the returned list will not be updated with
+	 * the board, nor will modifying the returned list change the state of the board.
+	 *
+	 * @return a list containing all the pieces on this board
 	 */
-	private void changeTurn() {
-		updatePieces(false);
-		whiteMove = !whiteMove;
-	}
-	
-	/**
-	 * Returns the list containing all the pieces on this board. Note that this method returns a direct reference.
-	 * @return the list containing all the pieces on this board
-	 */
-	List<Piece> getPieces() {
+	public List<Piece> getPieces() {    //store in a variable before iterating over a loop
 //		return new ArrayList<>(pieces);
-		return pieces;
+//		return pieces;
+		List<Piece> piecesList = new ArrayList<>();
+		for (Piece[] rank : pieces) {
+			for (Piece piece : rank) {
+				if (piece != null)
+					piecesList.add(piece);
+			}
+		}
+		return piecesList;
 	}
 
 	/**
 	 * Returns all legal moves of all pieces of the specified color.
-	 * @param color	the color of the side to collect legal moves from
-	 * @return a collection containing the moves of all pieces of the specified color
+	 *
+	 * @param color the color of the side to collect legal moves from
+	 * @return moves of all pieces of the specified color
 	 */
-	Collection<Move> getLegalMoves(boolean color) {
-		Collection<Move> moves = new HashSet<>();
+	public Set<Move> getLegalMoves(boolean color) {
+		Set<Move> moves = new HashSet<>();
 		for (Piece p : getPieces()) {
 			if (p.getColor() == color)
 				moves.addAll(p.getLegalMoves());
 		}
 		return moves;
 	}
-	
+
 	/**
-	 * Iterates through the list of pieces currently on the board and returns the piece at the specified location.
-	 * 
-	 * @param file	the file of the piece represented as char
-	 * @param rank	the rank of the piece represented as int
-	 * @return the Piece object with the specified file and rank, or null if none has the specified value
+	 * Returns the piece on the specified square.
+	 *
+	 * @param file the file of the piece represented as char
+	 * @param rank the rank of the piece represented as int
+	 * @return the piece on the specified square, or null if the specified square has no piece
 	 */
 	Piece getPieceAt(char file, int rank) {
 		return getPieceAt(parseFile(file), rank);
 	}
-	
+
 	/**
-	 * Searches through the list of pieces currently on the board and returns the piece at the specified location.
-	 * 
-	 * @param file	the file of the piece represented as int
-	 * @param rank	the rank of the piece represented as int
-	 * @return the Piece object with the specified file and rank, or null if none has the specified value
+	 * Returns the piece on the specified square.
+	 *
+	 * @param file the file of the piece represented as int
+	 * @param rank the rank of the piece represented as int
+	 * @return the piece on the specified square, or null if the specified square has no piece
+	 * or null if the specified square is not on the board.
 	 */
 	Piece getPieceAt(int file, int rank) {
-		PLACEHOLDER.setSquare(file, rank);
-		return getPiece(PLACEHOLDER);
+//		PLACEHOLDER.modifySquare(file, rank);
+//		return getPiece(PLACEHOLDER);
+		if (file > 8 || rank > 8 || file < 0 || rank < 0)
+			return null;
+		return pieces[rank][file];
 	}
-	
+
 	/**
-	 * Searches through the list of pieces currently on the board and returns the piece at the specified location.
-	 * 
-	 * @param square	the file and rank in an int array
-	 * @return the Piece object with the specified file and rank, or null if none has the specified value
+	 * Returns the piece on the specified square.
+	 *
+	 * @param square the file and rank as an int array
+	 * @return the piece on the specified square, or null if the specified square has no piece
 	 */
 	Piece getPieceAt(int[] square) {
 		return getPieceAt(square[0], square[1]);
 	}
-	
+
 	/**
-	 * Returns the equivalent Piece object of the specified Piece in the List of PieceType on the Board,
-	 * or null if none is found.
-	 * @param piece the Piece to find
-	 * @return the equivalent of the specified Piece, or null if such Piece is not on the Board
+	 * Removes the specified piece from the board.
+	 *
+	 * @param piece the Piece to remove
 	 */
-	Piece getPiece(Piece piece) {
-		int index = Collections.binarySearch(pieces, piece);	//binarySearch uses compareTo instead of equals
-		if (index < 0)
-			return null;
-		return pieces.get(index);
+	void removePiece(Piece piece) {
+		removePiece(piece.getFile(), piece.getRank());
 	}
-	
+
 	/**
-	 * Removes the specified Piece object from the list of PieceType currently on the board.
-	 * 
-	 * @param p	the Piece to remove
-	 * @return true if this list contained the specified element
+	 * Removes the piece at the specified file and rank.
+	 *
+	 * @param file the file of the piece
+	 * @param rank the rank of the piece
+	 * @return the removed Piece, or null if no piece is on the specified square
 	 */
-	boolean removePiece(Piece p) {
-		return pieces.remove(p);
+	Piece removePiece(int file, int rank) {
+		Piece piece = pieces[rank][file];
+		pieces[rank][file] = null;
+		return piece;
 	}
-	
+
+//	/**
+//	 * Removes the piece at the specified square.
+//	 * @param square	the square of the piece
+//	 * @return	the removed Piece, or null if no piece is on the specified square
+//	 */
+//	Piece removePiece(int[] square) {
+//		return removePiece(square[0], square[1]);
+//	}
+
 	/**
-	 * Removes the Piece object at the specified location in the list of PieceType currently on the board.
-	 * 
-	 * @param index	the index of the Piece to be removed
-	 * @return the Piece that was removed
-	 */
-	Piece removePiece(int index) {
-		return pieces.remove(index);
-	}
-	
-	/**
-	 * Add a Piece to the List of Piece objects on the Board.
-	 * 
+	 * Add a piece to this board at where calling {@code getSquare()} on the specified
+	 * piece would return.
+	 *
 	 * @param piece the Piece to add
+	 * @throws IllegalArgumentException if the square returned by {@code getSquare()}
+	 *                                  is occupied
 	 */
-	void addPiece(Piece piece) {	//see documentation for Collections.binarySearch()
-		int index = Collections.binarySearch(pieces, piece);
-		index = -index - 1;	//if not found, return (-(insertion point) - 1)
-		if (index < 0)
-			throw new IllegalArgumentException("Adding " + piece + " on square with " + pieces.get(-index-1));
-		if (!(index == pieces.size()))    //or size() if should be inserted at the end
-			pieces.add(index, piece);
-		else
-			pieces.add(piece);
+	void addPiece(Piece piece) throws IllegalArgumentException {
+		addPiece(piece, piece.getFile(), piece.getRank());
 	}
-	
+
+	/**
+	 * Add a piece to this board at the specified square. This method also sets the
+	 * square stored in the piece to the specified square.
+	 *
+	 * @param piece the piece to add
+	 * @param file  the file to add the piece to
+	 * @param rank  the rank to add the piece to
+	 * @throws IllegalArgumentException if the square returned by {@code getSquare()}
+	 *                                  is occupied
+	 */
+	void addPiece(Piece piece, int file, int rank) throws IllegalArgumentException {
+		if (pieces[rank][file] != null)
+			throw new IllegalArgumentException("Specified square (" + file + ", " + rank + ") already occupied");
+		piece.setSquare(file, rank);
+		pieces[rank][file] = piece;
+	}
+
+	/**
+	 * Move the piece on {@code fileO, rankO} to square {@code fileD, rankD}.
+	 *
+	 * @param fileO the original file the piece is on
+	 * @param rankO the original rank the piece is on
+	 * @param fileD the destination file to move the piece to
+	 * @param rankD the destination rank to move the piece to
+	 * @throws IllegalArgumentException if the origin square has no piece on it or if the destination
+	 *                                  square is occupied
+	 */
+	void movePiece(int fileO, int rankO, int fileD, int rankD) throws IllegalArgumentException {
+		Piece pieceO = removePiece(fileO, rankO);
+		if (pieceO == null)
+			throw new IllegalArgumentException("No piece on the specified square (" + fileO + ", " + rankO + ")");
+		addPiece(pieceO, fileD, rankD);
+	}
+
+//	/**
+//	 * Move the piece on {@code squareO} to {@code squareD}.
+//	 * @param squareO	the original square the piece is on
+//	 * @param squareD	the destination square to move the piece to
+//	 * @throws IllegalArgumentException if the origin square has no piece on it or if the destination
+//	 * square is occupied
+//	 */
+//	void movePiece(int[] squareO, int[] squareD) throws IllegalArgumentException {
+//		movePiece(squareO[0], squareO[1], squareD[0], squareD[1]);
+//	}
+
+	/**
+	 * Move the specified piece to fileD and rankD.
+	 *
+	 * @param piece the piece to move
+	 * @param fileD the destination file to move the piece to
+	 * @param rankD the destination rank to move the piece to
+	 * @throws IllegalArgumentException if the origin square has no piece on it or if the destination
+	 *                                  square is occupied
+	 */
+	void movePiece(Piece piece, int fileD, int rankD) throws IllegalArgumentException {
+		movePiece(piece.getFile(), piece.getRank(), fileD, rankD);
+	}
+
 	/**
 	 * Prints a list of played moves to the console.
 	 */
@@ -347,7 +466,7 @@ public final class Board {	//TODO change pieces list to 2d array
 		for (Move move : history)
 			System.out.println(move.toString());
 	}
-	
+
 	/**
 	 * Print a visual representation of the current state of the board to the console.
 	 */
@@ -355,10 +474,10 @@ public final class Board {	//TODO change pieces list to 2d array
 		String whiteSpace = "|    ";
 		String blackSpace = "|////";
 		boolean even, white;
-		int index = 0;
+//		int index = 0;
 		//first line, upper border
 		System.out.println("_________________________________________");
-		
+
 		//squares
 		for (int rank = 8; rank > 0; rank--) {
 			even = white = rank % 2 == 0;
@@ -372,27 +491,18 @@ public final class Board {	//TODO change pieces list to 2d array
 			System.out.println("|");
 			//rank second line
 			for (int file = 1; file < 9; file++) {
-				if (index < pieces.size()) {
-					Piece p = pieces.get(index);
-					if (p.getRank() == rank && p.getFile() == file) {
-						index++;
-						if (white)
-							System.out.printf("| %s ", p.toBriefString());
-						else
-							System.out.printf("|/%s/", p.toBriefString());
-					}
-					else {
-						if (white)
-							System.out.print("|    ");
-						else
-							System.out.print("|////");
-					}
-				}
-				else {	//eliminate this repetition
+				Piece piece = getPieceAt(file, rank);
+				if (piece != null) {
 					if (white)
-						System.out.print("|    ");
+						System.out.printf("| %s ", piece.toBriefString());
 					else
-						System.out.print("|////");
+						System.out.printf("|/%s/", piece.toBriefString());
+				}
+				else {
+					if (white)
+						System.out.print(whiteSpace);
+					else
+						System.out.print(blackSpace);
 				}
 				white = !white;
 			}
@@ -401,7 +511,7 @@ public final class Board {	//TODO change pieces list to 2d array
 			System.out.println("|____|____|____|____|____|____|____|____|");
 		}
 	}
-	
+
 	/**
 	 * Construct new Piece objects each with their standard starting position.
 	 */
@@ -455,20 +565,22 @@ public final class Board {	//TODO change pieces list to 2d array
 
 		updatePieces(false);
 	}
-	
+
 	/**
 	 * Returns a List of Move objects representing the previous moves played.
-	 * 
+	 *
 	 * @return a List of Move objects representing the previous moves played
 	 */
 	public List<Move> getHistory() {
 		return history;
 	}
-	
+
 	/**
-	 * Returns the Move object at the specified index in history. Note that the index starts at 0, and each Move will occupy an index in history, therefore the index is not the same as the move number in standard transcript.
-	 * 
-	 * @param moveNum	the index of the desired Move object
+	 * Returns the Move object at the specified index in history.
+	 * Note: the index starts at 0, and each Move will occupy an index in history,
+	 * therefore the index is not the same as the move number in standard transcript.
+	 *
+	 * @param moveNum the index of the desired Move object
 	 * @return the Move object at the specified index in history
 	 */
 	public Move getMove(int moveNum) {
@@ -476,30 +588,35 @@ public final class Board {	//TODO change pieces list to 2d array
 			return null;
 		return history.get(moveNum);
 	}
-	
+
 	/**
 	 * Returns the number of Move objects recorded.
-	 * 
+	 *
 	 * @return the number of Move objects recorded (the size of the history)
 	 */
 	public int getCurrentMoveNum() {
-		return history.size();	//starts with 0
+		return history.size();    //starts with 0
 	}
-	
+
 	/**
 	 * Returns true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise.<br>
-	 * <p>
 	 * <code>isSquareAttacked(true, 1, 1)</code> returns true if square A1 is being attacked by black;
 	 * likewise, <code>isSquareAttacked(false, 1, 1)</code> returns true if square A1 is being attacked by white.
-	 * 
-	 * @param color	the color of the friendly side
-	 * @param file	the file of the square
-	 * @param rank	the rank of the square
+	 *
+	 * @param color the color of the friendly side
+	 * @param file  the file of the square
+	 * @param rank  the rank of the square
 	 * @return true if the specified square is being attacked by the opponent of <code>color</code>, and false otherwise
 	 */
-	public boolean isSquareAttacked(boolean color, int file, int rank) {	//TODO: not very efficient
-		for (Piece p : pieces) {
-			if (p.getColor() != color && p.isThreatening(new Move(p, p.getSquare(), new int[] {file, rank})))
+	public boolean isSquareAttacked(boolean color, int file, int rank) {    //TODO: not very efficient
+		/*
+		place color pieces on the specified square and check if the piece could reach a
+		piece of the same type but of different color.
+		 */
+		for (Piece p : getPieces()) {
+			if (p != null &&
+					p.getColor() != color &&
+					p.isThreatening(new Move(p, p.getSquare(), new int[]{file, rank})))
 				return true;
 		}
 		return false;
@@ -507,8 +624,8 @@ public final class Board {	//TODO change pieces list to 2d array
 
 	/**
 	 * Returns true if the King of the specified color is in check, false otherwise.
-	 * 
-	 * @param color	the color of the specified king
+	 *
+	 * @param color the color of the specified king
 	 * @return true if the King of the specified color is in check, false otherwise
 	 */
 	public boolean isInCheck(boolean color) {
@@ -516,17 +633,17 @@ public final class Board {	//TODO change pieces list to 2d array
 				isSquareAttacked(color, whiteKing.getFile(), whiteKing.getRank())
 				: isSquareAttacked(color, blackKing.getFile(), blackKing.getRank());
 	}
-	
+
 	/**
 	 * Call <code>updatePiece()</code> on all Piece objects currently on the board.
-	 * @param threatsOnly	true to update only threats, false to update threats and legal moves
+	 *
+	 * @param threatsOnly true to update only threats, false to update threats and legal moves
 	 */
 	void updatePieces(boolean threatsOnly) {
-		Object[] piecesArray = pieces.toArray();
-		for (Object o : piecesArray) {
-			Piece p = (Piece) o;
-			if (!(p instanceof King))
-				p.updatePiece(threatsOnly);
+		List<Piece> pieceList = getPieces();
+		for (Piece piece : pieceList) {
+			if (!(piece instanceof King))
+				piece.updatePiece(threatsOnly);
 		}
 		//kings should be updated last (shouldn't really matter)
 		whiteKing.updatePiece(threatsOnly);
@@ -536,9 +653,9 @@ public final class Board {	//TODO change pieces list to 2d array
 		if (!threatsOnly) {
 			boolean whiteCheckmate, blackCheckmate, isWhiteInCheck, isBlackInCheck, isDrawW, isDrawB;
 			whiteCheckmate = blackCheckmate = isDrawW = isDrawB = true;
-			isWhiteInCheck = isInCheck(true);	//isInCheck() is expensive
+			isWhiteInCheck = isInCheck(true);    //isInCheck() is expensive
 			isBlackInCheck = isInCheck(false);
-			for (Piece p : pieces) {
+			for (Piece p : pieceList) {
 				boolean noLegalMoves = p.getLegalMoves().isEmpty();
 				if (p.getColor()) {
 					if (whiteCheckmate)
@@ -567,9 +684,10 @@ public final class Board {	//TODO change pieces list to 2d array
 			}
 		}
 	}
-	
+
 	/**
 	 * Execute the specified Move object. Returns true if the move described is legal, or false otherwise.
+	 *
 	 * @param move the Move to execute
 	 * @return true if the move described is legal, false otherwise
 	 */
@@ -584,36 +702,9 @@ public final class Board {	//TODO change pieces list to 2d array
 			else
 				generatedMove.execute(this);
 			history.add(move);
-			changeTurn();	//calls updatePieces()
+			updatePieces(false);
 			return true;
 		}
 		return false;
-	}
-	
-//	/**
-//	 * Execute the specified Move object without any checking.
-//	 * @param move	the move to execute
-//	 */
-//	void uncheckedMove(Move move) {
-//		Piece init = move.getInit();
-//		Piece subject = move.getSubject();
-//		if (subject != null)
-//			removePiece(subject);
-//		init.setSquare(move.getDestination());
-//		rearrange(init);
-//	}
-
-	/**
-	 * Rearrange the location of the moved piece to match the order specified by compareTo.
-	 * The piece need not have the same reference as the matching one in the list, but they must be logical equivalents.
-	 * (a comparision using equals() must return true)
-	 * @param piece	the piece with the wrong index
-	 */
-	void rearrange(Piece piece) {
-		int index = pieces.indexOf(piece);
-		while (index > 0 && piece.compareTo(pieces.get(index - 1)) < 0)
-			Collections.swap(pieces, index, --index);
-		while (index < pieces.size() -1 && piece.compareTo(pieces.get(index + 1)) > 0)
-			Collections.swap(pieces, index, ++index);
 	}
 }

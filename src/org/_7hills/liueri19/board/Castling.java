@@ -56,12 +56,12 @@ public class Castling extends Move {
 		King king = (King) getInit();
 		if (isKingSide()) {
 			//move pieces
-			king.setSquare(7, king.getRank());
-			rook.setSquare(6, rook.getRank());
+			king.modifySquare(7, king.getRank());
+			rook.modifySquare(6, rook.getRank());
 		}
 		else {
-			king.setSquare(3, king.getRank());
-			rook.setSquare(4, rook.getRank());
+			king.modifySquare(3, king.getRank());
+			rook.modifySquare(4, rook.getRank());
 		}
 		king.setCastlable(false);
 		rook.setCastlable(false);
@@ -72,8 +72,8 @@ public class Castling extends Move {
 	@Override
 	public void revert(Board board) {
 		King king = (King) getInit();
-		king.setSquare(getOrigin());
-		rook.setSquare(getDestination());
+		king.modifySquare(getOrigin());
+		rook.modifySquare(getDestination());
 		king.setCastlable(true);
 		rook.setCastlable(true);
 		List<Piece> pieces = board.getPieces();

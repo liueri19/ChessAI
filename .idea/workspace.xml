@@ -10,75 +10,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="815eaee4-2679-4f40-8976-d8b0bfbca1ca" name="Default" comment="Check for checkmate and draw.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Algorithm.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/BruteForce.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/EvaluatedMove.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Position.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+    <list default="true" id="815eaee4-2679-4f40-8976-d8b0bfbca1ca" name="Default" comment="Change the list implementation of storing pieces to a 2d array. Rewrote API.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/allclasses-frame.html" afterPath="$PROJECT_DIR$/doc/allclasses-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/allclasses-noframe.html" afterPath="$PROJECT_DIR$/doc/allclasses-noframe.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/constant-values.html" afterPath="$PROJECT_DIR$/doc/constant-values.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/deprecated-list.html" afterPath="$PROJECT_DIR$/doc/deprecated-list.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/help-doc.html" afterPath="$PROJECT_DIR$/doc/help-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-1.html" afterPath="$PROJECT_DIR$/doc/index-files/index-1.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-10.html" afterPath="$PROJECT_DIR$/doc/index-files/index-10.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-11.html" afterPath="$PROJECT_DIR$/doc/index-files/index-11.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-12.html" afterPath="$PROJECT_DIR$/doc/index-files/index-12.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-13.html" afterPath="$PROJECT_DIR$/doc/index-files/index-13.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-14.html" afterPath="$PROJECT_DIR$/doc/index-files/index-14.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-15.html" afterPath="$PROJECT_DIR$/doc/index-files/index-15.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-2.html" afterPath="$PROJECT_DIR$/doc/index-files/index-2.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-3.html" afterPath="$PROJECT_DIR$/doc/index-files/index-3.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-4.html" afterPath="$PROJECT_DIR$/doc/index-files/index-4.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-5.html" afterPath="$PROJECT_DIR$/doc/index-files/index-5.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-6.html" afterPath="$PROJECT_DIR$/doc/index-files/index-6.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-7.html" afterPath="$PROJECT_DIR$/doc/index-files/index-7.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-8.html" afterPath="$PROJECT_DIR$/doc/index-files/index-8.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index-files/index-9.html" afterPath="$PROJECT_DIR$/doc/index-files/index-9.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index.html" afterPath="$PROJECT_DIR$/doc/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Bishop.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Bishop.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Board.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Board.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Castling.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Castling.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/King.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/King.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Knight.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Knight.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Move.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Move.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Pawn.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Pawn.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Piece.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Piece.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Queen.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Queen.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Rook.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/Rook.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Bishop.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Bishop.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Board.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Board.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Castling.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Castling.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/King.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/King.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Knight.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Knight.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Move.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Move.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Pawn.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Pawn.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Piece.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Piece.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Queen.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Queen.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Rook.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/class-use/Rook.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/package-frame.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/package-summary.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/package-tree.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/package-use.html" afterPath="$PROJECT_DIR$/doc/org/_7hills/liueri19/game/package-use.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/overview-tree.html" afterPath="$PROJECT_DIR$/doc/overview-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/package-list" afterPath="$PROJECT_DIR$/doc/package-list" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/ChessAI.iml" afterPath="$PROJECT_DIR$/ChessGame.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/notes.txt" afterPath="$PROJECT_DIR$/spec.txt" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Bishop.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Bishop.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Board.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Board.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Castling.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Castling.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/King.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/King.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Knight.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Knight.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Move.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Move.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Pawn.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Pawn.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Piece.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Piece.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Promotion.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Promotion.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Queen.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Queen.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Rook.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Rook.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spec.txt" afterPath="$PROJECT_DIR$/spec.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Board.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Board.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Castling.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Castling.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Move.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Move.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Piece.java" afterPath="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Piece.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -98,14 +36,62 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Board.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Board.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="14" column="65" lean-forward="false" selection-start-line="14" selection-start-column="65" selection-end-line="14" selection-end-column="65" />
+            <state relative-caret-position="962">
+              <caret line="204" column="19" lean-forward="true" selection-start-line="204" selection-start-column="19" selection-end-line="204" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1501952983801" expanded="true" signature="12314:12505" ph="..." />
+                <element signature="e#1586#1587#0" expanded="true" />
+                <element signature="e#1606#1607#0" expanded="true" />
+                <element signature="e#8895#8896#0" expanded="true" />
+                <element signature="e#8942#8943#0" expanded="true" />
+                <element signature="e#9723#9724#0" expanded="true" />
+                <element signature="e#9769#9770#0" expanded="true" />
+                <element signature="e#9902#9903#0" expanded="true" />
+                <element signature="e#9954#9955#0" expanded="true" />
+                <marker date="1502304544674" expanded="true" signature="14879:15070" ph="..." />
+                <marker date="1502304544674" expanded="false" signature="16555:16560" ph=" { " />
+                <marker date="1502304544674" expanded="false" signature="16575:16578" ph=" }" />
+                <marker date="1502304544674" expanded="false" signature="17241:17246" ph=" { " />
+                <marker date="1502304544674" expanded="false" signature="17287:17290" ph=" }" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Piece.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Piece.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="674">
+              <caret line="398" column="9" lean-forward="true" selection-start-line="398" selection-start-column="9" selection-end-line="398" selection-end-column="9" />
+              <folding>
+                <element signature="e#1707#1708#0" expanded="true" />
+                <element signature="e#1726#1727#0" expanded="true" />
+                <element signature="e#2104#2105#0" expanded="true" />
+                <element signature="e#2146#2147#0" expanded="true" />
+                <element signature="e#2409#2410#0" expanded="true" />
+                <element signature="e#2447#2448#0" expanded="true" />
+                <element signature="e#3793#3794#0" expanded="true" />
+                <element signature="e#3820#3821#0" expanded="true" />
+                <element signature="e#3943#3944#0" expanded="true" />
+                <element signature="e#3970#3971#0" expanded="true" />
+                <element signature="e#4724#4725#0" expanded="true" />
+                <element signature="e#4751#4752#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Move.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Move.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="129" column="0" lean-forward="false" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+              <folding>
+                <element signature="e#2505#2506#0" expanded="true" />
+                <element signature="e#2565#2566#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -115,7 +101,7 @@
         <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Algorithm.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="720">
-              <caret line="20" column="25" lean-forward="true" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+              <caret line="20" column="25" lean-forward="false" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -126,7 +112,7 @@
       <file leaf-file-name="BruteForce.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/BruteForce.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1205">
+            <state relative-caret-position="812">
               <caret line="53" column="36" lean-forward="false" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
               <folding />
             </state>
@@ -136,22 +122,31 @@
       <file leaf-file-name="EvaluatedMove.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/EvaluatedMove.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-19">
-              <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state relative-caret-position="108">
+              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Position.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Position.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Position.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="12" column="52" lean-forward="true" selection-start-line="12" selection-start-column="52" selection-end-line="12" selection-end-column="52" />
+            <state relative-caret-position="396">
+              <caret line="11" column="34" lean-forward="false" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
               <folding>
-                <element signature="e#274#275#0" expanded="true" />
                 <element signature="e#324#325#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="spec.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/spec.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1589">
+              <caret line="56" column="16" lean-forward="false" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -172,6 +167,7 @@
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
+      <replace>[rank - 1][file - 1]</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -205,18 +201,19 @@
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Board.java" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/game/Piece.java" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/ai/Player.java" />
-        <option value="$PROJECT_DIR$/spec.txt" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/board/ImmutableMove.java" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Castling.java" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/ai/EvaluatedMove.java" />
         <option value="D:/New folder/PasswordGen.class" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/ai/Position.java" />
-        <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Move.java" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/ai/Algorithm.java" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/ai/BruteForce.java" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Algorithm.java" />
-        <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Board.java" />
         <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Position.java" />
+        <option value="$PROJECT_DIR$/spec.txt" />
+        <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Move.java" />
+        <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Board.java" />
+        <option value="$PROJECT_DIR$/src/org/_7hills/liueri19/board/Piece.java" />
       </list>
     </option>
   </component>
@@ -230,10 +227,10 @@
     <scope name="board" pattern="src:org._7hills.liueri19.board.*" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-16" />
-    <option name="y" value="-16" />
+    <option name="x" value="-56" />
+    <option name="y" value="-38" />
     <option name="width" value="3856" />
-    <option name="height" value="2176" />
+    <option name="height" value="2174" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -269,8 +266,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -313,16 +312,23 @@
               <item name="liueri19" type="462c0819:PsiDirectoryNode" />
               <item name="algorithm" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="ChessGame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ChessGame" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+              <item name="_7hills" type="462c0819:PsiDirectoryNode" />
+              <item name="liueri19" type="462c0819:PsiDirectoryNode" />
+              <item name="board" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="File.Encoding" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
@@ -643,7 +649,14 @@
       <option name="project" value="LOCAL" />
       <updated>1499824002416</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Start on algorithm part.">
+      <created>1501953323736</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1501953323736</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView">
@@ -661,6 +674,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34320465" sideWeight="0.49786097" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32945532" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -671,7 +685,8 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998943" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22967914" sideWeight="0.49788806" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23262031" sideWeight="0.49788806" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998413" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1973262" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -685,10 +700,8 @@
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Dynamic Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32994652" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946146" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1919786" sideWeight="0.5031496" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998943" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -721,6 +734,7 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Implement en passant." />
     <MESSAGE value="Fixed bug: Illegal move when blocking check." />
     <MESSAGE value="Draw by agreement" />
@@ -730,14 +744,26 @@
     <MESSAGE value="Remove copy methods and constructors, fix minor bugs." />
     <MESSAGE value="Take and promote." />
     <MESSAGE value="Check for checkmate and draw." />
-    <option name="LAST_COMMIT_MESSAGE" value="Check for checkmate and draw." />
+    <MESSAGE value="Start on algorithm part." />
+    <MESSAGE value="Change the list implementation of storing pieces to a 2d array. Rewrote API." />
+    <option name="LAST_COMMIT_MESSAGE" value="Change the list implementation of storing pieces to a 2d array. Rewrote API." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Board.java</url>
+          <line>472</line>
+          <properties class="org._7hills.liueri19.board.Board" method="printBoard">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="51" />
+      <option name="time" value="57" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -759,8 +785,8 @@
         <state relative-caret-position="705">
           <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
           <folding>
-            <element signature="e#2505#2506#0" expanded="false" />
-            <element signature="e#2565#2566#0" expanded="false" />
+            <element signature="e#2505#2506#0" expanded="true" />
+            <element signature="e#2565#2566#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -771,7 +797,19 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1501952983801" expanded="true" signature="12314:12505" ph="..." />
+            <element signature="e#1586#1587#0" expanded="true" />
+            <element signature="e#1606#1607#0" expanded="true" />
+            <element signature="e#8895#8896#0" expanded="true" />
+            <element signature="e#8942#8943#0" expanded="true" />
+            <element signature="e#9723#9724#0" expanded="true" />
+            <element signature="e#9769#9770#0" expanded="true" />
+            <element signature="e#9902#9903#0" expanded="true" />
+            <element signature="e#9954#9955#0" expanded="true" />
+            <marker date="1502304544674" expanded="true" signature="14879:15070" ph="..." />
+            <marker date="1502304544674" expanded="false" signature="16555:16560" ph=" { " />
+            <marker date="1502304544674" expanded="false" signature="16575:16578" ph=" }" />
+            <marker date="1502304544674" expanded="false" signature="17241:17246" ph=" { " />
+            <marker date="1502304544674" expanded="false" signature="17287:17290" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -842,8 +880,8 @@
         <state relative-caret-position="705">
           <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
           <folding>
-            <element signature="e#2505#2506#0" expanded="false" />
-            <element signature="e#2565#2566#0" expanded="false" />
+            <element signature="e#2505#2506#0" expanded="true" />
+            <element signature="e#2565#2566#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -862,7 +900,19 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1501952983801" expanded="true" signature="12314:12505" ph="..." />
+            <element signature="e#1586#1587#0" expanded="true" />
+            <element signature="e#1606#1607#0" expanded="true" />
+            <element signature="e#8895#8896#0" expanded="true" />
+            <element signature="e#8942#8943#0" expanded="true" />
+            <element signature="e#9723#9724#0" expanded="true" />
+            <element signature="e#9769#9770#0" expanded="true" />
+            <element signature="e#9902#9903#0" expanded="true" />
+            <element signature="e#9954#9955#0" expanded="true" />
+            <marker date="1502304544674" expanded="true" signature="14879:15070" ph="..." />
+            <marker date="1502304544674" expanded="false" signature="16555:16560" ph=" { " />
+            <marker date="1502304544674" expanded="false" signature="16575:16578" ph=" }" />
+            <marker date="1502304544674" expanded="false" signature="17241:17246" ph=" { " />
+            <marker date="1502304544674" expanded="false" signature="17287:17290" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -933,8 +983,8 @@
         <state relative-caret-position="1080">
           <caret line="80" column="40" lean-forward="false" selection-start-line="80" selection-start-column="40" selection-end-line="80" selection-end-column="40" />
           <folding>
-            <element signature="e#2505#2506#0" expanded="false" />
-            <element signature="e#2565#2566#0" expanded="false" />
+            <element signature="e#2505#2506#0" expanded="true" />
+            <element signature="e#2565#2566#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -985,27 +1035,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Knight.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2016">
-          <caret line="60" column="16" lean-forward="false" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
-          <folding>
-            <element signature="e#233#234#0" expanded="false" />
-            <element signature="e#265#266#0" expanded="false" />
-            <element signature="e#329#330#0" expanded="false" />
-            <element signature="e#367#368#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Pawn.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1548">
-          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/King.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1723">
@@ -1023,51 +1052,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/ImmutableMove.java" />
-    <entry file="file://$PROJECT_DIR$/spec.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="998">
-          <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Promotion.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="684">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Castling.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="746">
-          <caret line="32" column="5" lean-forward="true" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Desktop/java_memory_leak.txt" />
     <entry file="file://$USER_HOME$/Desktop/java_memory_leak.java" />
     <entry file="file://D:/New folder/PasswordGen.class" />
-    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Move.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="9" column="3" lean-forward="false" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-          <folding>
-            <element signature="e#2505#2506#0" expanded="false" />
-            <element signature="e#2565#2566#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Piece.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="16" column="14" lean-forward="false" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/nio/Buffer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
@@ -1104,10 +1091,79 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/EvaluatedMove.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Position.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="11" column="34" lean-forward="false" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
+          <folding>
+            <element signature="e#324#325#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Promotion.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="59" column="16" lean-forward="false" selection-start-line="59" selection-start-column="16" selection-end-line="59" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spec.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1589">
+          <caret line="56" column="16" lean-forward="false" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Castling.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1373">
+          <caret line="75" column="18" lean-forward="true" selection-start-line="75" selection-start-column="18" selection-end-line="75" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Pawn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Move.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="129" column="0" lean-forward="false" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+          <folding>
+            <element signature="e#2505#2506#0" expanded="true" />
+            <element signature="e#2565#2566#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Knight.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1313">
+          <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Algorithm.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
-          <caret line="20" column="25" lean-forward="true" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+          <caret line="20" column="25" lean-forward="false" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1116,38 +1172,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/BruteForce.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1205">
+        <state relative-caret-position="812">
           <caret line="53" column="36" lean-forward="false" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/EvaluatedMove.java">
+    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Piece.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-19">
-          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="674">
+          <caret line="398" column="9" lean-forward="true" selection-start-line="398" selection-start-column="9" selection-end-line="398" selection-end-column="9" />
+          <folding>
+            <element signature="e#1707#1708#0" expanded="true" />
+            <element signature="e#1726#1727#0" expanded="true" />
+            <element signature="e#2104#2105#0" expanded="true" />
+            <element signature="e#2146#2147#0" expanded="true" />
+            <element signature="e#2409#2410#0" expanded="true" />
+            <element signature="e#2447#2448#0" expanded="true" />
+            <element signature="e#3793#3794#0" expanded="true" />
+            <element signature="e#3820#3821#0" expanded="true" />
+            <element signature="e#3943#3944#0" expanded="true" />
+            <element signature="e#3970#3971#0" expanded="true" />
+            <element signature="e#4724#4725#0" expanded="true" />
+            <element signature="e#4751#4752#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/board/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="14" column="65" lean-forward="false" selection-start-line="14" selection-start-column="65" selection-end-line="14" selection-end-column="65" />
+        <state relative-caret-position="962">
+          <caret line="204" column="19" lean-forward="true" selection-start-line="204" selection-start-column="19" selection-end-line="204" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1501952983801" expanded="true" signature="12314:12505" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/_7hills/liueri19/algorithm/Position.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="12" column="52" lean-forward="true" selection-start-line="12" selection-start-column="52" selection-end-line="12" selection-end-column="52" />
-          <folding>
-            <element signature="e#274#275#0" expanded="true" />
-            <element signature="e#324#325#0" expanded="true" />
+            <element signature="e#1586#1587#0" expanded="true" />
+            <element signature="e#1606#1607#0" expanded="true" />
+            <element signature="e#8895#8896#0" expanded="true" />
+            <element signature="e#8942#8943#0" expanded="true" />
+            <element signature="e#9723#9724#0" expanded="true" />
+            <element signature="e#9769#9770#0" expanded="true" />
+            <element signature="e#9902#9903#0" expanded="true" />
+            <element signature="e#9954#9955#0" expanded="true" />
+            <marker date="1502304544674" expanded="true" signature="14879:15070" ph="..." />
+            <marker date="1502304544674" expanded="false" signature="16555:16560" ph=" { " />
+            <marker date="1502304544674" expanded="false" signature="16575:16578" ph=" }" />
+            <marker date="1502304544674" expanded="false" signature="17241:17246" ph=" { " />
+            <marker date="1502304544674" expanded="false" signature="17287:17290" ph=" }" />
           </folding>
         </state>
       </provider>

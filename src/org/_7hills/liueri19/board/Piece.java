@@ -54,7 +54,7 @@ public abstract class Piece implements Comparable<Piece> {
 	
 	/**
 	 * Returns the color of this Piece.
-	 * 
+	 * Color is represented with booleans, true for white, and false for black.
 	 * @return the color of this Piece
 	 */
 	public boolean getColor() {
@@ -66,28 +66,50 @@ public abstract class Piece implements Comparable<Piece> {
 	 * 
 	 * @return the current location of this Piece
 	 */
-	int[] getSquare() {
-		return coordinate;
+	public int[] getSquare() {
+		return Arrays.copyOf(coordinate, 2);
 	}
-	
+
+
 	/**
-	 * Change the current location of this Piece to the specified square.
-	 * 
-	 * @param square the new location to set the Piece on
+	 * Set the coordinate information stored in this piece to the specified square.
+	 * This method does not modify the corresponding coordinates stored in the board.
+	 * @param square	the square to set the coordinate to.
 	 */
 	void setSquare(int[] square) {
-		coordinate = square;
+		setSquare(square[0], square[1]);
 	}
-	
+
 	/**
-	 * Change the current location of this Piece to the specified square.
-	 * 
-	 * @param file	the file of the new location
-	 * @param rank	the rank of the new location
+	 * Set the coordinate information stored in this piece to the specified square.
+	 * This method does not modify the corresponding coordinates stored in the board.
+	 * @param file	the file to set the coordinate to
+	 * @param rank	the rank to set the coordinate to
 	 */
 	void setSquare(int file, int rank) {
 		coordinate[0] = file;
 		coordinate[1] = rank;
+	}
+
+	/**
+	 * Change the current location of this Piece to the specified square. This method
+	 * also modifies the corresponding coordinates stored in board.
+	 * @param square the new location to set the Piece on
+	 * @throws IllegalArgumentException	if the destination square is occupied
+	 */
+	void modifySquare(int[] square) throws IllegalArgumentException {
+		modifySquare(square[0], square[1]);
+	}
+	
+	/**
+	 * Change the current location of this Piece to the specified square. This method
+	 * also modifies the corresponding coordinates stored in board.
+	 * @param file	the file of the new location
+	 * @param rank	the rank of the new location
+	 * @throws IllegalArgumentException	if the destination square is occupied
+	 */
+	void modifySquare(int file, int rank) throws IllegalArgumentException {
+		board.movePiece(this, file, rank);
 	}
 	
 	/**

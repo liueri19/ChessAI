@@ -119,26 +119,27 @@ public class Move {
 	}
 
 	/**
-	 * Execute the move represented by this Move object. All subclasses should override this method.
+	 * Move the piece returned by {@code getInit()} to the square returned by
+	 * {@code getDestination()}, taking the piece returned by {@code getSubject()}
+	 * if not null.
 	 * @param board	the board to execute this move on
 	 */
 	public void execute(Board board) {
 		if (subject != null)
 			board.removePiece(subject);
-		init.setSquare(getDestination());
-		board.rearrange(init);
+		init.modifySquare(getDestination());
 	}
 
 	/**
-	 * Undo changes of execute(). All subclasses must implement this method.
+	 * Undo changes of {@code execute()}. All classes overriding {@code execute()} should also
+	 * override this method.
 	 * @param board	the board to revert this move on
 	 */
 	public void revert(Board board) {
 		Piece init = getInit();
 		Piece subject = getSubject();
-		init.setSquare(getOrigin());
+		init.modifySquare(getOrigin());
 		if (subject != null)
 			board.addPiece(subject);
-		board.rearrange(init);
 	}
 }

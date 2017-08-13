@@ -56,3 +56,6 @@ null ------- null
  |   |         |
  |   |         |
 null a8 ------ h8
+
+The algorithm thread should take an initial position from board thread. Then take immutable
+moves from board. The algorithm should send immutable moves back.

@@ -96,7 +96,7 @@ public class Move {
 	 * A move from E2 to E4 would be represented as: e2e4;<br>
 	 * King and queen side castling is: O-O and O-O-O;<br>
 	 * A promotion will have an extra character specifying the piece promoted to
-	 * (see {@link Piece.PieceType PieceType}).
+	 * (see {@link PieceType PieceType}).
 	 */
 	@Override
 	public String toString() {

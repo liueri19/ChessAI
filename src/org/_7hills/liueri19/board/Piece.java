@@ -2,7 +2,6 @@ package org._7hills.liueri19.board;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -139,14 +138,14 @@ public abstract class Piece implements Comparable<Piece> {
 		return legalMoves;
 	}
 	
-	/**
-	 * Change the current List of legal moves to the specified List.
-	 * 
-	 * @param moves	the new List of legal moves
-	 */
-	void setLegalMoves(List<Move> moves) {
-		legalMoves = moves;
-	}
+//	/**
+//	 * Change the current List of legal moves to the specified List.
+//	 *
+//	 * @param moves	the new List of legal moves
+//	 */
+//	void setLegalMoves(List<Move> moves) {
+//		legalMoves = moves;
+//	}
 	
 	/**
 	 * Clear the list of legal moves. All moves are considered illegal after a call to this method.
@@ -219,14 +218,14 @@ public abstract class Piece implements Comparable<Piece> {
 		return threats;
 	}
 	
-	/**
-	 * Change the current List of threats to the specified List.<br>
-	 * For pieces other than King and Pawn, this method is equivalent to <code>setLegalMoves()</code>.
-	 * @param moves the new List of threats
-	 */
-	void setThreats(List<Move> moves) {
-		threats = moves;
-	}
+//	/**
+//	 * Change the current List of threats to the specified List.<br>
+//	 * For pieces other than King and Pawn, this method is equivalent to <code>setLegalMoves()</code>.
+//	 * @param moves the new List of threats
+//	 */
+//	void setThreats(List<Move> moves) {
+//		threats = moves;
+//	}
 	
 	/**
 	 * Clear the list of threats.<br>
@@ -294,6 +293,24 @@ public abstract class Piece implements Comparable<Piece> {
 	 * @return a brief String representation of this Piece
 	 */
 	public abstract String toBriefString();
+
+	/**
+	 * Returns the PieceType matching this piece.
+	 * @return	the PieceType matching this Piece
+	 */
+	public final PieceType getPieceType() {
+		if (this instanceof Bishop)
+			return PieceType.BISHOP;
+		if (this instanceof King)
+			return PieceType.KING;
+		if (this instanceof Knight)
+			return PieceType.KNIGHT;
+		if (this instanceof Pawn)
+			return PieceType.PAWN;
+		if (this instanceof Queen)
+			return PieceType.QUEEN;
+		return PieceType.ROOK;
+	}
 	
 	/**
 	 * Compares this Piece to the specified Piece based on their location on the board. The Piece with
@@ -317,25 +334,6 @@ public abstract class Piece implements Comparable<Piece> {
 		}
 	}
 
-	/**
-	 * Compares the location of this Piece to the specified square. This method has the same behavior as compareTo(Piece piece).
-	 * @param square	the square to be compared with
-	 * @return -1, 0, or 1 as this Piece's location is less than, equal to, or greater than the specified square.
-	 */
-	@Deprecated
-	public int compareToSquare(int[] square) {
-		if (this.getRank() == square[1]) {
-			if (this.getFile() < square[0])
-				return -1;
-			else if (this.getFile() > square[0])
-				return 1;
-			return 0;
-		}
-		if (this.getRank() > square[1])
-			return -1;
-		return 1;
-	}
-	
 	/**
 	 * Indicates whether some other object is "equal to" this Piece.<br>
 	 * Returns true if:<br>
@@ -370,56 +368,5 @@ public abstract class Piece implements Comparable<Piece> {
 		hash += getBoard().hashCode() * 31;
 		hash += getFile() * 31;
 		return hash;
-	}
-
-	/**
-	 * This enum represents all piece types and provides the short representations of each piece type.<br>
-	 * K for King;<br>
-	 * Q for Queen;<br>
-	 * R for Rook;<br>
-	 * B for Bishop;<br>
-	 * N for Knight;<br>
-	 * P for Pawn.
-	 */
-	public enum PieceType {
-		KNIGHT	('N'),
-		PAWN	('P'),
-		QUEEN	('Q'),
-		ROOK	('R'),
-		BISHOP	('B'),
-		KING	('K');
-
-		private char charRep;
-		/** List of PieceTypes that can be promoted to, containing QUEEN, KNIGHT, ROOK and BISHOP. */
-		public static final List<PieceType> PROMOTABLES =
-				Collections.unmodifiableList(Arrays.asList(QUEEN, KNIGHT, ROOK, BISHOP));
-
-		PieceType(char charRep) {
-			this.charRep = charRep;
-		}
-
-		/**
-		 * Return the character representation of the corresponding piece type.
-		 * @return the character representation of the specified piece type
-		 */
-		char getCharRep() { return charRep; }
-
-		/**
-		 * Return an instance of PieceType corresponding to the specified character representation.
-		 * @param charRep	the short representation of a piece
-		 * @return the corresponding PieceType instance
-		 */
-		static PieceType getInstance(char charRep) {
-			switch (charRep) {
-				case 'Q': return QUEEN;
-				case 'N': return KNIGHT;
-				case 'R': return ROOK;
-				case 'B': return BISHOP;
-				case 'P': return PAWN;
-				case 'K': return KING;
-				default:
-					throw new IllegalArgumentException();
-			}
-		}
 	}
 }

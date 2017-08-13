@@ -116,10 +116,10 @@ public class King extends Piece {
 		return attackedSquares;
 	}
 	
-	@Override
-	protected void setThreats(List<Move> moves) {
-		attackedSquares = moves;
-	}
+//	@Override
+//	protected void setThreats(List<Move> moves) {
+//		attackedSquares = moves;
+//	}
 	
 	@Override
 	protected void clearThreats() {

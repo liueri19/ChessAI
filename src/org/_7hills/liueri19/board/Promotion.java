@@ -5,7 +5,7 @@ package org._7hills.liueri19.board;
  * @author liueri19
  */
 public class Promotion extends Move {
-	private Piece.PieceType promoteTo;
+	private PieceType promoteTo;
 	private Piece promotedPiece;
 
 	/**
@@ -15,9 +15,9 @@ public class Promotion extends Move {
 	 * @param to	destination of the move
 	 * @param promoteTo	the type of Piece to promote to; can only be Queen, Knight, Rook or Bishop
 	 */
-	public Promotion(Pawn init, int[] to, Piece.PieceType promoteTo) {
+	public Promotion(Pawn init, int[] to, PieceType promoteTo) {
 		super(init, init.getSquare(), to);
-		if (promoteTo == Piece.PieceType.KING || promoteTo == Piece.PieceType.PAWN)
+		if (promoteTo == PieceType.KING || promoteTo == PieceType.PAWN)
 			throw new IllegalArgumentException("Can only promote to Queen, Knight, Rook or Bishop");
 		this.promoteTo = promoteTo;
 	}
@@ -31,9 +31,9 @@ public class Promotion extends Move {
 	 * @param to	destination of the move
 	 * @param promoteTo	the type of Piece to promote to; can only be Queen, Knight, Rook or Bishop
 	 */
-	public Promotion(Pawn init, Piece subject, int[] to, Piece.PieceType promoteTo) {
+	public Promotion(Pawn init, Piece subject, int[] to, PieceType promoteTo) {
 		super(init, subject, init.getSquare(), to);
-		if (promoteTo == Piece.PieceType.KING || promoteTo == Piece.PieceType.PAWN)
+		if (promoteTo == PieceType.KING || promoteTo == PieceType.PAWN)
 			throw new IllegalArgumentException("Can only promote to Queen, Knight, Rook or Bishop");
 		this.promoteTo = promoteTo;
 	}
@@ -42,7 +42,7 @@ public class Promotion extends Move {
 	 * Return the PieceType to promote to.
 	 * @return	the PieceType to promote to
 	 */
-	public Piece.PieceType getPromoteTo() {
+	public PieceType getPromoteTo() {
 		return promoteTo;
 	}
 
@@ -50,8 +50,8 @@ public class Promotion extends Move {
 	 * Set this Move to promote to the specified PieceType.
 	 * @param type	the PieceType to promote to
 	 */
-	public void setPromoteTo(Piece.PieceType type) {
-		if (promoteTo == Piece.PieceType.KING || promoteTo == Piece.PieceType.PAWN)
+	public void setPromoteTo(PieceType type) {
+		if (promoteTo == PieceType.KING || promoteTo == PieceType.PAWN)
 			throw new IllegalArgumentException("Can only promoteTo to Queen, Knight, Rook or Bishop");
 		promoteTo = type;
 	}
@@ -63,13 +63,13 @@ public class Promotion extends Move {
 		Piece subject = getSubject();
 		if (subject != null)
 			board.removePiece(subject);
-		if (promoteTo == Piece.PieceType.QUEEN)	//queen is most common for promotion
+		if (promoteTo == PieceType.QUEEN)	//queen is most common for promotion
 			board.addPiece(promotedPiece = new Queen(board, getInit().getColor(), getDestination()));
-		else if (promoteTo == Piece.PieceType.KNIGHT)	//followed by knight if there's an under-promotion
+		else if (promoteTo == PieceType.KNIGHT)	//followed by knight if there's an under-promotion
 			board.addPiece(promotedPiece = new Knight(board, getInit().getColor(), getDestination()));
-		else if (promoteTo == Piece.PieceType.ROOK)
+		else if (promoteTo == PieceType.ROOK)
 			board.addPiece(promotedPiece = new Rook(board, getInit().getColor(), getDestination()));
-		else if (promoteTo == Piece.PieceType.BISHOP)
+		else if (promoteTo == PieceType.BISHOP)
 			board.addPiece(promotedPiece = new Bishop(board, getInit().getColor(), getDestination()));
 		board.removePiece(getInit());
 	}

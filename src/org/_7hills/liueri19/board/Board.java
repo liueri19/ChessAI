@@ -2,8 +2,8 @@ package org._7hills.liueri19.board;
 
 import org._7hills.liueri19.algorithm.Algorithm;
 import org._7hills.liueri19.algorithm.BruteForce;
+import org._7hills.liueri19.algorithm.Position;
 
-import java.rmi.activation.ActivationException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,9 +13,7 @@ import java.util.concurrent.Executors;
  *
  * @author liueri19
  */
-public final class Board {
-	//this list must always be sorted. all manipulations must not break the order of this list. see PieceType.compareTo()
-//	private List<Piece> pieces = new ArrayList<>();
+public class Board {
 	//9*9 array for the board, Piece should be accessed with pieces[rank][file]
 	private final Piece[][] pieces = new Piece[9][9];
 	private King whiteKing, blackKing;
@@ -26,17 +24,6 @@ public final class Board {
 	 */
 	private int gameResult;
 	private List<Move> history = new ArrayList<>();
-//	/** a placeholder to meet the arguments of Collections.binarySearch() */
-//	private final Piece PLACEHOLDER = new Piece(null, true, 0, 0) {	//reuse the same object
-//		@Override
-//		public void updatePiece(boolean threatsOnly) {}
-//		@Override
-//		public String toString() {
-//			return "PLACEHOLDER@" + getFile() + getRank();
-//		}
-//		@Override
-//		public String toBriefString() { return "PLACEHOLDER"; }
-//	};
 
 	/**
 	 * the Algorithm to use
@@ -172,7 +159,7 @@ public final class Board {
 
 						Move m = new Move(piece, piece.getSquare(), to);
 						if (input.length() == 5 && piece instanceof Pawn) {    //promotion
-							Piece.PieceType type = Piece.PieceType.getInstance(input.charAt(4));
+							PieceType type = PieceType.getInstance(input.charAt(4));
 							m = new Promotion((Pawn) piece, to, type);
 						}
 						if (!board.move(m)) {
@@ -189,6 +176,7 @@ public final class Board {
 			else {    //if not userInput
 				//wait for 3 minutes (or 5 minutes max)
 //				board.ALGORITHM.
+				//use continue to loop until a move is returned from algorithm?
 			}
 			playerTurn = !playerTurn;
 			whiteMove = !whiteMove;	//merge two booleans into one?
@@ -416,6 +404,21 @@ public final class Board {
 			throw new IllegalArgumentException("Specified square (" + file + ", " + rank + ") already occupied");
 		piece.setSquare(file, rank);
 		pieces[rank][file] = piece;
+	}
+
+
+	//use the cache if correctness can be guaranteed (both for the checkMove algorithm and concurrency)
+//	private Position positionCache = null;
+
+	/**
+	 * Generate a new Position object representing the current position of this board.
+	 * @return	a Position representing this board
+	 */
+	public Position getPosition() {
+//		if (positionCache == null)
+//			positionCache = new Position(this);
+//		return positionCache;
+		return new Position(this);
 	}
 
 	/**
